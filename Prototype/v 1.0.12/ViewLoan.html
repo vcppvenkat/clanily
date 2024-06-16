@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- Page title -->
+    <title>HOMER | WebApp admin theme</title>
+
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <!--<link rel="shortcut icon" type="image/ico" href="favicon.ico" />-->
+
+    <!-- Vendor styles -->
+    <link rel="stylesheet" href="vendor/fontawesome/css/font-awesome.css" />
+    <link rel="stylesheet" href="vendor/metisMenu/dist/metisMenu.css" />
+    <link rel="stylesheet" href="vendor/animate.css/animate.css" />
+    <link rel="stylesheet" href="vendor/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="vendor/xeditable/bootstrap3-editable/css/bootstrap-editable.css" />
+    <link rel="stylesheet" href="vendor/select2-3.5.2/select2.css" />
+    <link rel="stylesheet" href="vendor/select2-bootstrap/select2-bootstrap.css" />
+    <link rel="stylesheet" href="vendor/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.css" />
+    <link rel="stylesheet" href="vendor/bootstrap-datepicker-master/dist/css/bootstrap-datepicker3.min.css" />
+    <link rel="stylesheet" href="vendor/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" />
+    <link rel="stylesheet" href="vendor/clockpicker/dist/bootstrap-clockpicker.min.css" />
+    <link rel="stylesheet" href="vendor/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
+
+    <!-- App styles -->
+    <link rel="stylesheet" href="fonts/pe-icon-7-stroke/css/pe-icon-7-stroke.css" />
+    <link rel="stylesheet" href="fonts/pe-icon-7-stroke/css/helper.css" />
+    <link rel="stylesheet" href="styles/style.css">
+
+
+</head>
+
+<body class="fixed-navbar sidebar-scroll">
+
+    <!-- Simple splash screen-->
+    <div class="splash">
+        <div class="color-line"></div>
+        <div class="splash-title">
+            <h1>Homer - Responsive Admin Theme</h1>
+            <p>Special Admin Theme for small and medium webapp with very clean and aesthetic style and feel. </p>
+            <div class="spinner">
+                <div class="rect1"></div>
+                <div class="rect2"></div>
+                <div class="rect3"></div>
+                <div class="rect4"></div>
+                <div class="rect5"></div>
+            </div>
+        </div>
+    </div>
+    <!--[if lt IE 7]>
+<p class="alert alert-danger">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<![endif]-->
+
+    <!-- Header -->
+    <div id="header">
+        <div class="color-line"></div>
+        <div id="logo" class="light-version">
+            <span> Clanily </span>
+        </div>
+        <nav role="navigation">
+            <div class="small-logo">
+                <span class="text-primary">Clanily</span>
+            </div>
+
+            <div class="navbar-right">
+                <ul class="nav navbar-nav no-borders">
+
+
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                            <i class="pe-7s-config"></i>
+                        </a>
+
+                        <div class="dropdown-menu hdropdown bigmenu animated flipInX">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <a href="Categories.html">
+                                                <i class="pe pe-7s-portfolio text-info"></i>
+                                                <h5>Categories</h5>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a href="payee.html">
+                                                <i class="pe pe-7s-users text-warning"></i>
+                                                <h5>Payee</h5>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a href="objectives.html">
+                                                <i class="pe pe-7s-target text-success"></i>
+                                                <h5>Objectives</h5>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <a href="users.html">
+                                                <i class="pe pe-7s-user text-info"></i>
+                                                <h5>Users</h5>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a href="templates.html">
+                                                <i class="pe pe-7s-folder text-danger"></i>
+                                                <h5>Templates</h5>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a href="jobs.html">
+                                                <i class="pe pe-7s-help2 text-success"></i>
+                                                <h5>Jobs</h5>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </li>
+
+                    <li>
+                        <a href="#" id="sidebar" class="right-sidebar-toggle">
+                            <i class="pe-7s-upload pe-7s-news-paper"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Navigation -->
+    <aside id="menu">
+        <div id="navigation">
+            <div class="profile-picture">
+                <img src="images/profile.jpg" class="img-circle m-b" alt="logo" />
+
+                <div class="stats-label text-color">
+                    <span class="font-extra-bold font-uppercase">Venkat</span>
+
+                    <div class="dropdown">
+                        <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                            <small class="text-muted">Admin, Super User <b class="caret"></b></small>
+                        </a>
+                        <ul class="dropdown-menu animated flipInX m-t-xs">
+                            <li><a href="appsettings.html">Application Settings</a></li>
+                            <li><a href="profile.html">Profile</a></li>
+                            <li><a href="preferences.html">Preferences</a></li>
+                            <li class="divider"></li>
+                            <li><a href="login.html">Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <ul class="nav" id="side-menu">
+                <li>
+                    <a href="index.html">
+                        <span class="nav-label">Home</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="transactions.html">
+                        <span class="nav-label">Transactions</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="accounts.html">
+                        <span class="nav-label">Accounts</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="projects.html">
+                        <span class="nav-label">Projects</span>
+                    </a>
+                </li>
+                <li class="active">
+                    <a href="loans.html">
+                        <span class="nav-label">Loan</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="budget.html">
+                        <span class="nav-label">Budget</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="reports.html">
+                        <span class="nav-label">Reports</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="settings.html">
+                        <span class="nav-label">Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </aside>
+
+    <!-- Main Wrapper -->
+    <div id="wrapper">
+        <div class="normalheader small-header">
+            <div class="hpanel">
+                <div class="panel-body">
+                    <h2 class="font-light m-b-xs">
+                        Loans
+                    </h2>
+                    <small>Manage your accounts</small>
+                </div>
+            </div>
+        </div>
+        <div class="content">
+
+            <div class="row">
+
+                <div class="col-lg-4">
+
+                    <div class="col-lg-12">
+                        <div class="hpanel">
+
+
+                            <div class="panel-heading no-padding">
+
+                                <table id="user" class="table table-striped">
+                                    <tbody>
+                                        <tr class="m-b-md">
+                                            <td width="35%">Loan Name</td>
+                                            <td width="65%"><a href="#" id="username" data-type="text" data-pk="1"
+                                                    data-title="Enter username" class="editable editable-click">HDFC</a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Description</td>
+                                            <td><a href="#" id="firstname" data-type="text" data-pk="1"
+                                                    data-placement="right" data-placeholder="Required"
+                                                    data-title="Enter your firstname"
+                                                    class="editable editable-click editable-empty">Venkat</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Start date</td>
+                                            <td><a href="#" id="sex" data-type="select" data-pk="1" data-value=""
+                                                    data-title="Select sex" class="editable editable-click">Savings</a>
+                                                <a href="#" class="pull-right">Add group</a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>End date</td>
+                                            <td><a href="#" id="firstname" data-type="text" data-pk="1"
+                                                    data-placement="right" data-placeholder="Required"
+                                                    data-title="Enter your firstname"
+                                                    class="editable editable-click editable-empty">3473.23</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>No End Date</td>
+                                            <td><label class="label label-danger">Yes</label> <a href="#"
+                                                    class="pull-right">No</a></td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+
+
+
+
+
+
+
+                        </div>
+                        <div class="hpanel">
+                            <p class="m-t-lg">
+                            <h5><strong>Categories</strong></h5>
+                            </p>
+                            <div class="panel-body">
+                                <table id="user" class="table table-striped" style="clear: both">
+                                    <tbody>
+                                        <tr>
+                                            <td>Home Daily Needs</td>
+                                            <td>1234.56</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Home Maintenance</td>
+                                            <td>421234.56</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Vehicle Maintenance</td>
+                                            <td>823882</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Outside Food</td>
+                                            <td>93883.36</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="col-lg-8">
+                    <div class="hpanel">
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>Summary</th>
+                                    <th>Date</th>
+                                    <th>Type</th>
+                                    <th>Amount</th>
+                                    <th>Account</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>Sample summary of transactions</td>
+                                    <td>12-Dec-2023</td>
+                                    <td class="text-danger">Expense</td>
+                                    <td>18,000</td>
+                                    <td>HDFC</td>
+                                </tr>
+                                <tr>
+                                    <td>Sample summary of transactions</td>
+                                    <td>12-Dec-2023</td>
+                                    <td class="text-success">Income</td>
+                                    <td>2,000</td>
+                                    <td>HDFC</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>Sample summary of transactions</td>
+                                    <td>12-Dec-2023</td>
+                                    <td class="text-success">Income</td>
+                                    <td>2,000</td>
+                                    <td>KOTAK</td>
+                                </tr>
+                                <tr>
+                                    <td>Sample summary of transactions</td>
+                                    <td>12-Dec-2023</td>
+                                    <td class="text-success">Income</td>
+                                    <td>2,000</td>
+                                    <td>SBI - Venkat</td>
+                                </tr>
+                                <tr>
+                                    <td>Sample summary of transactions</td>
+                                    <td>12-Dec-2023</td>
+                                    <td class="text-danger">Expense</td>
+                                    <td>2,000</td>
+                                    <td>Cash</td>
+                                </tr>
+                                </tbody>
+                            </table>
+            </div>
+            
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+
+        <!-- Right sidebar -->
+
+
+        <!-- Footer-->
+        <footer class="footer">
+            <span class="pull-right"> Example text </span>
+            Company 2015-2020
+        </footer>
+    </div>
+
+    <!-- Vendor scripts -->
+    <script src="vendor/jquery/dist/jquery.min.js"></script>
+    <script src="vendor/jquery-ui/jquery-ui.min.js"></script>
+    <script src="vendor/slimScroll/jquery.slimscroll.min.js"></script>
+    <script src="vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="vendor/metisMenu/dist/metisMenu.min.js"></script>
+    <script src="vendor/iCheck/icheck.min.js"></script>
+    <script src="vendor/sparkline/index.js"></script>
+    <script src="vendor/moment/moment.js"></script>
+    <script src="vendor/xeditable/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+    <script src="vendor/select2-3.5.2/select2.min.js"></script>
+    <script src="vendor/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js"></script>
+    <script src="vendor/bootstrap-datepicker-master/dist/js/bootstrap-datepicker.min.js"></script>
+    <script src="vendor/clockpicker/dist/bootstrap-clockpicker.min.js"></script>
+    <script src="vendor/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="vendor/chartjs/Chart.min.js"></script>
+
+    <!-- App scripts -->
+    <script src="scripts/homer.js"></script>
+
+    <script>
+
+        $(function () {
+
+            $('#datepicker').datepicker();
+            $("#datepicker").on("changeDate", function (event) {
+                $("#my_hidden_input").val(
+                    $("#datepicker").datepicker('getFormattedDate')
+                )
+            });
+
+            $('#datapicker2').datepicker();
+            $('.input-group.date').datepicker({});
+            $('.input-daterange').datepicker({});
+
+            $("#demo1").TouchSpin({
+                min: 0,
+                max: 100,
+                step: 0.1,
+                decimals: 2,
+                boostat: 5,
+                maxboostedstep: 10,
+            });
+
+            $("#demo2").TouchSpin({
+                verticalbuttons: true
+            });
+
+            $("#demo3").TouchSpin({
+                postfix: '%'
+            });
+
+            $("#demo4").TouchSpin({
+                postfix: "a button",
+                postfix_extraclass: "btn btn-default"
+            });
+
+            $(".js-source-states").select2();
+            $(".js-source-states-2").select2();
+
+            //turn to inline mode
+            $.fn.editable.defaults.mode = 'inline';
+
+            //defaults
+            $.fn.editable.defaults.url = '#';
+
+            //editables
+            $('#username').editable({
+                url: '#',
+                type: 'text',
+                pk: 1,
+                name: 'username',
+                title: 'Enter username'
+            });
+
+            $('#firstname').editable({
+                validate: function (value) {
+                    if ($.trim(value) == '') return 'This field is required';
+                }
+            });
+
+            $('#sex').editable({
+                prepend: "Savings",
+                source: [
+                    { value: 1, text: 'Savings' },
+                    { value: 2, text: 'Investment' },
+                    { value: 3, text: 'Credit Card' },
+                    { value: 4, text: 'Online Wallet' }
+                ],
+                display: function (value, sourceData) {
+                    var colors = { "": "gray", 1: "green", 2: "blue" },
+                        elem = $.grep(sourceData, function (o) { return o.value == value; });
+
+                    if (elem.length) {
+                        $(this).text(elem[0].text).css("color", colors[value]);
+                    } else {
+                        $(this).empty();
+                    }
+                }
+            });
+
+            $('#dob').editable();
+
+            $('#event').editable({
+                placement: 'right',
+                combodate: {
+                    firstItem: 'name'
+                }
+            });
+
+            $('#comments').editable({
+                showbuttons: 'bottom'
+            });
+
+            $('#fruits').editable({
+                pk: 1,
+                limit: 3,
+                source: [
+                    { value: 1, text: 'banana' },
+                    { value: 2, text: 'peach' },
+                    { value: 3, text: 'apple' },
+                    { value: 4, text: 'watermelon' },
+                    { value: 5, text: 'orange' }
+                ]
+            });
+
+            $('#user .editable').on('hidden', function (e, reason) {
+                if (reason === 'save' || reason === 'nochange') {
+                    var $next = $(this).closest('tr').next().find('.editable');
+                    if ($('#autoopen').is(':checked')) {
+                        setTimeout(function () {
+                            $next.editable('show');
+                        }, 300);
+                    } else {
+                        $next.focus();
+                    }
+                }
+            });
+
+            // ClockPicker
+            $('.clockpicker').clockpicker({ autoclose: true });
+
+            // DateTimePicker
+            $('#datetimepicker1').datetimepicker();
+
+        });
+
+    </script>
+    <script>
+
+        $(function () {
+
+
+            /**
+             * Options for Line chart
+             */
+
+            var lineData = {
+                labels: ["January", "February", "March", "April", "May", "June", "July"],
+                datasets: [
+
+                    {
+                        label: "Dt 1",
+                        backgroundColor: 'rgba(98,203,49, 0.5)',
+                        pointBorderWidth: 1,
+                        pointBackgroundColor: "rgba(98,203,49,1)",
+                        pointRadius: 3,
+                        pointBorderColor: '#ffffff',
+                        borderWidth: 1,
+                        data: [16, 32, 18, 26, 42, 33, 44]
+                    },
+                    {
+                        label: "Dt 2",
+                        backgroundColor: 'rgba(220,220,220,0.5)',
+                        borderColor: "rgba(220,220,220,0.7)",
+                        pointBorderWidth: 1,
+                        pointBackgroundColor: "rgba(220,220,220,1)",
+                        pointRadius: 3,
+                        pointBorderColor: '#ffffff',
+                        borderWidth: 1,
+                        data: [22, 44, 67, 43, 76, 45, 12]
+                    }
+                ]
+            };
+
+            var lineOptions = {
+                responsive: true
+            };
+
+            var ctx = document.getElementById("lineOptions").getContext("2d");
+            new Chart(ctx, { type: 'line', data: lineData, options: lineOptions });
+
+            /**
+             * Options for Sharp Line chart
+             */
+            var sharpLineData = {
+                labels: ["January", "February", "March", "April", "May", "June", "July"],
+                datasets: [
+                    {
+                        label: "Dt 1",
+                        backgroundColor: "rgba(98,203,49,0.5)",
+                        data: [33, 48, 40, 19, 54, 27, 54],
+                        lineTension: 0,
+                        pointBorderWidth: 1,
+                        pointBackgroundColor: "rgba(98,203,49,1)",
+                        pointRadius: 3,
+                        pointBorderColor: '#ffffff',
+                        borderWidth: 1
+                    }
+                ]
+            };
+
+            var sharpLineOptions = {
+                responsive: true,
+                legend: {
+                    display: false
+                }
+            };
+
+            var ctx = document.getElementById("sharpLineOptions").getContext("2d");
+            new Chart(ctx, { type: 'line', data: sharpLineData, options: sharpLineOptions });
+
+
+            /**
+             * Options for Bar chart
+             */
+            var barOptions = {
+                responsive: true
+            };
+
+            /**
+             * Data for Bar chart
+             */
+            var barData = {
+                labels: ["January", "February", "March", "April", "May", "June", "July"],
+                datasets: [
+                    {
+                        label: "Dt 1",
+                        backgroundColor: "rgba(220,220,220,0.5)",
+                        borderColor: "rgba(220,220,220,0.8)",
+                        highlightFill: "rgba(220,220,220,0.75)",
+                        highlightStroke: "rgba(220,220,220,1)",
+                        borderWidth: 1,
+                        data: [65, 59, 80, 81, 56, 55, 40]
+                    },
+                    {
+                        label: "Dt 2",
+                        backgroundColor: "rgba(98,203,49,0.5)",
+                        borderColor: "rgba(98,203,49,0.8)",
+                        highlightFill: "rgba(98,203,49,0.75)",
+                        highlightStroke: "rgba(98,203,49,1)",
+                        borderWidth: 1,
+                        data: [28, 48, 40, 19, 86, 27, 90]
+                    }
+                ]
+            };
+
+            var ctx = document.getElementById("barOptions").getContext("2d");
+            new Chart(ctx, { type: 'bar', data: barData, options: barOptions });
+
+            /**
+             * Options for Bar chart
+             */
+            var singleBarOptions = {
+                responsive: true,
+                legend: {
+                    display: true
+                }
+            };
+
+            /**
+             * Data for Bar chart
+             */
+            var singleBarData = {
+                labels: ["January", "February", "March"],
+                datasets: [
+                    {
+                        label: "Category",
+                        backgroundColor: "rgba(98,203,49,0.5)",
+                        borderColor: "rgba(98,203,49,0.8)",
+                        highlightFill: "rgba(98,203,49,0.75)",
+                        highlightStroke: "rgba(98,203,49,1)",
+                        borderWidth: 1,
+                        data: [15, 20, 30]
+                    }
+                ]
+            };
+
+            var ctx = document.getElementById("singleBarOptions").getContext("2d");
+            new Chart(ctx, { type: 'bar', data: singleBarData, options: singleBarOptions });
+
+
+            var polarData = {
+                datasets: [{
+                    data: [
+                        120,
+                        130,
+                        100
+                    ],
+                    backgroundColor: [
+                        "#62cb31",
+                        "#80dd55",
+                        "#a3e186"
+                    ],
+                    label: 'Dt 1' // for legend
+                }],
+                labels: [
+                    "Homer",
+                    "Inspinia",
+                    "Luna"
+                ]
+            }
+
+            var polarOptions = {
+                responsive: true
+
+            };
+
+            var ctx = document.getElementById("polarOptions").getContext("2d");
+            new Chart(ctx, { type: 'polarArea', data: polarData, options: polarOptions });
+
+
+            var doughnutData = {
+                labels: [
+                    "App",
+                    "Software",
+                    "Laptop"
+                ],
+                datasets: [
+                    {
+                        data: [20, 120, 100],
+                        backgroundColor: [
+                            "#62cb31",
+                            "#91dc6e",
+                            "#a3e186"
+                        ],
+                        hoverBackgroundColor: [
+                            "#57b32c",
+                            "#57b32c",
+                            "#57b32c"
+                        ]
+                    }]
+            }
+
+
+            var doughnutOptions = {
+                responsive: true
+            };
+
+            var ctx = document.getElementById("doughnutChart").getContext("2d");
+            new Chart(ctx, { type: 'doughnut', data: doughnutData, options: doughnutOptions });
+
+            var radarData = {
+                labels: ["Eating", "Drinking", "Sleeping", "Designing", "Coding", "Cycling", "Running"],
+                datasets: [
+                    {
+                        label: "Dt 1",
+                        backgroundColor: "rgba(98,203,49,0.2)",
+                        borderColor: "rgba(98,203,49,1)",
+                        pointBackgroundColor: "rgba(98,203,49,1)",
+                        pointBorderColor: "#fff",
+                        pointHoverBackgroundColor: "#fff",
+                        pointHoverBorderColor: "#62cb31",
+                        borderWidth: 1,
+                        data: [65, 59, 66, 45, 56, 55, 40]
+                    },
+                    {
+                        label: "Dt 2",
+                        backgroundColor: "rgba(98,203,49,0.4)",
+                        borderColor: "rgba(98,203,49,1)",
+                        pointBackgroundColor: "rgba(98,203,49,1)",
+                        pointBorderColor: "#fff",
+                        pointHoverBackgroundColor: "#fff",
+                        pointHoverBorderColor: "#62cb31",
+                        borderWidth: 1,
+                        data: [28, 12, 40, 19, 63, 27, 87]
+                    }
+                ]
+            };
+
+            var radarOptions = {
+                responsive: true
+            };
+
+
+            var ctx = document.getElementById("radarChart").getContext("2d");
+            new Chart(ctx, { type: 'radar', data: radarData, options: radarOptions });
+        });
+
+    </script>
+
+</body>
+
+</html>

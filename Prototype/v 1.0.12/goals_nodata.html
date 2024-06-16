@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  <!-- Page title -->
+  <title>Clanily</title>
+
+  <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+  <!--<link rel="shortcut icon" type="image/ico" href="favicon.ico" />-->
+
+  <!-- Vendor styles -->
+  <link rel="stylesheet" href="vendor/fontawesome/css/font-awesome.css" />
+  <link rel="stylesheet" href="vendor/metisMenu/dist/metisMenu.css" />
+  <link rel="stylesheet" href="vendor/animate.css/animate.css" />
+  <link rel="stylesheet" href="vendor/bootstrap/dist/css/bootstrap.css" />
+
+  <!-- App styles -->
+  <link rel="stylesheet" href="fonts/pe-icon-7-stroke/css/pe-icon-7-stroke.css" />
+  <link rel="stylesheet" href="fonts/pe-icon-7-stroke/css/helper.css" />
+  <link rel="stylesheet" href="styles/style.css" />
+</head>
+
+<body class="fixed-navbar sidebar-scroll">
+  <!-- Skin option / for demo purpose only -->
+
+  <!-- Header -->
+  <div id="header">
+    <div class="color-line"></div>
+    <div id="logo" class="light-version">
+      <span> Clanily </span>
+    </div>
+    <nav role="navigation">
+      <div class="small-logo">
+        <span class="text-primary">Clanily</span>
+      </div>
+
+      <div class="navbar-right">
+        <ul class="nav navbar-nav no-borders">
+
+          <li class="dropdown">
+            <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+              <i class="pe-7s-config"></i>
+            </a>
+
+            <div class="dropdown-menu hdropdown bigmenu animated flipInX">
+              <table>
+                <tbody>
+                  <tr>
+                    <td>
+                      <a href="Categories.html">
+                        <i class="pe pe-7s-portfolio text-info"></i>
+                        <h5>Categories</h5>
+                      </a>
+                    </td>
+                    <td>
+                      <a href="payee.html">
+                        <i class="pe pe-7s-users text-warning"></i>
+                        <h5>Payee</h5>
+                      </a>
+                    </td>
+                    <td>
+                      <a href="objectives.html">
+                        <i class="pe pe-7s-target text-success"></i>
+                        <h5>Objectives</h5>
+                      </a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <a href="users.html">
+                        <i class="pe pe-7s-user text-info"></i>
+                        <h5>Users</h5>
+                      </a>
+                    </td>
+                    <td>
+                      <a href="templates.html">
+                        <i class="pe pe-7s-folder text-danger"></i>
+                        <h5>Templates</h5>
+                      </a>
+                    </td>
+                    <td>
+                      <a href="jobs.html">
+                        <i class="pe pe-7s-help2 text-success"></i>
+                        <h5>Jobs</h5>
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </li>
+
+          <li>
+            <a href="#" id="sidebar" class="right-sidebar-toggle">
+              <i class="pe-7s-upload pe-7s-news-paper"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Navigation -->
+  <aside id="menu">
+    <div id="navigation">
+      <div class="profile-picture">
+        <img src="images/profile.jpg" class="img-circle m-b" alt="logo" />
+
+        <div class="stats-label text-color">
+          <span class="font-extra-bold font-uppercase">Venkat</span>
+
+          <div class="dropdown">
+            <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+              <small class="text-muted">Admin, Super User <b class="caret"></b></small>
+            </a>
+            <ul class="dropdown-menu animated flipInX m-t-xs">
+              <li><a href="appsettings.html">Application Settings</a></li>
+              <li><a href="profile.html">Profile</a></li>
+              <li><a href="preferences.html">Preferences</a></li>
+              <li class="divider"></li>
+              <li><a href="login.html">Logout</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <ul class="nav" id="side-menu">
+        <li>
+          <a href="index.html">
+            <span class="nav-label">Home</span>
+          </a>
+        </li>
+        <li>
+          <a href="transactions.html">
+            <span class="nav-label">Transactions</span>
+          </a>
+        </li>
+        <li>
+          <a href="accounts.html">
+            <span class="nav-label">Accounts</span>
+          </a>
+        </li>
+
+        <li>
+          <a href="projects.html">
+            <span class="nav-label">Projects</span>
+          </a>
+        </li>
+        <li>
+          <a href="loans.html">
+            <span class="nav-label">Loan</span>
+          </a>
+        </li>
+        <li>
+          <a href="budget.html">
+            <span class="nav-label">Budget</span>
+          </a>
+        </li>
+        <li class="active">
+          <a href="goals.html">
+            <span class="nav-label">Goals</span>
+          </a>
+        </li>
+        <li>
+          <a href="reports.html">
+            <span class="nav-label">Reports</span>
+          </a>
+        </li>
+        <li>
+          <a href="settings.html">
+            <span class="nav-label">Settings</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </aside>
+
+  <!-- Main Wrapper -->
+  <div id="wrapper">
+    <div class="normalheader small-header">
+      <div class="hpanel">
+        <div class="panel-body">
+          <h2 class="font-light m-b-xs">
+            Goals
+          </h2>
+          <small>Manage your goals</small>
+        </div>
+      </div>
+    </div>
+    <div class="content">
+
+      <div class="col-lg-9">
+        <div class="error-container">
+
+          <h1 class="h-100 text-danger">No data found</h1>
+          <div class="font-extra-bold">
+            <p>Sorry. There are no data available for this filter criteria</p>
+          </div>
+          <p class="text-muted">
+            Overdue goals are those which you missed the deadline and fullfil them on time. These goals are calculated
+            based on the conditions that you have opted.
+
+          </p>
+        </div>
+      </div>
+
+      <div class="col-lg-3">
+        <div class="hpanel">
+          <div class="panel-body">
+
+            <ul class="mailbox-list">
+              <li class="m-b-md">
+                <a href="NewGoal.html" class="btn btn-primary">+ New
+                  Goal</a>
+              </li>
+
+              <li>
+                <a href="goals.html">
+                  Active
+                </a>
+              </li>
+              <li>
+                <a href="goals.html">
+                  Completed
+                </a>
+              </li>
+              <li class="active">
+                <a href="goals_nodata.html">
+                  Overdue
+                </a>
+              </li>
+
+              <li class>
+                <a href="#">
+                  Missed
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  KOTAK Credit card
+                </a>
+              </li>
+
+            </ul>
+
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Footer-->
+      <footer class="footer">
+        <span class="pull-right"> Example text </span>
+        Company 2015-2020
+      </footer>
+    </div>
+
+    <script src="vendor/jquery/dist/jquery.min.js"></script>
+    <script src="vendor/jquery-ui/jquery-ui.min.js"></script>
+    <script src="vendor/slimScroll/jquery.slimscroll.min.js"></script>
+    <script src="vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="vendor/metisMenu/dist/metisMenu.min.js"></script>
+    <script src="vendor/iCheck/icheck.min.js"></script>
+    <script src="vendor/chartjs/Chart.min.js"></script>
+    <script src="vendor/sparkline/index.js"></script>
+    <script src="vendor/flot.curvedlines/curvedLines.js"></script>
+    <script src="vendor/jquery.flot.spline/index.js"></script>
+    <script src="vendor/jquery-flot/jquery.flot.js"></script>
+    <script src="vendor/jquery-flot/jquery.flot.resize.js"></script>
+    <script src="vendor/jquery-flot/jquery.flot.pie.js"></script>
+
+    <!-- App scripts -->
+    <script src="scripts/homer.js"></script>
+
+    <script>
+
+      $(function () {
+
+
+        /**
+         * Options for Line chart
+         */
+
+        var lineData = {
+          labels: ["January", "February", "March", "April", "May", "June", "July"],
+          datasets: [
+
+            {
+              label: "Dt 1",
+              backgroundColor: 'rgba(98,203,49, 0.5)',
+              pointBorderWidth: 1,
+              pointBackgroundColor: "rgba(98,203,49,1)",
+              pointRadius: 3,
+              pointBorderColor: '#ffffff',
+              borderWidth: 1,
+              data: [16, 32, 18, 26, 42, 33, 44]
+            },
+            {
+              label: "Dt 2",
+              backgroundColor: 'rgba(220,220,220,0.5)',
+              borderColor: "rgba(220,220,220,0.7)",
+              pointBorderWidth: 1,
+              pointBackgroundColor: "rgba(220,220,220,1)",
+              pointRadius: 3,
+              pointBorderColor: '#ffffff',
+              borderWidth: 1,
+              data: [22, 44, 67, 43, 76, 45, 12]
+            }
+          ]
+        };
+
+        var lineOptions = {
+          responsive: true
+        };
+
+        var ctx = document.getElementById("lineOptions").getContext("2d");
+        new Chart(ctx, { type: 'line', data: lineData, options: lineOptions });
+
+        /**
+         * Options for Sharp Line chart
+         */
+        var sharpLineData = {
+          labels: ["January", "February", "March", "April", "May", "June", "July"],
+          datasets: [
+            {
+              label: "Dt 1",
+              backgroundColor: "rgba(98,203,49,0.5)",
+              data: [33, 48, 40, 19, 54, 27, 54],
+              lineTension: 0,
+              pointBorderWidth: 1,
+              pointBackgroundColor: "rgba(98,203,49,1)",
+              pointRadius: 3,
+              pointBorderColor: '#ffffff',
+              borderWidth: 1
+            }
+          ]
+        };
+
+        var sharpLineOptions = {
+          responsive: true,
+          legend: {
+            display: false
+          }
+        };
+
+        var ctx = document.getElementById("sharpLineOptions").getContext("2d");
+        new Chart(ctx, { type: 'line', data: sharpLineData, options: sharpLineOptions });
+
+
+        /**
+         * Options for Bar chart
+         */
+        var barOptions = {
+          responsive: true
+        };
+
+        /**
+         * Data for Bar chart
+         */
+        var barData = {
+          labels: ["January", "February", "March", "April", "May", "June", "July"],
+          datasets: [
+            {
+              label: "Dt 1",
+              backgroundColor: "rgba(220,220,220,0.5)",
+              borderColor: "rgba(220,220,220,0.8)",
+              highlightFill: "rgba(220,220,220,0.75)",
+              highlightStroke: "rgba(220,220,220,1)",
+              borderWidth: 1,
+              data: [65, 59, 80, 81, 56, 55, 40]
+            },
+            {
+              label: "Dt 2",
+              backgroundColor: "rgba(98,203,49,0.5)",
+              borderColor: "rgba(98,203,49,0.8)",
+              highlightFill: "rgba(98,203,49,0.75)",
+              highlightStroke: "rgba(98,203,49,1)",
+              borderWidth: 1,
+              data: [28, 48, 40, 19, 86, 27, 90]
+            }
+          ]
+        };
+
+        var ctx = document.getElementById("barOptions").getContext("2d");
+        new Chart(ctx, { type: 'bar', data: barData, options: barOptions });
+
+        /**
+         * Options for Bar chart
+         */
+        var singleBarOptions = {
+          responsive: true,
+          legend: {
+            display: true
+          }
+        };
+
+        /**
+         * Data for Bar chart
+         */
+        var singleBarData = {
+          labels: ["January", "February", "March", "April", "May", "June", "July"],
+          datasets: [
+            {
+              label: "Dt 1",
+              backgroundColor: "rgba(98,203,49,0.5)",
+              borderColor: "rgba(98,203,49,0.8)",
+              highlightFill: "rgba(98,203,49,0.75)",
+              highlightStroke: "rgba(98,203,49,1)",
+              borderWidth: 1,
+              data: [15, 20, 30, 40, 30, 50, 60]
+            }
+          ]
+        };
+
+        var ctx = document.getElementById("singleBarOptions").getContext("2d");
+        new Chart(ctx, { type: 'bar', data: singleBarData, options: singleBarOptions });
+
+
+        var polarData = {
+          datasets: [{
+            data: [
+              120,
+              130,
+              100
+            ],
+            backgroundColor: [
+              "#62cb31",
+              "#80dd55",
+              "#a3e186"
+            ],
+            label: 'Dt 1' // for legend
+          }],
+          labels: [
+            "Homer",
+            "Inspinia",
+            "Luna"
+          ]
+        }
+
+        var polarOptions = {
+          responsive: true
+
+        };
+
+        var ctx = document.getElementById("polarOptions").getContext("2d");
+        new Chart(ctx, { type: 'polarArea', data: polarData, options: polarOptions });
+
+
+        var doughnutData = {
+          labels: [
+            "App",
+            "Software",
+            "Laptop"
+          ],
+          datasets: [
+            {
+              data: [20, 120, 100],
+              backgroundColor: [
+                "#62cb31",
+                "#91dc6e",
+                "#a3e186"
+              ],
+              hoverBackgroundColor: [
+                "#57b32c",
+                "#57b32c",
+                "#57b32c"
+              ]
+            }]
+        }
+
+
+        var doughnutOptions = {
+          responsive: true
+        };
+
+        var ctx = document.getElementById("doughnutChart").getContext("2d");
+        new Chart(ctx, { type: 'doughnut', data: doughnutData, options: doughnutOptions });
+
+        var radarData = {
+          labels: ["Eating", "Drinking", "Sleeping", "Designing", "Coding", "Cycling", "Running"],
+          datasets: [
+            {
+              label: "Dt 1",
+              backgroundColor: "rgba(98,203,49,0.2)",
+              borderColor: "rgba(98,203,49,1)",
+              pointBackgroundColor: "rgba(98,203,49,1)",
+              pointBorderColor: "#fff",
+              pointHoverBackgroundColor: "#fff",
+              pointHoverBorderColor: "#62cb31",
+              borderWidth: 1,
+              data: [65, 59, 66, 45, 56, 55, 40]
+            },
+            {
+              label: "Dt 2",
+              backgroundColor: "rgba(98,203,49,0.4)",
+              borderColor: "rgba(98,203,49,1)",
+              pointBackgroundColor: "rgba(98,203,49,1)",
+              pointBorderColor: "#fff",
+              pointHoverBackgroundColor: "#fff",
+              pointHoverBorderColor: "#62cb31",
+              borderWidth: 1,
+              data: [28, 12, 40, 19, 63, 27, 87]
+            }
+          ]
+        };
+
+        var radarOptions = {
+          responsive: true
+        };
+
+
+        var ctx = document.getElementById("radarChart").getContext("2d");
+        new Chart(ctx, { type: 'radar', data: radarData, options: radarOptions });
+
+
+
+        /**
+          * Pie Chart Data
+          */
+        var pieChartData = [
+          { label: "Data 1", data: 16, color: "#62cb31", },
+          { label: "Data 2", data: 6, color: "#A4E585", },
+          { label: "Data 3", data: 22, color: "#368410", },
+          { label: "Data 4", data: 32, color: "#8DE563", }
+        ];
+
+        /**
+         * Pie Chart Options
+         */
+        var pieChartOptions = {
+          series: {
+            pie: {
+              show: true
+            }
+          },
+          grid: {
+            hoverable: true
+          },
+          tooltip: true,
+          tooltipOpts: {
+            content: "%p.0%, %s", // show percentages, rounding to 2 decimal places
+            shifts: {
+              x: 20,
+              y: 0
+            },
+            defaultTheme: false
+          }
+        };
+
+        $.plot($("#flot-pie-chart"), pieChartData, pieChartOptions);
+
+        /**
+        * Flot charts line data and options
+        */
+        var chartIncomeData = [
+          {
+            label: "line",
+            data: [[1, 10], [2, 26], [3, 16], [4, 36], [5, 32], [6, 51]]
+          }
+        ];
+
+        var chartIncomeOptions = {
+          series: {
+            lines: {
+              show: true,
+              lineWidth: 0,
+              fill: true,
+              fillColor: "#64cc34"
+
+            }
+          },
+          colors: ["#62cb31"],
+          grid: {
+            show: false
+          },
+          legend: {
+            show: false
+          }
+        };
+
+        $.plot($("#flot-income-chart"), chartIncomeData, chartIncomeOptions);
+
+
+        /**
+         * Bar Chart data
+         */
+        var flotChartData = [
+          {
+            label: "bar",
+            data: [[1, 12], [2, 14], [3, 18], [4, 24], [5, 32], [6, 22]]
+          }
+        ];
+        /**
+         * Bar Chart Options for Analytics
+         */
+        var flotBarOptions = {
+          series: {
+            bars: {
+              show: true,
+              barWidth: 0.8,
+              fill: true,
+              fillColor: {
+                colors: [{ opacity: 1 }, { opacity: 1 }]
+              },
+              lineWidth: 1
+            }
+          },
+          xaxis: {
+            tickDecimals: 0
+          },
+          colors: ["#62cb31"],
+          grid: {
+            show: false
+          },
+          legend: {
+            show: false
+          }
+        };
+
+        $.plot($("#flot-bar-chart"), flotChartData, flotBarOptions);
+
+      });
+
+    </script>
+
+</body>
+
+</html>
