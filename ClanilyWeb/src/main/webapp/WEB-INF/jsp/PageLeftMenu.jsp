@@ -76,7 +76,7 @@
 					<li>
 				</c:otherwise>
 			</c:choose>
-			<a href="budget.html"> <span class="nav-label">Budget</span>
+			<a href="/budget/"> <span class="nav-label">Budget</span>
 			</a></li>
 			
 			<c:choose>
