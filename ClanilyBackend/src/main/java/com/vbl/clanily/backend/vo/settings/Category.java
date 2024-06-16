@@ -1,0 +1,90 @@
+package com.vbl.clanily.backend.vo.settings;
+
+import com.vbl.clanily.backend.vo.ValueObject;
+
+public class Category implements ValueObject {
+
+	public int categoryId;
+	public String categoryName;
+	public String description;
+	public String type;
+	public String tag;
+	public boolean internal;
+	public boolean active;
+
+	public int totalTransactions;
+	public float totalTransactionValue;
+
+	public int getCategoryId() {
+		return categoryId;
+	}
+
+	public void setCategoryId(int categoryId) {
+		this.categoryId = categoryId;
+	}
+
+	public String getCategoryName() {
+		return categoryName;
+	}
+
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public String getTag() {
+		return tag;
+	}
+
+	public void setTag(String tag) {
+		this.tag = tag;
+	}
+
+	public boolean isInternal() {
+		return internal;
+	}
+
+	public void setInternal(boolean internal) {
+		this.internal = internal;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+
+	public int getTotalTransactions() {
+		return totalTransactions;
+	}
+
+	public void setTotalTransactions(int totalTransactions) {
+		this.totalTransactions = totalTransactions;
+	}
+
+	public float getTotalTransactionValue() {
+		return totalTransactionValue;
+	}
+
+	public void setTotalTransactionValue(float totalTransactionValue) {
+		this.totalTransactionValue = totalTransactionValue;
+	}
+
+}

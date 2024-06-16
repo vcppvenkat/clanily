@@ -1,0 +1,482 @@
+package com.vbl.clanily.backend.vo.settings;
+
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+import com.vbl.clanily.backend.vo.ValueObject;
+import com.vbl.clanily.backend.vo.account.Account;
+
+public class Transaction implements ValueObject {
+
+	private SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+	private DecimalFormat decimalFormat = new DecimalFormat("#,###.00");
+	public int transactionId;
+	public String summary;
+	public Date transactionDate;
+	public Date effectiveDate;
+	public String transactionDateString;
+
+	public String displayGroupValue;
+
+	public int categoryId;
+	public String categoryName;
+
+	public Category category;
+
+	public float transactionAmount;
+	public String transactionAmountString;
+	public String transactionType;
+
+	public int accountId;
+	public int toAccountId;
+	public String accountName;
+	public Account account;
+
+	public int payeeId;
+	public Payee payee;
+	public String payeeName;
+
+	public String transactionUserId;
+	public String transactionUserName;
+	public User transactionUser;
+
+	public String notes;
+	public String importedNotes;
+	public String insertionType;
+	public boolean cleared;
+
+	public int projectId;
+	public String projectName;
+
+	public int objectiveId;
+	public String objectiveName;
+	public Objective objective;
+
+	public int splitParentId;
+	public Transaction splitParent;
+	public List<Transaction> splitTransactions;
+
+	public int loanId;
+	public String loanName;
+
+	public int groupParentId;
+	public Transaction groupTransaction;
+	public List<Transaction> groupTransactions;
+
+	public int transferTransactionId;
+	public Transaction transferTransaction;
+
+	public float sumOfSplit;
+	public float sumOfGroup;
+
+	public int recurrenceId;
+
+	public String customField1;
+	public String customField2;
+	public String customField3;
+
+	public boolean autoSync;
+
+	public boolean isAlreadyInitialized;
+
+	public String beneficiary;
+
+	public String getObjectiveName() {
+		return objectiveName;
+	}
+
+	public void setObjectiveName(String objectiveName) {
+		this.objectiveName = objectiveName;
+	}
+
+	public String getPayeeName() {
+		return payeeName;
+	}
+
+	public void setPayeeName(String payeeName) {
+		this.payeeName = payeeName;
+	}
+
+	public String getTransactionAmountString() {
+		return transactionAmountString = decimalFormat.format(transactionAmount);
+	}
+
+	public void setTransactionAmountString(String transactionAmountString) {
+		this.transactionAmountString = transactionAmountString;
+	}
+
+	public String getTransactionDateString() {
+		transactionDateString = "dd-mmm-yyyy";
+		if (transactionDate != null) {
+			transactionDateString = dateFormat.format(transactionDate);
+		}
+		return transactionDateString;
+	}
+
+	public void setTransactionDateString(String transactionDateString) {
+		this.transactionDateString = transactionDateString;
+	}
+
+	public int getToAccountId() {
+		return toAccountId;
+	}
+
+	public void setToAccountId(int toAccountId) {
+		this.toAccountId = toAccountId;
+	}
+
+	public boolean isAutoSync() {
+		return autoSync;
+	}
+
+	public void setAutoSync(boolean autoSync) {
+		this.autoSync = autoSync;
+	}
+
+	public int getTransactionId() {
+		return transactionId;
+	}
+
+	public void setTransactionId(int transactionId) {
+		this.transactionId = transactionId;
+	}
+
+	public String getSummary() {
+		return summary;
+	}
+
+	public void setSummary(String summary) {
+		this.summary = summary;
+	}
+
+	public Date getTransactionDate() {
+		return transactionDate;
+	}
+
+	public void setTransactionDate(Date transactionDate) {
+		this.transactionDate = transactionDate;
+	}
+
+	public int getCategoryId() {
+		return categoryId;
+	}
+
+	public void setCategoryId(int categoryId) {
+		this.categoryId = categoryId;
+	}
+
+	public Category getCategory() {
+		return category;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
+	}
+
+	public float getTransactionAmount() {
+		return transactionAmount;
+	}
+
+	public void setTransactionAmount(float transactionAmount) {
+		this.transactionAmount = transactionAmount;
+	}
+
+	public String getTransactionType() {
+		return transactionType;
+	}
+
+	public void setTransactionType(String transactionType) {
+		this.transactionType = transactionType;
+	}
+
+	public int getAccountId() {
+		return accountId;
+	}
+
+	public void setAccountId(int accountId) {
+		this.accountId = accountId;
+	}
+
+	public Account getAccount() {
+		return account;
+	}
+
+	public void setAccount(Account account) {
+		this.account = account;
+	}
+
+	public int getPayeeId() {
+		return payeeId;
+	}
+
+	public void setPayeeId(int payeeId) {
+		this.payeeId = payeeId;
+	}
+
+	public Payee getPayee() {
+		return payee;
+	}
+
+	public void setPayee(Payee payee) {
+		this.payee = payee;
+	}
+
+	public String getTransactionUserId() {
+		return transactionUserId;
+	}
+
+	public void setTransactionUserId(String transactionUserId) {
+		this.transactionUserId = transactionUserId;
+	}
+
+	public User getTransactionUser() {
+		return transactionUser;
+	}
+
+	public void setTransactionUser(User transactionUser) {
+		this.transactionUser = transactionUser;
+	}
+
+	public String getNotes() {
+		return notes;
+	}
+
+	public void setNotes(String notes) {
+		this.notes = notes;
+	}
+
+	public String getImportedNotes() {
+		return importedNotes;
+	}
+
+	public void setImportedNotes(String importedNotes) {
+		this.importedNotes = importedNotes;
+	}
+
+	public String getInsertionType() {
+		return insertionType;
+	}
+
+	public void setInsertionType(String insertionType) {
+		this.insertionType = insertionType;
+	}
+
+	public boolean isCleared() {
+		return cleared;
+	}
+
+	public void setCleared(boolean cleared) {
+		this.cleared = cleared;
+	}
+
+	public int getProjectId() {
+		return projectId;
+	}
+
+	public void setProjectId(int projectId) {
+		this.projectId = projectId;
+	}
+
+	public int getObjectiveId() {
+		return objectiveId;
+	}
+
+	public void setObjectiveId(int objectiveId) {
+		this.objectiveId = objectiveId;
+	}
+
+	public Objective getObjective() {
+		return objective;
+	}
+
+	public void setObjective(Objective objective) {
+		this.objective = objective;
+	}
+
+	public int getSplitParentId() {
+		return splitParentId;
+	}
+
+	public void setSplitParentId(int splitParentId) {
+		this.splitParentId = splitParentId;
+	}
+
+	public Transaction getSplitParent() {
+		return splitParent;
+	}
+
+	public void setSplitParent(Transaction splitParent) {
+		this.splitParent = splitParent;
+	}
+
+	public List<Transaction> getSplitTransactions() {
+		return splitTransactions;
+	}
+
+	public void setSplitTransactions(List<Transaction> splitTransactions) {
+		this.splitTransactions = splitTransactions;
+	}
+
+	public int getLoanId() {
+		return loanId;
+	}
+
+	public void setLoanId(int loanId) {
+		this.loanId = loanId;
+	}
+
+	public int getGroupParentId() {
+		return groupParentId;
+	}
+
+	public void setGroupParentId(int groupParentId) {
+		this.groupParentId = groupParentId;
+	}
+
+	public Transaction getGroupTransaction() {
+		return groupTransaction;
+	}
+
+	public void setGroupTransaction(Transaction groupTransaction) {
+		this.groupTransaction = groupTransaction;
+	}
+
+	public List<Transaction> getGroupTransactions() {
+		return groupTransactions;
+	}
+
+	public void setGroupTransactions(List<Transaction> groupTransactions) {
+		this.groupTransactions = groupTransactions;
+	}
+
+	public int getTransferTransactionId() {
+		return transferTransactionId;
+	}
+
+	public void setTransferTransactionId(int transferTransactionId) {
+		this.transferTransactionId = transferTransactionId;
+	}
+
+	public Transaction getTransferTransaction() {
+		return transferTransaction;
+	}
+
+	public void setTransferTransaction(Transaction transferTransaction) {
+		this.transferTransaction = transferTransaction;
+	}
+
+	public float getSumOfSplit() {
+		return sumOfSplit;
+	}
+
+	public void setSumOfSplit(float sumOfSplit) {
+		this.sumOfSplit = sumOfSplit;
+	}
+
+	public float getSumOfGroup() {
+		return sumOfGroup;
+	}
+
+	public void setSumOfGroup(float sumOfGroup) {
+		this.sumOfGroup = sumOfGroup;
+	}
+
+	public int getRecurrenceId() {
+		return recurrenceId;
+	}
+
+	public void setRecurrenceId(int recurrenceId) {
+		this.recurrenceId = recurrenceId;
+	}
+
+	public String getCustomField1() {
+		return customField1;
+	}
+
+	public void setCustomField1(String customField1) {
+		this.customField1 = customField1;
+	}
+
+	public String getCustomField2() {
+		return customField2;
+	}
+
+	public void setCustomField2(String customField2) {
+		this.customField2 = customField2;
+	}
+
+	public String getCustomField3() {
+		return customField3;
+	}
+
+	public void setCustomField3(String customField3) {
+		this.customField3 = customField3;
+	}
+
+	public String getBeneficiary() {
+		return beneficiary;
+	}
+
+	public void setBeneficiary(String beneficiary) {
+		this.beneficiary = beneficiary;
+	}
+
+	public Date getEffectiveDate() {
+		return effectiveDate;
+	}
+
+	public void setEffectiveDate(Date effectiveDate) {
+		this.effectiveDate = effectiveDate;
+	}
+
+	public String getAccountName() {
+		return accountName;
+	}
+
+	public void setAccountName(String accountName) {
+		this.accountName = accountName;
+	}
+
+	public String getDisplayGroupValue() {
+		return displayGroupValue;
+	}
+
+	public void setDisplayGroupValue(String displayGroupName) {
+		this.displayGroupValue = displayGroupName;
+	}
+
+	public String getCategoryName() {
+		return categoryName;
+	}
+
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
+	}
+
+	public String getLoanName() {
+		return loanName;
+	}
+
+	public void setLoanName(String loanName) {
+		this.loanName = loanName;
+	}
+
+	public String getProjectName() {
+		return projectName;
+	}
+
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+
+	public String getTransactionUserName() {
+		return transactionUserName;
+	}
+
+	public void setTransactionUserName(String transactionUserName) {
+		this.transactionUserName = transactionUserName;
+	}
+
+}
