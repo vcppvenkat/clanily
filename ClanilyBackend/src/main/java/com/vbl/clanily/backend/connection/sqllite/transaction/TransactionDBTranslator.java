@@ -313,9 +313,39 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 		return rowId;
 	}
 
+	public void attachFile(int transactionId, String fileStream, String fileName, String description) throws Exception {
+		
+
+		String query = "INSERT INTO TRANSACTION_FILES (TRANSACTION_ID, FILE_NAME, FILE_OBJECT, DATE_ADDED, DESCRIPTION) VALUES (?,?,?,?,?)";
+
+		PreparedStatement s = connection.prepareStatement(query);
+
+		s.setInt(1, transactionId);
+		s.setString(2, fileName);
+		s.setBytes(3, fileStream.getBytes());
+		s.setLong(4, new Date().getTime());
+		s.setString(5, description);
+		s.executeUpdate();
+		s.close();
+
+	}
+
 	@Override
 	public List<Integer> insertAll(List<ValueObject> values) throws Exception {
 		throw new OperationNotSupportedException("Insert all for transactions is not supported.");
+	}
+	
+	
+	public void groupTransaction(int transactionId, List<Integer> transactionIds) throws Exception {
+		String query = "UPDATE TRANSACTIONS SET GROUP_PARENT_ID=? WHERE TRANSACTION_ID=?";
+		PreparedStatement s = connection.prepareStatement(query);
+		for(int tempId : transactionIds) {
+			
+			s.setInt(1, tempId);
+			s.setInt(2, transactionId);
+			s.executeUpdate();
+		}
+		s.close();
 	}
 
 	@Override

@@ -8,5 +8,5 @@ public abstract class AbstractSqlLiteManager {
 	protected static Connection connection = null;
 	
 	// path of the DB file. 
-	protected static final String DB_FILE_PATH = "/Users/venkat/Documents/Home/Clanily Data/DEV/";
+	protected static final String DB_FILE_PATH = "/Users/venkat/Documents/My Projects/Clanily/Clanily v2.0/workspace/git/DEV/";
 }

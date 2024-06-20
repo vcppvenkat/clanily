@@ -29,6 +29,14 @@ public class TransactionService extends ClanilyService {
 	public static TransactionService getInstance() {
 		return thisInstance;
 	}
+	
+	public void groupTransaction(int transactionId, List<Integer> transactionIds) throws Exception {
+		thisInstance.groupTransaction(transactionId, transactionIds);
+	}
+	
+	public void attachFile(int transactionId, String fileStream, String fileName, String description) throws Exception {
+		thisInstance.attachFile(transactionId, fileStream, fileName, description);
+	}
 
 	@Override
 	public SearchResult<Transaction> search(SearchCriteria search) throws Exception {
