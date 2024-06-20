@@ -87,7 +87,7 @@
 					<li>
 				</c:otherwise>
 			</c:choose>
-			<a href="goals.html"> <span class="nav-label">Goals</span>
+			<a href="/goals/"> <span class="nav-label">Goals</span>
 			</a></li>
 			
 			<c:choose>
