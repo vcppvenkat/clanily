@@ -9,8 +9,8 @@ import com.vbl.clanily.backend.vo.account.Account;
 import com.vbl.clanily.backend.vo.settings.Category;
 import com.vbl.clanily.backend.vo.settings.Objective;
 import com.vbl.clanily.backend.vo.settings.Payee;
-import com.vbl.clanily.backend.vo.settings.Transaction;
 import com.vbl.clanily.backend.vo.settings.User;
+import com.vbl.clanily.backend.vo.transaction.Transaction;
 
 public abstract class AbstractSqlLiteOperationManager extends AbstractSqlLiteManager {
 

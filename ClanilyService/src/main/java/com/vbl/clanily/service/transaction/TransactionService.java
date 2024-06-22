@@ -13,8 +13,9 @@ import com.vbl.clanily.backend.vo.search.TransactionSearchCriteria;
 import com.vbl.clanily.backend.vo.settings.Category;
 import com.vbl.clanily.backend.vo.settings.Objective;
 import com.vbl.clanily.backend.vo.settings.Payee;
-import com.vbl.clanily.backend.vo.settings.Transaction;
 import com.vbl.clanily.backend.vo.settings.User;
+import com.vbl.clanily.backend.vo.transaction.Transaction;
+import com.vbl.clanily.backend.vo.transaction.TransactionFile;
 import com.vbl.clanily.service.ClanilyService;
 import com.vbl.clanily.service.account.AccountService;
 import com.vbl.clanily.service.settings.CategoryService;
@@ -29,28 +30,49 @@ public class TransactionService extends ClanilyService {
 	public static TransactionService getInstance() {
 		return thisInstance;
 	}
-	
+
 	public void groupTransaction(int transactionId, List<Integer> transactionIds) throws Exception {
-		thisInstance.groupTransaction(transactionId, transactionIds);
+		TransactionDBTranslator.getInstance().groupTransaction(transactionId, transactionIds);
 	}
-	
-	public void attachFile(int transactionId, String fileStream, String fileName, String description) throws Exception {
-		thisInstance.attachFile(transactionId, fileStream, fileName, description);
+
+	public void attachFile(TransactionFile file) throws Exception {
+		if (file == null)
+			throw new Exception("Input object is null");
+		if (!isValid(file.summary)) {
+			throw new Exception("File summary is mandatory to search in the future");
+		}
+		if (file.summary.length() > 50)
+			throw new Exception("File summary cannot exceed 50 chars");
+		if (isValid(file.description) && file.description.length() > 250)
+			throw new Exception("File description cannot exceed 250 chars");
+
+		if (file.transactionId < 1)
+			throw new Exception("Invalid transaction id : " + file.transactionId);
+
+		// DB check
+		Transaction t = getById(file.transactionId);
+		if (t == null) {
+			throw new Exception("Invalid transaction id : " + file.transactionId);
+		}
+		if (!isValid(file.fileName) || !isValid(file.fileType)) {
+			throw new Exception("Invalid file metadata");
+		}
+		TransactionDBTranslator.getInstance().attachFile(file);
 	}
 
 	@Override
 	public SearchResult<Transaction> search(SearchCriteria search) throws Exception {
 		if (search != null) {
 			TransactionSearchCriteria t = (TransactionSearchCriteria) search;
-			if(isValid(t.currentTransactionGroup)) {
-				switch(t.currentTransactionGroup) {
-				case "Date" : 
-				case  "None": {
-					
+			if (isValid(t.currentTransactionGroup)) {
+				switch (t.currentTransactionGroup) {
+				case "Date":
+				case "None": {
+
 					t.searchGroupName = "EFFECTIVE_DATE";
 					break;
 				}
-				case "Category" : {
+				case "Category": {
 					t.searchGroupName = "CATEGORY.CATEGORY_NAME";
 					break;
 				}
@@ -70,16 +92,16 @@ public class TransactionService extends ClanilyService {
 					t.searchGroupName = "BENEFICIARY_NAME";
 					break;
 				}
-				
+
 				}
 			}
-			
+
 			SearchResult<Transaction> result = TransactionDBTranslator.getInstance().search(search);
 			if ("None".equals(t.currentTransactionGroup) || "Date".equals(t.currentTransactionGroup)) {
 				String temp = "";
-				for(Transaction trans: result.values()) {
-					if(!temp.equals(trans.displayGroupValue)) {
-						
+				for (Transaction trans : result.values()) {
+					if (!temp.equals(trans.displayGroupValue)) {
+
 					}
 				}
 			}
@@ -167,13 +189,12 @@ public class TransactionService extends ClanilyService {
 			if (c == null) {
 				throw new Exception("Transaction category must be a valid category from Clanily application. "
 						+ _input.categoryId + " : is not a valid category");
-			} 
-			/*
-			else if (!_input.transactionType.equals(c.type)) {
-				throw new Exception("Transaction type must match with the category type. Given transaction type is "
-						+ _input.transactionType + " and Category type is " + c.type);
 			}
-			*/
+			/*
+			 * else if (!_input.transactionType.equals(c.type)) { throw new
+			 * Exception("Transaction type must match with the category type. Given transaction type is "
+			 * + _input.transactionType + " and Category type is " + c.type); }
+			 */
 		} else {
 			throw new Exception("Transaction category must be a valid category from Clanily application. "
 					+ _input.categoryId + " : is not a valid category");
@@ -439,12 +460,12 @@ public class TransactionService extends ClanilyService {
 			t.transactionUserId = transactionUserId;
 			t.objectiveId = objectiveId;
 			t.importedNotes = t.summary;
-			
+
 			// reduce summary
-			if(t.summary.length() > 50) {
+			if (t.summary.length() > 50) {
 				t.summary = t.summary.substring(0, 49);
 			}
-			
+
 			insert(t);
 
 		}
@@ -453,7 +474,7 @@ public class TransactionService extends ClanilyService {
 
 	private int findCategoryId(String c, String amount) {
 		int cat = 1;
-		if(!isValid(c)) {
+		if (!isValid(c)) {
 			return 3;
 		}
 		switch (c) {
@@ -573,9 +594,8 @@ public class TransactionService extends ClanilyService {
 		case "Vehicle Maintenance": {
 			cat = 74;
 			break;
-		} 
-		
-		
+		}
+
 		default: {
 			float value = Float.parseFloat(amount);
 			if (value < 0) {

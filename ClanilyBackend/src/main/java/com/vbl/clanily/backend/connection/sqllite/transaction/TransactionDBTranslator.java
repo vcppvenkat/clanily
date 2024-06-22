@@ -15,7 +15,8 @@ import com.vbl.clanily.backend.vo.ValueObject;
 import com.vbl.clanily.backend.vo.response.SearchResult;
 import com.vbl.clanily.backend.vo.search.SearchCriteria;
 import com.vbl.clanily.backend.vo.search.TransactionSearchCriteria;
-import com.vbl.clanily.backend.vo.settings.Transaction;
+import com.vbl.clanily.backend.vo.transaction.Transaction;
+import com.vbl.clanily.backend.vo.transaction.TransactionFile;
 
 public class TransactionDBTranslator extends AbstractSqlLiteOperationManager implements ClanilyDBOperation {
 
@@ -313,18 +314,19 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 		return rowId;
 	}
 
-	public void attachFile(int transactionId, String fileStream, String fileName, String description) throws Exception {
-		
+	public void attachFile(TransactionFile file) throws Exception {
 
-		String query = "INSERT INTO TRANSACTION_FILES (TRANSACTION_ID, FILE_NAME, FILE_OBJECT, DATE_ADDED, DESCRIPTION) VALUES (?,?,?,?,?)";
+		String query = "INSERT INTO TRANSACTION_FILES (TRANSACTION_ID, FILE_NAME, FILE_TYPE, SUMMARY,  FILE_OBJECT, DATE_ADDED, DESCRIPTION) VALUES (?,?,?,?,?,?,?)";
 
 		PreparedStatement s = connection.prepareStatement(query);
 
-		s.setInt(1, transactionId);
-		s.setString(2, fileName);
-		s.setBytes(3, fileStream.getBytes());
-		s.setLong(4, new Date().getTime());
-		s.setString(5, description);
+		s.setInt(1, file.transactionId);
+		s.setString(2, file.fileName);
+		s.setString(3, file.fileType);
+		s.setString(4, file.summary);
+		s.setBytes(5, file.file.getBytes());
+		s.setLong(6, new Date().getTime());
+		s.setString(7, file.description);
 		s.executeUpdate();
 		s.close();
 
@@ -334,13 +336,12 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 	public List<Integer> insertAll(List<ValueObject> values) throws Exception {
 		throw new OperationNotSupportedException("Insert all for transactions is not supported.");
 	}
-	
-	
+
 	public void groupTransaction(int transactionId, List<Integer> transactionIds) throws Exception {
 		String query = "UPDATE TRANSACTIONS SET GROUP_PARENT_ID=? WHERE TRANSACTION_ID=?";
 		PreparedStatement s = connection.prepareStatement(query);
-		for(int tempId : transactionIds) {
-			
+		for (int tempId : transactionIds) {
+
 			s.setInt(1, tempId);
 			s.setInt(2, transactionId);
 			s.executeUpdate();

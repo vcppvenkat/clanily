@@ -1,4 +1,4 @@
-package com.vbl.clanily.backend.vo.settings;
+package com.vbl.clanily.backend.vo.transaction;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -7,6 +7,10 @@ import java.util.List;
 
 import com.vbl.clanily.backend.vo.ValueObject;
 import com.vbl.clanily.backend.vo.account.Account;
+import com.vbl.clanily.backend.vo.settings.Category;
+import com.vbl.clanily.backend.vo.settings.Objective;
+import com.vbl.clanily.backend.vo.settings.Payee;
+import com.vbl.clanily.backend.vo.settings.User;
 
 public class Transaction implements ValueObject {
 
