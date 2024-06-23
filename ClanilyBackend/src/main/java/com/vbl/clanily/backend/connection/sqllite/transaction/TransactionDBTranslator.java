@@ -175,7 +175,7 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 				query += " AND CLEARED = '1' ";
 			}
 			// exclude transactions that contains parent
-			query += " AND (TRANSACTIONS.GROUP_PARENT_ID IS NULL  OR TRANSACTIONS.GROUP_PARENT_ID = '')";
+			query += " AND (TRANSACTIONS.GROUP_PARENT_ID = 0)";
 
 		}
 
@@ -194,13 +194,13 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 			transaction = copyTransaction(null, rs);
 			// transaction.setDisplayGroupName(search.groupBy);
 
-			query = " SELECT TRANSACTION_ID FROM TRNASACTIONS WHERE GROUP_PARENT_ID = " + transaction.transactionId;
+			query = " SELECT TRANSACTION_ID FROM TRANSACTIONS WHERE GROUP_PARENT_ID = " + transaction.transactionId;
 			rs1 = st1.executeQuery(query);
 			while (rs1.next()) {
 				transaction.addGroupTransactionId(rs.getInt("TRANSACTION_ID"));
 			}
 			rs1.close();
-
+			
 			result.add(transaction);
 		}
 		rs.close();
