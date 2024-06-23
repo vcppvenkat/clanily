@@ -140,18 +140,14 @@
 										<th>Category</th>
 									</thead>
 									<tbody>
-										<tr>
-											<td>Sample summary with description...</td>
-											<td class="text-danger">1,22,34.30</td>
-											<td>HDFC Bank</td>
-											<td>Home Maintenance</td>
-										</tr>
-										<tr>
-											<td>Netflix Subscriptions</td>
-											<td class="text-success">1,22,34.30</td>
-											<td>HDFC Bank</td>
-											<td>Home Maintenance</td>
-										</tr>
+										<c:forEach items="${transaction.groupTransactions}" var="groupTransaction">
+											<tr>
+												<td>${ groupTransaction.summary }</td>
+												<td class="text-danger">${ groupTransaction.transactionAmountString }</td>
+												<td>${ groupTransaction.accountName }</td>
+												<td>${ groupTransaction.categoryName }</td>
+											</tr>
+										</c:forEach>
 									</tbody>
 									<tfoot>
 										<tr>
