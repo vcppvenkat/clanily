@@ -167,6 +167,15 @@ public class TransactionController implements ControllerAttributes {
 		Transaction t = null;
 		try {
 			t = TransactionService.getInstance().getById(transactionId);
+			List<Integer> associatedGroupTrantractionIds = t.getGroupTransactionIds();
+			List<Transaction> associatedGroupTransactions = null;
+			if(associatedGroupTrantractionIds != null && !associatedGroupTrantractionIds.isEmpty()) {
+				associatedGroupTransactions = new ArrayList<>();
+				for(int groupTransactionId : associatedGroupTrantractionIds) {
+					associatedGroupTransactions.add(TransactionService.getInstance().getById(groupTransactionId));
+				}
+				t.setGroupTransactions(associatedGroupTransactions);
+			}
 			
 		} catch (Exception e) {
 

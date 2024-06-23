@@ -174,7 +174,7 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 			if (!search.includePending) {
 				query += " AND CLEARED = '1' ";
 			}
-			// exclude transactions that contains parent
+
 			query += " AND (TRANSACTIONS.GROUP_PARENT_ID = 0)";
 
 		}
@@ -186,7 +186,6 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 
 		query += " ORDER BY " + search.searchGroupName + " " + ((search.asc) ? "ASC" : "DESC");
 
-		// System.out.println(query);
 		ResultSet rs = st.executeQuery(query);
 		ResultSet rs1 = null;
 		Statement st1 = connection.createStatement();
@@ -200,12 +199,22 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 				transaction.addGroupTransactionId(rs.getInt("TRANSACTION_ID"));
 			}
 			rs1.close();
-			
+
 			result.add(transaction);
 		}
 		rs.close();
 
 		return result;
+	}
+
+	private void amendGroupTransactionIds(Transaction transaction) throws Exception {
+		Statement st1 = connection.createStatement();
+		String query = " SELECT TRANSACTION_ID FROM TRANSACTIONS WHERE GROUP_PARENT_ID = " + transaction.transactionId;
+		ResultSet rs1 = st1.executeQuery(query);
+		while (rs1.next()) {
+			transaction.addGroupTransactionId(rs1.getInt("TRANSACTION_ID"));
+		}
+		rs1.close();
 	}
 
 	@Override
@@ -267,6 +276,7 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 		}
 
 		rs.close();
+		amendGroupTransactionIds(t);
 
 		return t;
 	}
