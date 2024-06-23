@@ -2,6 +2,7 @@ package com.vbl.clanily.backend.vo.transaction;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -68,6 +69,7 @@ public class Transaction implements ValueObject {
 	public int groupParentId;
 	public Transaction groupTransaction;
 	public List<Transaction> groupTransactions;
+	public List<Integer> groupTransactionIds;
 
 	public int transferTransactionId;
 	public Transaction transferTransaction;
@@ -481,6 +483,23 @@ public class Transaction implements ValueObject {
 
 	public void setTransactionUserName(String transactionUserName) {
 		this.transactionUserName = transactionUserName;
+	}
+
+	public List<Integer> getGroupTransactionIds() {
+		return groupTransactionIds;
+	}
+
+	public void setGroupTransactionIds(List<Integer> groupTransactionIds) {
+		this.groupTransactionIds = groupTransactionIds;
+	}
+
+	public void addGroupTransactionId(int groupTransactionId) {
+		if (groupTransactionId > 0) {
+			if (this.groupTransactionIds == null) {
+				this.groupTransactionIds = new ArrayList<Integer>();
+			}
+			this.groupTransactionIds.add(groupTransactionId);
+		}
 	}
 
 }

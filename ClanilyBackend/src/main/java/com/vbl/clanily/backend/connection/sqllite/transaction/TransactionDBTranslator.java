@@ -3,6 +3,7 @@ package com.vbl.clanily.backend.connection.sqllite.transaction;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -153,23 +154,18 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 				query += " ) ";
 			}
 
-			if (containsValue(search.groupParentIds)) {
-				query += " AND TRANSACTIONS.SPLIT_PARENT_ID IN ( ";
-				for (int id : search.splitParentIds) {
-					query += id + ",";
-				}
-				query = query.substring(0, query.length() - 1);
-				query += " ) ";
-			}
-
-			if (containsValue(search.splitParentIds)) {
-				query += " AND TRANSACTIONS.GROUP_PARENT_ID IN ( ";
-				for (int id : search.groupParentIds) {
-					query += id + ",";
-				}
-				query = query.substring(0, query.length() - 1);
-				query += " ) ";
-			}
+			/*
+			 * if (containsValue(search.groupParentIds)) { query +=
+			 * " AND TRANSACTIONS.SPLIT_PARENT_ID IN ( "; for (int id :
+			 * search.splitParentIds) { query += id + ","; } query = query.substring(0,
+			 * query.length() - 1); query += " ) "; }
+			 * 
+			 * if (containsValue(search.splitParentIds)) { query +=
+			 * " AND TRANSACTIONS.GROUP_PARENT_ID IN ( "; for (int id :
+			 * search.groupParentIds) { query += id + ","; } query = query.substring(0,
+			 * query.length() - 1); query += " ) "; }
+			 * 
+			 */
 
 			if (search.transactionId > 0) {
 				query += " AND TRANSACTION_ID = " + search.transactionId;
@@ -178,6 +174,8 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 			if (!search.includePending) {
 				query += " AND CLEARED = '1' ";
 			}
+			// exclude transactions that contains parent
+			query += " AND (TRANSACTIONS.GROUP_PARENT_ID IS NULL  OR TRANSACTIONS.GROUP_PARENT_ID = '')";
 
 		}
 
@@ -188,12 +186,21 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 
 		query += " ORDER BY " + search.searchGroupName + " " + ((search.asc) ? "ASC" : "DESC");
 
-		System.out.println(query);
+		// System.out.println(query);
 		ResultSet rs = st.executeQuery(query);
-
+		ResultSet rs1 = null;
+		Statement st1 = connection.createStatement();
 		while (rs.next()) {
 			transaction = copyTransaction(null, rs);
 			// transaction.setDisplayGroupName(search.groupBy);
+
+			query = " SELECT TRANSACTION_ID FROM TRNASACTIONS WHERE GROUP_PARENT_ID = " + transaction.transactionId;
+			rs1 = st1.executeQuery(query);
+			while (rs1.next()) {
+				transaction.addGroupTransactionId(rs.getInt("TRANSACTION_ID"));
+			}
+			rs1.close();
+
 			result.add(transaction);
 		}
 		rs.close();
@@ -263,6 +270,27 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 
 		return t;
 	}
+
+	/*
+	 * public List<Transaction> getByGroupId(int groupParentId) throws Exception {
+	 * List<Integer> groupIds = new ArrayList<Integer>(); List<Transaction>
+	 * parentTransactions = null; Statement st = connection.createStatement();
+	 * String query =
+	 * "SELECT TRANSACTION_ID FROM TRANSACTIONS WHERE GROUP_PARENT_ID =  " +
+	 * groupParentId;
+	 * 
+	 * ResultSet rs = st.executeQuery(query);
+	 * 
+	 * while (rs.next()) { groupIds.add(rs.getInt("TRANSACTION_ID")); }
+	 * 
+	 * if(isValid(groupIds)) { TransactionSearchCriteria search = new
+	 * TransactionSearchCriteria();
+	 * 
+	 * } rs.close();
+	 * 
+	 * return groupIds; }
+	 * 
+	 */
 
 	@Override
 	public Transaction getByUniqueName(String name) throws Exception {
@@ -337,13 +365,12 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 		throw new OperationNotSupportedException("Insert all for transactions is not supported.");
 	}
 
-	public void groupTransaction(int transactionId, List<Integer> transactionIds) throws Exception {
+	public void groupTransaction(int transactionId, List<Integer> children) throws Exception {
 		String query = "UPDATE TRANSACTIONS SET GROUP_PARENT_ID=? WHERE TRANSACTION_ID=?";
 		PreparedStatement s = connection.prepareStatement(query);
-		for (int tempId : transactionIds) {
-
-			s.setInt(1, tempId);
-			s.setInt(2, transactionId);
+		for (int child : children) {
+			s.setInt(1, transactionId);
+			s.setInt(2, child);
 			s.executeUpdate();
 		}
 		s.close();

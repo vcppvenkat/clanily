@@ -31,8 +31,8 @@ public class TransactionService extends ClanilyService {
 		return thisInstance;
 	}
 
-	public void groupTransaction(int transactionId, List<Integer> transactionIds) throws Exception {
-		TransactionDBTranslator.getInstance().groupTransaction(transactionId, transactionIds);
+	public void groupTransaction(int transactionId, List<Integer> children) throws Exception {
+		TransactionDBTranslator.getInstance().groupTransaction(transactionId, children);
 	}
 
 	public void attachFile(TransactionFile file) throws Exception {
