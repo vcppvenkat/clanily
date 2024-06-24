@@ -12,7 +12,7 @@ public class TransactionFile implements ValueObject {
 	public String fileType;
 	public String summary;
 	public String description;
-	public String file;
+	public byte[] file;
 	public Date dateAdded;
 
 	public String getFileName() {
@@ -63,11 +63,11 @@ public class TransactionFile implements ValueObject {
 		this.description = description;
 	}
 
-	public String getFile() {
+	public byte[] getFile() {
 		return file;
 	}
 
-	public void setFile(String file) {
+	public void setFile(byte[] file) {
 		this.file = file;
 	}
 

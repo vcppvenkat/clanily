@@ -351,7 +351,7 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 		s.setString(2, file.fileName);
 		s.setString(3, file.fileType);
 		s.setString(4, file.summary);
-		s.setBytes(5, file.file.getBytes());
+		s.setBytes(5, file.file);
 		s.setLong(6, new Date().getTime());
 		s.setString(7, file.description);
 		s.executeUpdate();
