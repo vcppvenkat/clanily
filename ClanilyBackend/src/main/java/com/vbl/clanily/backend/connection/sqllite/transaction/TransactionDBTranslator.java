@@ -3,7 +3,6 @@ package com.vbl.clanily.backend.connection.sqllite.transaction;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -187,19 +186,9 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 		query += " ORDER BY " + search.searchGroupName + " " + ((search.asc) ? "ASC" : "DESC");
 
 		ResultSet rs = st.executeQuery(query);
-		ResultSet rs1 = null;
-		Statement st1 = connection.createStatement();
 		while (rs.next()) {
 			transaction = copyTransaction(null, rs);
-			// transaction.setDisplayGroupName(search.groupBy);
-
-			query = " SELECT TRANSACTION_ID FROM TRANSACTIONS WHERE GROUP_PARENT_ID = " + transaction.transactionId;
-			rs1 = st1.executeQuery(query);
-			while (rs1.next()) {
-				transaction.addGroupTransactionId(rs.getInt("TRANSACTION_ID"));
-			}
-			rs1.close();
-
+			amendGroupTransactionIds(transaction);
 			result.add(transaction);
 		}
 		rs.close();
