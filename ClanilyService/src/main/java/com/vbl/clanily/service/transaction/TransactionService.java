@@ -32,6 +32,14 @@ public class TransactionService extends ClanilyService {
 	}
 
 	public void groupTransaction(int transactionId, List<Integer> children) throws Exception {
+		float total = 0.0F;
+		for (int child : children) {
+			Transaction t = TransactionDBTranslator.getInstance().getById(child);
+			if (t == null)
+				throw new Exception("Invalid child : " + child);
+			
+			
+		}
 		TransactionDBTranslator.getInstance().groupTransaction(transactionId, children);
 	}
 
