@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import com.vbl.clanily.backend.vo.ValueObject;
 import com.vbl.clanily.backend.vo.account.Account;
@@ -502,4 +503,20 @@ public class Transaction implements ValueObject {
 		}
 	}
 
+	@Override
+	public int hashCode() {
+		return Objects.hash(transactionId);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Transaction other = (Transaction) obj;
+		return transactionId == other.transactionId;
+	}	
 }
