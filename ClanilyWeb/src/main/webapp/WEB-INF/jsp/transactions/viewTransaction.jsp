@@ -151,7 +151,7 @@
 									</tbody>
 									<tfoot>
 										<tr>
-											<td colspan="4"><a class="btn btn-primary2 btn-outline btn-sm" href="GroupTransaction.html">Group transaction</a></td>
+											<td colspan="4"><a class="btn btn-primary2 btn-outline btn-sm" href="/transactions/groupTransaction?f=true&transactionId=${transaction.transactionId}">Group transaction</a></td>
 										</tr>
 									</tfoot>
 								</table>

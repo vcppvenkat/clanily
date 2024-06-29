@@ -4,6 +4,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -47,6 +48,8 @@ import jakarta.servlet.http.HttpSession;
 public class TransactionController implements ControllerAttributes {
 
 	private static final String SEARCH_CRITERIA = "transactionSearchCriteria";
+	private static final String SEARCH_GROUP_TRANSACTION = "groupTransactionSearchCriteria";
+	private static final String CHOSEN_GROUP_TRANSACTION = "chosenGroupTransactions";
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -189,6 +192,130 @@ public class TransactionController implements ControllerAttributes {
 		return mav;
 	}
 
+	@GetMapping("/groupTransaction")
+	public ModelAndView groupTransaction(int transactionId, boolean f, HttpSession session, RedirectAttributes rad,
+			ModelAndView mav) {
+		mav.setViewName("/transactions/groupTransaction");
+		Transaction t = null;
+		try {
+			t = TransactionService.getInstance().getById(transactionId);
+			List<Integer> associatedGroupTransactionIds = new ArrayList<>();
+			if(f) {
+				if(t.getGroupTransactionIds() != null)
+					associatedGroupTransactionIds = t.getGroupTransactionIds();
+				session.setAttribute(CHOSEN_GROUP_TRANSACTION, associatedGroupTransactionIds);
+			} else {
+				associatedGroupTransactionIds = getSessionGroupTransactionIds(session);
+			}
+
+			List<Transaction> associatedGroupTransactionDetails = null;
+			if(associatedGroupTransactionIds != null && !associatedGroupTransactionIds.isEmpty()) {
+				associatedGroupTransactionDetails = new ArrayList<>();
+				for(int groupTransactionId : associatedGroupTransactionIds) {
+					associatedGroupTransactionDetails.add(TransactionService.getInstance().getById(groupTransactionId));
+				}
+				t.setGroupTransactions(associatedGroupTransactionDetails);
+			}
+
+			TransactionSearchCriteria searchCriteria = getGroupTransactionSearchCriteria(session);
+			SearchResult<Transaction> result = getTransactions(searchCriteria);
+			List<Transaction> searchResultTransactions = result.values();
+			List<Transaction> filteredSearchResultTransactions = new ArrayList<>();
+			for(Transaction transaction : searchResultTransactions) {
+				if(!associatedGroupTransactionIds.contains(transaction.getTransactionId()))
+						filteredSearchResultTransactions.add(transaction);
+			}
+
+			mav.addObject("searchResult", filteredSearchResultTransactions);
+		} catch (Exception e) {
+			rad.addFlashAttribute("errorMessage", e.getMessage());
+			ClanilyLogger.LogMessage(getClass(), e);
+			mav.setViewName("redirect:/transactions/");
+		} finally {
+			mav.addObject("transaction", t);
+			mav.addObject(SEARCH_GROUP_TRANSACTION, getGroupTransactionSearchCriteria(session));
+		}
+
+		return mav;
+	}
+
+	@PostMapping("/groupTransactionSearch")
+	public ModelAndView groupTransactionSearch(TransactionSearchCriteria searchCriteria, HttpSession session, RedirectAttributes rad,
+			ModelAndView mav) {
+		mav.setViewName("redirect:/transactions/groupTransaction?transactionId=" + searchCriteria.getTransactionId());
+		
+		try {
+			session.setAttribute(SEARCH_GROUP_TRANSACTION, searchCriteria);
+		} catch (Exception e) {
+			rad.addFlashAttribute("errorMessage", e.getMessage());
+			ClanilyLogger.LogMessage(getClass(), e);
+			mav.setViewName("redirect:/transactions/");
+		} finally {
+			
+		}
+		return mav;
+	}
+
+	@GetMapping("/popGroupTransaction")
+	public ModelAndView popGroupTransaction(int transactionId, int groupTransactionId, HttpSession session, RedirectAttributes rad,
+			ModelAndView mav) {
+		mav.setViewName("redirect:/transactions/groupTransaction?transactionId=" + transactionId);
+		
+		try {
+			List<Integer> associatedGroupTransactionIds = getSessionGroupTransactionIds(session);
+			if(associatedGroupTransactionIds != null && associatedGroupTransactionIds.contains(groupTransactionId)) {
+				associatedGroupTransactionIds.remove(Integer.valueOf(groupTransactionId));
+				session.setAttribute(CHOSEN_GROUP_TRANSACTION, associatedGroupTransactionIds);
+			}
+		} catch (Exception e) {
+			rad.addFlashAttribute("errorMessage", e.getMessage());
+			ClanilyLogger.LogMessage(getClass(), e);
+			mav.setViewName("redirect:/transactions/");
+		} finally {
+			
+		}
+		return mav;
+	}
+
+	@GetMapping("/pushGroupTransaction")
+	public ModelAndView pushGroupTransaction(int transactionId, int groupTransactionId, HttpSession session, RedirectAttributes rad,
+			ModelAndView mav) {
+		mav.setViewName("redirect:/transactions/groupTransaction?transactionId=" + transactionId);
+		
+		try {
+			List<Integer> associatedGroupTransactionIds = getSessionGroupTransactionIds(session);
+			if(associatedGroupTransactionIds != null && !associatedGroupTransactionIds.contains(groupTransactionId)) {
+				associatedGroupTransactionIds.add(groupTransactionId);
+				session.setAttribute(CHOSEN_GROUP_TRANSACTION, associatedGroupTransactionIds);
+			}
+		} catch (Exception e) {
+			rad.addFlashAttribute("errorMessage", e.getMessage());
+			ClanilyLogger.LogMessage(getClass(), e);
+			mav.setViewName("redirect:/transactions/");
+		} finally {
+			
+		}
+		return mav;
+	}
+
+	@GetMapping("/saveGroupTransaction")
+	public ModelAndView pushGroupTransaction(int transactionId, HttpSession session, RedirectAttributes rad,
+			ModelAndView mav) {
+		mav.setViewName("redirect:/transactions/viewTransaction?transactionId=" + transactionId);
+		
+		try {
+			List<Integer> associatedGroupTransactionIds = getSessionGroupTransactionIds(session);
+			TransactionService.getInstance().groupTransaction(transactionId, associatedGroupTransactionIds);
+		} catch (Exception e) {
+			rad.addFlashAttribute("errorMessage", e.getMessage());
+			ClanilyLogger.LogMessage(getClass(), e);
+			mav.setViewName("redirect:/transactions/");
+		} finally {
+			
+		}
+		return mav;
+	}
+	
 	@GetMapping("/resetAllFilters")
 	public ModelAndView resetAllFilters(HttpSession session, RedirectAttributes rad, ModelAndView mav) {
 		mav.setViewName("redirect:/transactions/");
@@ -855,5 +982,24 @@ public class TransactionController implements ControllerAttributes {
 			return (TransactionSearchCriteria) session.getAttribute(SEARCH_CRITERIA);
 		}
 
+	}
+
+	private TransactionSearchCriteria getGroupTransactionSearchCriteria(HttpSession session) {
+		if (session.getAttribute(SEARCH_GROUP_TRANSACTION) == null) {
+			TransactionSearchCriteria search = new TransactionSearchCriteria();
+			return search;
+		} else {
+			return (TransactionSearchCriteria) session.getAttribute(SEARCH_GROUP_TRANSACTION);
+		}
+
+	}
+
+	private List<Integer> getSessionGroupTransactionIds(HttpSession session) {
+		if (session.getAttribute(CHOSEN_GROUP_TRANSACTION) == null) {
+			List<Integer> emptyList = new ArrayList<>();
+			return emptyList;
+		} else {
+			return (ArrayList<Integer>) session.getAttribute(CHOSEN_GROUP_TRANSACTION);
+		}
 	}
 }

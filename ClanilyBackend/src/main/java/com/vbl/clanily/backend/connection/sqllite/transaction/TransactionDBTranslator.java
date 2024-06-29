@@ -184,6 +184,7 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 		 */
 
 		query += " ORDER BY " + search.searchGroupName + " " + ((search.asc) ? "ASC" : "DESC");
+		System.out.println(query);
 
 		ResultSet rs = st.executeQuery(query);
 		while (rs.next()) {
@@ -364,7 +365,16 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 		throw new OperationNotSupportedException("Insert all for transactions is not supported.");
 	}
 
+	public void ungroupTransaction(int transactionId) throws Exception {
+		String query = "UPDATE TRANSACTIONS SET GROUP_PARENT_ID=0 WHERE GROUP_PARENT_ID=?";
+		PreparedStatement s = connection.prepareStatement(query);
+		s.setInt(1, transactionId);
+		s.executeUpdate();
+		s.close();
+	}
+
 	public void groupTransaction(int transactionId, List<Integer> children) throws Exception {
+		ungroupTransaction(transactionId);
 		String query = "UPDATE TRANSACTIONS SET GROUP_PARENT_ID=? WHERE TRANSACTION_ID=?";
 		PreparedStatement s = connection.prepareStatement(query);
 		for (int child : children) {
