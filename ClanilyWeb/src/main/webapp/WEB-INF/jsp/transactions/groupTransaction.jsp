@@ -36,6 +36,7 @@
             <div class="row">
             	<form:form action="/transactions/groupTransactionSearch" method="post" cssClass="form-horizontal" modelAttribute="groupTransactionSearchCriteria">
             		<form:hidden path="transactionId" value="${transaction.transactionId}" />
+            		<form:hidden path="currentTransactionView" value="${groupTransactionSearchCriteria.currentTransactionView}" />
 	                <div class="col-lg-3">
 	                    <div class="hpanel">
 	                        <div class="panel-body">
@@ -70,24 +71,31 @@
 	                            <div class="form-group">
 	                                <label class="control-label">Transaction Type</label>
 	                                <div class="input-group col-lg-12">
-	                                    <a class="btn btn-primary2 btn-outline btn-sm">Income</a>&nbsp;
-	                                    <a class="btn btn-primary2 btn-sm">Expense</a>
+	                                    <a 
+	                                    	href="/transactions/onClickTransactionTypeButton?transactionId=${transaction.transactionId}&transactionType=Income"
+		                                    class='btn btn-primary2 ${groupTransactionSearchCriteria.currentTransactionView.contains("Income") ? "" : "btn-outline" } '> 
+		                                    Income
+	                                    </a>&nbsp;
+	                                    <a 
+	                                    	href="/transactions/onClickTransactionTypeButton?transactionId=${transaction.transactionId}&transactionType=Expense"
+	                                    	class='btn btn-primary2 ${groupTransactionSearchCriteria.currentTransactionView.contains("Expense") ? "" : "btn-outline" } '>
+	                                    	Expense
+	                                    </a>
 	                                </div>
 	                                
 	                            </div>
 	                            <div class="form-group">
 	                                <label class="control-label">Category</label>
 	                                <div class="input-group col-lg-12">
-	                                    <select class="js-source-states-2" multiple="multiple" style="width: 100%">
-	                                        <option value="Blue">Home Maintenance</option>
-	                                        <option value="Red">Home Daily Needs</option>
-	                                        <option value="Green">Vehicle Maintenance</option>
-	                                        <option value="Maroon">Shopping</option>
-	                                        <option value="1">Healthcare</option>
-	                                        <option value="2">Personal Grooming</option>
-	                                        <option value="3">Family needs</option>
-	                                        <option value="4">Lend</option>
-	                                </select>
+	                                    <form:select path="categoryIds" id="categoryIds" class="js-source-states-2" multiple="multiple" style="width: 100%">
+	                                    	<c:forEach items="${categories}" var="category">
+	                                    		<option value="${category.categoryId}" 
+	                                    			${groupTransactionSearchCriteria.categoryIds.contains(category.categoryId) ? "selected" : ""}
+	                                    		>
+	                                    			${category.categoryName}
+	                                    		</option>
+	                                    	</c:forEach>
+	                                	</form:select>
 	                                </div>
 	                                
 	                            </div>
@@ -95,14 +103,9 @@
 	                                <label class="control-label">Account</label>
 	                                <div class="input-group col-lg-12">
 	                                    <select class="js-source-states-2" multiple="multiple" style="width: 100%">
-	                                        <option value="Blue">Home Maintenance</option>
-	                                        <option value="Red">Home Daily Needs</option>
-	                                        <option value="Green">Vehicle Maintenance</option>
-	                                        <option value="Maroon">Shopping</option>
-	                                        <option value="1">Healthcare</option>
-	                                        <option value="2">Personal Grooming</option>
-	                                        <option value="3">Family needs</option>
-	                                        <option value="4">Lend</option>
+	                                    	<c:forEach items="${accounts}" var="account">
+	                                    		<option value="${account.accountId}">${account.accountName}</option>
+	                                    	</c:forEach>
 	                                </select>
 	                                </div>
 	                                
@@ -173,8 +176,19 @@
                                 	<tr>
 	                                    <td><a href="/transactions/popGroupTransaction?transactionId=${transaction.transactionId}&groupTransactionId=${groupTransaction.transactionId}"><i class="fa fa-minus"></i></a></td>
 	                                    <td>${ groupTransaction.summary }</td>
-	                                    <td>17-Dec-2-23</td>
-	                                    <td class="text-success">${ groupTransaction.transactionAmountString }</td>
+	                                    <td>${groupTransaction.transactionDateString}</td>
+	                                    <c:choose>
+											<c:when test="${groupTransaction.transactionType eq 'Expense'}">
+												<td class="text-danger">${groupTransaction.transactionAmountString}</td>
+											</c:when>
+											<c:when test="${groupTransaction.transactionType eq 'Income' }">
+												<td class="text-success">${groupTransaction.transactionAmountString}</td>
+											</c:when>
+											<c:when test="${groupTransaction.transactionType eq 'Incoming Transfer' or  t.transactionType eq 'Outgoing Transfer'}">
+												<td class="text-info">${groupTransaction.transactionAmountString}</td>
+											</c:when>
+										</c:choose>
+	                                    
 	                                    <td>${ groupTransaction.categoryName }</td>
 	                                    <td>${ groupTransaction.accountName }</td>
 	                                </tr>
@@ -184,7 +198,7 @@
                                 <tr class="bg-silver text-white font-extra-bold">
                                     <td></td>
                                     <td colspan="2">Total</td>
-                                    <td>1000 / 1000</td>
+                                    <td>${ sumOfGroupedTransactionAmount } / ${ transaction.transactionAmountString }</td>
                                     <td colspan="2"></td>
                                 </tr>
                             </tfoot>
@@ -211,8 +225,18 @@
 	                                <tr>
 	                                    <td><a href="/transactions/pushGroupTransaction?transactionId=${transaction.transactionId}&groupTransactionId=${transactionItr.transactionId}"><i class="fa fa-plus"></i></a></td>
 	                                    <td>${transactionItr.summary }</td>
-	                                    <td>17-Dec-2-23</td>
-	                                    <td class="text-danger">${transactionItr.transactionAmountString }</td>
+	                                    <td>${ transactionItr.transactionDateString }</td>
+	                                    <c:choose>
+											<c:when test="${transactionItr.transactionType eq 'Expense'}">
+												<td class="text-danger">${transactionItr.transactionAmountString}</td>
+											</c:when>
+											<c:when test="${transactionItr.transactionType eq 'Income' }">
+												<td class="text-success">${transactionItr.transactionAmountString}</td>
+											</c:when>
+											<c:when test="${transactionItr.transactionType eq 'Incoming Transfer' or  t.transactionType eq 'Outgoing Transfer'}">
+												<td class="text-info">${transactionItr.transactionAmountString}</td>
+											</c:when>
+										</c:choose>
 	                                    <td>${ transactionItr.categoryName }</td>
 	                                    <td>${ transactionItr.accountName }</td>
 	                                </tr>

@@ -2,7 +2,7 @@ package com.vbl.clanily.backend.vo.settings;
 
 import com.vbl.clanily.backend.vo.ValueObject;
 
-public class Category implements ValueObject {
+public class Category implements ValueObject, Comparable<Category> {
 
 	public int categoryId;
 	public String categoryName;
@@ -87,4 +87,13 @@ public class Category implements ValueObject {
 		this.totalTransactionValue = totalTransactionValue;
 	}
 
+	@Override
+	public int compareTo(Category o) {
+		if(this.getCategoryId() < o.getCategoryId())
+			return -1;
+		else if(this.getCategoryId() > o.getCategoryId())
+			return 1;
+		else
+			return 0;
+	}
 }

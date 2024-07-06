@@ -3,10 +3,14 @@ package com.vbl.clanily.ui.web.controller.transaction;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.commons.io.FileUtils;
 import org.springframework.stereotype.Controller;
@@ -50,6 +54,8 @@ public class TransactionController implements ControllerAttributes {
 	private static final String SEARCH_CRITERIA = "transactionSearchCriteria";
 	private static final String SEARCH_GROUP_TRANSACTION = "groupTransactionSearchCriteria";
 	private static final String CHOSEN_GROUP_TRANSACTION = "chosenGroupTransactions";
+	private static final String TRANSACTION_TYPE_EXPENSE = "Expense";
+	private static final String TRANSACTION_TYPE_INCOME = "Income";
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -209,24 +215,59 @@ public class TransactionController implements ControllerAttributes {
 			}
 
 			List<Transaction> associatedGroupTransactionDetails = null;
+			Transaction groupedTransaction = null;
+			float sumOfGroupedTransactionAmount = 0;
 			if(associatedGroupTransactionIds != null && !associatedGroupTransactionIds.isEmpty()) {
 				associatedGroupTransactionDetails = new ArrayList<>();
 				for(int groupTransactionId : associatedGroupTransactionIds) {
-					associatedGroupTransactionDetails.add(TransactionService.getInstance().getById(groupTransactionId));
+					groupedTransaction = TransactionService.getInstance().getById(groupTransactionId);
+					sumOfGroupedTransactionAmount += groupedTransaction.getTransactionAmount();
+					associatedGroupTransactionDetails.add(groupedTransaction);
 				}
 				t.setGroupTransactions(associatedGroupTransactionDetails);
 			}
+			mav.addObject("sumOfGroupedTransactionAmount", sumOfGroupedTransactionAmount);
 
 			TransactionSearchCriteria searchCriteria = getGroupTransactionSearchCriteria(session);
 			SearchResult<Transaction> result = getTransactions(searchCriteria);
 			List<Transaction> searchResultTransactions = result.values();
 			List<Transaction> filteredSearchResultTransactions = new ArrayList<>();
+			int transactionIndex = 0;
+			
 			for(Transaction transaction : searchResultTransactions) {
-				if(!associatedGroupTransactionIds.contains(transaction.getTransactionId()))
-						filteredSearchResultTransactions.add(transaction);
+				if(transactionIndex == 20)
+					break;
+
+				if(associatedGroupTransactionIds.contains(transaction.getTransactionId()))
+					continue;
+				
+				if(transactionId == transaction.getTransactionId())
+					continue;
+				
+				if(transaction.getGroupTransactionIds() != null && !transaction.getGroupTransactionIds().isEmpty())
+					continue;
+
+				if(transaction.getGroupParentId() > 0)
+					continue;
+				
+				filteredSearchResultTransactions.add(transaction);
+				transactionIndex++;
 			}
 
 			mav.addObject("searchResult", filteredSearchResultTransactions);
+			Set<Category> categories = new TreeSet<>();
+			if (searchCriteria.getCurrentTransactionView().trim().length() > 0) {
+				if (searchCriteria.getCurrentTransactionView().contains(TRANSACTION_TYPE_EXPENSE))
+					categories.addAll(CategoryService.getInstance().getAllExpenseCategories().values());
+
+				if (searchCriteria.getCurrentTransactionView().contains(TRANSACTION_TYPE_INCOME))
+					categories.addAll(CategoryService.getInstance().getAllIncomeCategories().values());
+			} else {
+				categories.addAll(CategoryService.getInstance().getAllExpenseCategories().values());
+				categories.addAll(CategoryService.getInstance().getAllIncomeCategories().values());
+			}
+
+			mav.addObject("categories", categories);
 		} catch (Exception e) {
 			rad.addFlashAttribute("errorMessage", e.getMessage());
 			ClanilyLogger.LogMessage(getClass(), e);
@@ -235,7 +276,7 @@ public class TransactionController implements ControllerAttributes {
 			mav.addObject("transaction", t);
 			mav.addObject(SEARCH_GROUP_TRANSACTION, getGroupTransactionSearchCriteria(session));
 		}
-
+		
 		return mav;
 	}
 
@@ -243,7 +284,7 @@ public class TransactionController implements ControllerAttributes {
 	public ModelAndView groupTransactionSearch(TransactionSearchCriteria searchCriteria, HttpSession session, RedirectAttributes rad,
 			ModelAndView mav) {
 		mav.setViewName("redirect:/transactions/groupTransaction?transactionId=" + searchCriteria.getTransactionId());
-		
+		searchCriteria.setTransactionId(0);
 		try {
 			session.setAttribute(SEARCH_GROUP_TRANSACTION, searchCriteria);
 		} catch (Exception e) {
@@ -288,6 +329,47 @@ public class TransactionController implements ControllerAttributes {
 				associatedGroupTransactionIds.add(groupTransactionId);
 				session.setAttribute(CHOSEN_GROUP_TRANSACTION, associatedGroupTransactionIds);
 			}
+		} catch (Exception e) {
+			rad.addFlashAttribute("errorMessage", e.getMessage());
+			ClanilyLogger.LogMessage(getClass(), e);
+			mav.setViewName("redirect:/transactions/");
+		} finally {
+			
+		}
+		return mav;
+	}
+
+	@GetMapping("/onClickTransactionTypeButton")
+	public ModelAndView onClickTransactionTypeButton(int transactionId, String transactionType, HttpSession session, RedirectAttributes rad,
+			ModelAndView mav) {
+		mav.setViewName("redirect:/transactions/groupTransaction?transactionId=" + transactionId);
+		
+		try {
+			TransactionSearchCriteria searchCriteria = getGroupTransactionSearchCriteria(session);
+			String[] currentTransactionViewSplit = searchCriteria.getCurrentTransactionView().trim().split(",");
+			Set<String> currentTransactionView = new HashSet<>();
+			if(currentTransactionViewSplit != null && currentTransactionViewSplit.length > 0) {
+				for(String transactionTypeItr : currentTransactionViewSplit) {
+					if(transactionTypeItr.length() > 0)
+						currentTransactionView.add(transactionTypeItr.trim());
+				}
+			}
+			if(transactionType != null) {
+				if(TRANSACTION_TYPE_EXPENSE.equals(transactionType) || 
+						TRANSACTION_TYPE_INCOME.equals(transactionType)) {
+					if(currentTransactionView.contains(transactionType))
+						currentTransactionView.remove(transactionType);
+					else
+						currentTransactionView.add(transactionType);
+				}
+				if(currentTransactionView != null && !currentTransactionView.isEmpty()) {
+					searchCriteria.setCurrentTransactionView(String.join(",", currentTransactionView));
+				} else {
+					searchCriteria.setCurrentTransactionView("");
+				}
+			}
+			System.out.println("Current Transaction view decision ? " + searchCriteria.getCurrentTransactionView());
+			session.setAttribute(SEARCH_GROUP_TRANSACTION, searchCriteria);
 		} catch (Exception e) {
 			rad.addFlashAttribute("errorMessage", e.getMessage());
 			ClanilyLogger.LogMessage(getClass(), e);
@@ -987,6 +1069,7 @@ public class TransactionController implements ControllerAttributes {
 	private TransactionSearchCriteria getGroupTransactionSearchCriteria(HttpSession session) {
 		if (session.getAttribute(SEARCH_GROUP_TRANSACTION) == null) {
 			TransactionSearchCriteria search = new TransactionSearchCriteria();
+			search.setCurrentTransactionView(TRANSACTION_TYPE_EXPENSE);
 			return search;
 		} else {
 			return (TransactionSearchCriteria) session.getAttribute(SEARCH_GROUP_TRANSACTION);
