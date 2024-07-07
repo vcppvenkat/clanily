@@ -262,6 +262,14 @@ public class TransactionController implements ControllerAttributes {
 			}
 
 			mav.addObject("categories", categories);
+			
+			// search for list of accounts
+			SearchResult<Account> accountResult = AccountService.getInstance().search(new AccountSearchCriteria());
+			if (accountResult.values() == null || accountResult.values().isEmpty()) {
+				throw new Exception("No accounts found");
+			} 
+			
+			mav.addObject("accounts", accountResult.values());
 		} catch (Exception e) {
 			rad.addFlashAttribute("errorMessage", e.getMessage());
 			ClanilyLogger.LogMessage(getClass(), e);
