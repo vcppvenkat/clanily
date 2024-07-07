@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
@@ -250,7 +249,7 @@ public class TransactionController implements ControllerAttributes {
 			}
 
 			mav.addObject("searchResult", filteredSearchResultTransactions);
-			Set<Category> categories = new TreeSet<>();
+			List<Category> categories = new ArrayList<>();
 			if (searchCriteria.getCurrentTransactionView().trim().length() > 0) {
 				if (searchCriteria.getCurrentTransactionView().contains(TRANSACTION_TYPE_EXPENSE))
 					categories.addAll(CategoryService.getInstance().getAllExpenseCategories().values());

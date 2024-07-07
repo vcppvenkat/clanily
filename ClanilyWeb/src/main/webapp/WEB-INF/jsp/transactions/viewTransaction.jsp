@@ -143,7 +143,13 @@
 										<c:forEach items="${transaction.groupTransactions}" var="groupTransaction">
 											<tr>
 												<td>${ groupTransaction.summary }</td>
-												<td class="text-danger">${ groupTransaction.transactionAmountString }</td>
+												<c:if test="${groupTransaction.transactionType eq 'Income' }">
+													<td class="text-success">${ groupTransaction.transactionAmountString }</td>
+												</c:if>
+												<c:if test="${groupTransaction.transactionType eq 'Expense' }">
+													<td class="text-danger">${ groupTransaction.transactionAmountString }</td>
+												</c:if>
+												
 												<td>${ groupTransaction.accountName }</td>
 												<td>${ groupTransaction.categoryName }</td>
 											</tr>
