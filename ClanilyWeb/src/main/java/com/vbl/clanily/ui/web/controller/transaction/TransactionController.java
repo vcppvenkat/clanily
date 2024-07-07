@@ -1,5 +1,8 @@
 package com.vbl.clanily.ui.web.controller.transaction;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -8,12 +11,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -29,6 +35,7 @@ import com.vbl.clanily.backend.vo.settings.Objective;
 import com.vbl.clanily.backend.vo.settings.Payee;
 import com.vbl.clanily.backend.vo.settings.User;
 import com.vbl.clanily.backend.vo.transaction.Transaction;
+import com.vbl.clanily.backend.vo.transaction.TransactionFile;
 import com.vbl.clanily.service.account.AccountService;
 import com.vbl.clanily.service.settings.CategoryService;
 import com.vbl.clanily.service.settings.ObjectiveService;
@@ -180,6 +187,7 @@ public class TransactionController implements ControllerAttributes {
 				}
 				t.setGroupTransactions(associatedGroupTransactions);
 			}
+			mav.addObject("attachment", new TransactionFile());
 
 		} catch (Exception e) {
 
@@ -395,6 +403,39 @@ public class TransactionController implements ControllerAttributes {
 		} finally {
 
 		}
+		return mav;
+	}
+
+	@PostMapping("/addAttachment")
+	public ModelAndView addAttachment(int transactionId, @RequestParam("transactionFile") MultipartFile inputFile,
+			HttpSession session, RedirectAttributes rad, ModelAndView mav) {
+		mav.setViewName("redirect:/transactions/viewTransaction?transactionId=" + transactionId);
+		try {
+			String extension = FilenameUtils.getExtension(inputFile.getOriginalFilename());
+
+			if (!"txt".equalsIgnoreCase(extension)) {
+				throw new Exception("Please upload only CSV file");
+			}
+
+			byte[] fileData = inputFile.getBytes();
+			String fileDataStr = new String(fileData);
+
+			TransactionFile transactionFile = new TransactionFile();
+			transactionFile.setTransactionId(transactionId);
+			transactionFile.setDescription("W.R.T. " + transactionId);
+			transactionFile.setSummary("W.R.T. " + transactionId);
+			transactionFile.setFile(fileData);
+			transactionFile.setFileName(inputFile.getOriginalFilename());
+			transactionFile.setFileType(extension);
+			TransactionService.getInstance().attachFile(transactionFile);
+			System.out.println(fileDataStr);
+
+		} catch (Exception e) {
+			mav.setViewName("redirect:/transactions/");
+			rad.addFlashAttribute("errorMessage", e.getMessage());
+			ClanilyLogger.LogMessage(getClass(), e);
+		}
+
 		return mav;
 	}
 

@@ -192,7 +192,14 @@
 							</div>
 						</div>
 						<div class="col-lg-12">
-							<a class="btn btn-primary2 btn-outline btn-sm" href="#">Add attachments</a>
+							<form:form id="addAttachmentForm" action="/transactions/addAttachment" 
+								method="post" enctype="multipart/form-data">
+								<input type="hidden" name="transactionId" value="${transaction.transactionId}" />
+								<input onChange="$('#addAttachmentForm').submit()" 
+										name="transactionFile" id="transactionFile"  type="file" class="form-control "
+	                                    placeholder="Choose a file" style="visibility:hidden"/>
+								<a onClick="$('#transactionFile').click()" class="btn btn-primary2 btn-outline btn-sm" href="#">Add attachments</a>
+							</form:form>
 						</div>
 
 
