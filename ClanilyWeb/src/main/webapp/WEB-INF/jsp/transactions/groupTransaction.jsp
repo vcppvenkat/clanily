@@ -59,10 +59,12 @@
 	                            <div class="form-group">
 	                                <label class="control-label">Date Range</label>
 	                                <div class="input-group col-lg-12">
-	                                    <div class="input-daterange input-group" id="datepicker">
-	                                        <input type="text" class="input-sm form-control" name="start">
-	                                        <span class="input-group-addon">to</span>
-	                                        <input type="text" class="input-sm form-control" name="end">
+	                                    <div class="input-daterange input-group" id="datepicker1">
+	                                        <form:input path="searchFromDateString" id="searchFromDateString" type="text" class="input-sm form-control" />
+	                                     </div>
+	                                     <span class="input-group-addon">to</span>
+	                                     <div class="input-daterange input-group" id="datepicker2">
+	                                        <form:input path="searchToDateString" id="searchToDateString" type="text" class="input-sm form-control" />
 	                                    </div>
 	                                    
 	                                </div>
@@ -102,11 +104,15 @@
 	                            <div class="form-group">
 	                                <label class="control-label">Account</label>
 	                                <div class="input-group col-lg-12">
-	                                    <select class="js-source-states-2" multiple="multiple" style="width: 100%">
+	                                    <form:select path="accountIds" id="accountIds" class="js-source-states-2" multiple="multiple" style="width: 100%">
 	                                    	<c:forEach items="${accounts}" var="account">
-	                                    		<option value="${account.accountId}">${account.accountName}</option>
+	                                    		<option value="${account.accountId}"
+	                                    			${groupTransactionSearchCriteria.accountIds.contains(account.accountId) ? "selected" : ""}
+	                                    		>
+	                                    			${account.accountName}
+	                                    		</option>
 	                                    	</c:forEach>
-	                                </select>
+	                                	</form:select>
 	                                </div>
 	                                
 	                            </div>

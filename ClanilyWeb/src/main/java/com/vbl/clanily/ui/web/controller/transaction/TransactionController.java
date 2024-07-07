@@ -49,6 +49,7 @@ public class TransactionController implements ControllerAttributes {
 	private static final String CHOSEN_GROUP_TRANSACTION = "chosenGroupTransactions";
 	private static final String TRANSACTION_TYPE_EXPENSE = "Expense";
 	private static final String TRANSACTION_TYPE_INCOME = "Income";
+	private static final SimpleDateFormat CALENDAR_DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy");
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -223,6 +224,23 @@ public class TransactionController implements ControllerAttributes {
 			mav.addObject("sumOfGroupedTransactionAmount", sumOfGroupedTransactionAmount);
 
 			TransactionSearchCriteria searchCriteria = getGroupTransactionSearchCriteria(session);
+			System.out.println("from date ? " + searchCriteria.getSearchFromDateString());
+			System.out.println("to date ? " + searchCriteria.getSearchToDateString());
+			if(searchCriteria.getSearchFromDateString() != null && searchCriteria.getSearchFromDateString().length() > 1) {
+				Date fromDate = CALENDAR_DATE_FORMAT.parse(searchCriteria.getSearchFromDateString());
+				searchCriteria.setFromDate(fromDate);
+			}
+			if(searchCriteria.getSearchToDateString() != null && searchCriteria.getSearchToDateString().length() > 1) {
+				Date toDate = CALENDAR_DATE_FORMAT.parse(searchCriteria.getSearchToDateString());
+				Calendar calendar = Calendar.getInstance();
+				calendar.setTime(toDate);
+				calendar.set(Calendar.HOUR_OF_DAY, 23);
+				calendar.set(Calendar.MINUTE, 59);
+				calendar.set(Calendar.SECOND, 59);
+				calendar.set(Calendar.MILLISECOND, 999);				
+				searchCriteria.setToDate(calendar.getTime());
+			}
+
 			SearchResult<Transaction> result = getTransactions(searchCriteria);
 			List<Transaction> searchResultTransactions = result.values();
 			List<Transaction> filteredSearchResultTransactions = new ArrayList<>();
@@ -348,29 +366,9 @@ public class TransactionController implements ControllerAttributes {
 
 		try {
 			TransactionSearchCriteria searchCriteria = getGroupTransactionSearchCriteria(session);
-			String[] currentTransactionViewSplit = searchCriteria.getCurrentTransactionView().trim().split(",");
-			Set<String> currentTransactionView = new HashSet<>();
-			if (currentTransactionViewSplit != null && currentTransactionViewSplit.length > 0) {
-				for (String transactionTypeItr : currentTransactionViewSplit) {
-					if (transactionTypeItr.length() > 0)
-						currentTransactionView.add(transactionTypeItr.trim());
-				}
-			}
 			if (transactionType != null) {
-				if (TRANSACTION_TYPE_EXPENSE.equals(transactionType)
-						|| TRANSACTION_TYPE_INCOME.equals(transactionType)) {
-					if (currentTransactionView.contains(transactionType))
-						currentTransactionView.remove(transactionType);
-					else
-						currentTransactionView.add(transactionType);
-				}
-				if (currentTransactionView != null && !currentTransactionView.isEmpty()) {
-					searchCriteria.setCurrentTransactionView(String.join(",", currentTransactionView));
-				} else {
-					searchCriteria.setCurrentTransactionView("");
-				}
+				searchCriteria.setCurrentTransactionView(transactionType);
 			}
-			System.out.println("Current Transaction view decision ? " + searchCriteria.getCurrentTransactionView());
 			session.setAttribute(SEARCH_GROUP_TRANSACTION, searchCriteria);
 		} catch (Exception e) {
 			rad.addFlashAttribute("errorMessage", e.getMessage());

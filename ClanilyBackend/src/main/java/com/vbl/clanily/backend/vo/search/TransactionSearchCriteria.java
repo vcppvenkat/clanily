@@ -11,15 +11,16 @@ public class TransactionSearchCriteria extends SearchCriteria {
 
 	public TransactionSearchCriteria() {
 
-		
 	}
 
 	public String summary;
 	public Date fromDate;
 	public String fromDateString;
+	public String searchFromDateString;
 
 	public Date toDate;
 	public String toDateString;
+	public String searchToDateString;
 
 	public List<Integer> accountIds;
 	public float amount;
@@ -419,6 +420,22 @@ public class TransactionSearchCriteria extends SearchCriteria {
 
 	public void setToDateString(String toDateString) {
 		this.toDateString = toDateString;
+	}
+
+	public String getSearchFromDateString() {
+		return searchFromDateString;
+	}
+
+	public void setSearchFromDateString(String searchFromDateString) {
+		this.searchFromDateString = searchFromDateString;
+	}
+
+	public String getSearchToDateString() {
+		return searchToDateString;
+	}
+
+	public void setSearchToDateString(String searchToDateString) {
+		this.searchToDateString = searchToDateString;
 	}
 
 }
