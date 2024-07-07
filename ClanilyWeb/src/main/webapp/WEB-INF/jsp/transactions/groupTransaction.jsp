@@ -41,7 +41,7 @@
 	                    <div class="hpanel">
 	                        <div class="panel-body">
 	                            <div class="m-b-md">
-	                                <h4>
+	                                <h4> 
 	                                    Filters
 	                                </h4>
 	                                <small>
@@ -107,18 +107,6 @@
 	                                    		<option value="${account.accountId}">${account.accountName}</option>
 	                                    	</c:forEach>
 	                                </select>
-	                                </div>
-	                                
-	                            </div>
-	                            <div class="form-group">
-	                                <label class="control-label">Amount range</label>
-	                                <div class="input-group col-lg-12">
-	                                    <div class="input-group">
-	                                        <input type="text" class="input-sm form-control">
-	                                        <span class="input-group-addon">to</span>
-	                                        <input type="text" class="input-sm form-control">
-	                                    </div>
-	                                    
 	                                </div>
 	                                
 	                            </div>
