@@ -140,6 +140,7 @@ public abstract class AbstractSqlLiteOperationManager extends AbstractSqlLiteMan
 		t.transactionType = rs.getString("TRANSACTION_TYPE");
 		t.accountId = rs.getInt("ACCOUNT_ID");
 		t.account = AccountDBTranslator.getInstance().getById(t.accountId);
+		t.accountName = rs.getString("ACCOUNT_NAME");
 		
 		t.payeeId = rs.getInt("PAYEE_ID");
 		t.payeeName = rs.getString("PAYEE_NAME");

@@ -32,13 +32,31 @@ public class TransactionService extends ClanilyService {
 	}
 
 	public void groupTransaction(int transactionId, List<Integer> children) throws Exception {
-		float total = 0.0F;
+		
 		for (int child : children) {
 			Transaction t = TransactionDBTranslator.getInstance().getById(child);
+			// check id is valid
 			if (t == null)
 				throw new Exception("Invalid child : " + child);
 			
+			// check if the given id is already a children
+			if(t.groupParentId > 0) {
+				throw new Exception("An existing grouped member cannot be re-grouped : "+ t.summary);
+			}
 			
+			if(t.splitParentId > 0) {
+				throw new Exception("An existing split member cannot be grouped : " + t.summary);
+			}
+			
+			
+			// Validate sum of all ids
+			float childrenSum = TransactionDBTranslator.getInstance().sumOfTransactions(children);
+			if(childrenSum > t.transactionAmount) {
+				throw new Exception("Sum of children cannot exceed transaction total. Tip: Adjust with additional income / expense");
+			}
+			if(childrenSum < t.transactionAmount) {
+				throw new Exception("Sum of children cannot be less than transaction total. Tip: Adjust with additional income / expense");
+			}
 		}
 		TransactionDBTranslator.getInstance().groupTransaction(transactionId, children);
 	}

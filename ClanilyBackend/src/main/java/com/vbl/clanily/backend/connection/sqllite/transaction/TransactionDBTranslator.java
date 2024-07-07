@@ -3,6 +3,7 @@ package com.vbl.clanily.backend.connection.sqllite.transaction;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -195,6 +196,27 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 		rs.close();
 
 		return result;
+	}
+
+	public float sumOfTransactions(List<Integer> transactionIds) throws Exception {
+
+		float sum = 0.0f;
+
+		String query = "SELECT SUM(TRANSACTION_AMOUNT) AS SUM_OF_IDS FROM TRANSACTIONS WHERE TRANSACTION_ID IN ( ";
+		for (int id : transactionIds)
+			query += id + ",";
+		query += ")";
+		query = query.substring(0, query.length() - 1);
+
+		Statement s = connection.createStatement();
+
+		ResultSet rs = s.executeQuery(query);
+		while (rs.next()) {
+			sum = rs.getFloat("SUM_OF_IDS");
+		}
+
+		s.close();
+		return sum;
 	}
 
 	private void amendGroupTransactionIds(Transaction transaction) throws Exception {
