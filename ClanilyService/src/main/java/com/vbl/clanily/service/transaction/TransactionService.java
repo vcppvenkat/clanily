@@ -40,11 +40,11 @@ public class TransactionService extends ClanilyService {
 				throw new Exception("Invalid child : " + child);
 			
 			// check if the given id is already a children
-			if(t.groupParentId > 0) {
+			if(t.groupParentId > 0 && t.groupParentId != transactionId) {
 				throw new Exception("An existing grouped member cannot be re-grouped : "+ t.summary);
 			}
 			
-			if(t.splitParentId > 0) {
+			if(t.splitParentId > 0 && t.splitParentId != transactionId) {
 				throw new Exception("An existing split member cannot be grouped : " + t.summary);
 			}
 			

@@ -1,15 +1,10 @@
 package com.vbl.clanily.ui.web.controller.transaction;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Controller;
@@ -399,7 +394,7 @@ public class TransactionController implements ControllerAttributes {
 		} catch (Exception e) {
 			rad.addFlashAttribute("errorMessage", e.getMessage());
 			ClanilyLogger.LogMessage(getClass(), e);
-			mav.setViewName("redirect:/transactions/");
+			mav.setViewName("redirect:/transactions/groupTransaction?transactionId="+transactionId);
 		} finally {
 
 		}

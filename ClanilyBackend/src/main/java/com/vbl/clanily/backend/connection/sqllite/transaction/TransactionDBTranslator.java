@@ -126,21 +126,13 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 
 			if (containsValue(search.accountIds)) {
 				query += " AND (";
-				query += " FROM_ACCOUNT_ID IN ( ";
+				query += " TRANSACTIONS.ACCOUNT_ID IN ( ";
 				for (int value : search.accountIds) {
 					query += value + ",";
 				}
 				query = query.substring(0, query.length() - 1);
 				query += " ) ";
-				query += " OR  ";
-
-				query += " TO_ACCOUNT_ID IN ( ";
-				for (int value : search.accountIds) {
-					query += value + ",";
-				}
-				query = query.substring(0, query.length() - 1);
-
-				query += " ) ";
+				
 				query += " ) ";
 
 			}
@@ -205,8 +197,9 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 		String query = "SELECT SUM(TRANSACTION_AMOUNT) AS SUM_OF_IDS FROM TRANSACTIONS WHERE TRANSACTION_ID IN ( ";
 		for (int id : transactionIds)
 			query += id + ",";
-		query += ")";
 		query = query.substring(0, query.length() - 1);
+		query += ")";
+		
 
 		Statement s = connection.createStatement();
 

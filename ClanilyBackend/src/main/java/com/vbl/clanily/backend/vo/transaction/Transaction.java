@@ -36,7 +36,7 @@ public class Transaction implements ValueObject {
 	public String transactionType;
 
 	public int accountId;
-	public int toAccountId;
+	//public int toAccountId;
 	public String accountName;
 	public Account account;
 
@@ -126,14 +126,7 @@ public class Transaction implements ValueObject {
 		this.transactionDateString = transactionDateString;
 	}
 
-	public int getToAccountId() {
-		return toAccountId;
-	}
-
-	public void setToAccountId(int toAccountId) {
-		this.toAccountId = toAccountId;
-	}
-
+	
 	public boolean isAutoSync() {
 		return autoSync;
 	}
