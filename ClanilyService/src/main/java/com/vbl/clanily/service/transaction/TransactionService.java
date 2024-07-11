@@ -1,5 +1,9 @@
 package com.vbl.clanily.service.transaction;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -131,8 +135,51 @@ public class TransactionService extends ClanilyService {
 					}
 				}
 			}
+			
+			
+			
+			
+			// insert an attachment
+			String file = "/Users/venkat/Downloads/4C89E125-7C20-4358-8C97-FA542164E737_1_102_o.jpeg";
+			File image = new File(file);
+	        FileInputStream fis = new FileInputStream(image);
+	        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+	        byte[] buf = new byte[1024];
+	        byte[] person_image = null;
+	        try {
+	            for (int readNum; (readNum = fis.read(buf)) != -1;)
+	            {
+	                bos.write(buf, 0, readNum);
+	                person_image = bos.toByteArray();
+	            }
+	            
+	            
+	            for(Transaction temp : result.values()) {
+    	        	TransactionFile tFile = new TransactionFile();
+    	        	tFile.dateAdded = new Date();
+    	        	tFile.description = "This is added via auto code from service for testing";
+    	        	tFile.file = person_image;
+    	        	tFile.fileName = temp.summary;
+    	        	tFile.fileType = "JPEG";
+    	        	tFile.summary = temp.summary;
+    	        	tFile.transactionId = temp.transactionId;
+    	        	TransactionDBTranslator.getInstance().attachFile(tFile);
+    	        }
+	            
+	        } catch (IOException ex) {
+	            System.err.println(ex.getMessage());
+	        }
+	       
+	        	
+	        	
+	        	
+	        	
 			return result;
 		}
+		
+		
+		
+		
 		throw new Exception("Input search criteria object is null");
 	}
 

@@ -3,7 +3,6 @@ package com.vbl.clanily.backend.connection.sqllite.transaction;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -182,7 +181,7 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 		ResultSet rs = st.executeQuery(query);
 		while (rs.next()) {
 			transaction = copyTransaction(null, rs);
-			amendGroupTransactionIds(transaction);
+			amendGroupTransactionIds(transaction);	
 			result.add(transaction);
 		}
 		rs.close();
@@ -281,7 +280,15 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 		}
 
 		rs.close();
+		
+
+		// associate transaction file metadata
+		t.transactionFilesMetaData = getTransactionFilesMetadata(t.transactionId).values() ;
+		System.out.println("Printing - " + t.transactionFilesMetaData.size());
+		
 		amendGroupTransactionIds(t);
+		
+		
 
 		return t;
 	}
@@ -356,7 +363,31 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 		s.close();
 		return rowId;
 	}
-
+	
+	public TransactionFile getTransactionFile(int transactionFileId) throws Exception {
+		throw new UnsupportedOperationException("This method is currently not supported");
+	}
+	
+	public SearchResult<TransactionFile> getTransactionFilesMetadata(int transactionId) throws Exception {
+		SearchResult<TransactionFile> result = new SearchResult<TransactionFile>();
+		String query = "SELECT TRANSACTION_FILE_ID, TRANSACTION_ID, FILE_NAME, DATE_ADDED, DESCRIPTION, FILE_TYPE, SUMMARY FROM TRANSACTION_FILES WHERE TRANSACTION_ID = " + transactionId;
+		Statement s = connection.createStatement();
+		ResultSet rs = s.executeQuery(query);
+		while(rs.next()) {
+			TransactionFile file = new TransactionFile();
+			file.dateAdded = new Date(rs.getLong("DATE_ADDED"));
+			file.description = rs.getString("DESCRIPTION");
+			file.fileName = rs.getString("FILE_NAME");
+			file.fileType = rs.getString("FILE_TYPE");
+			file.summary = rs.getString("SUMMARY");
+			file.transactionFileId = rs.getInt("TRANSACTION_FILE_ID");
+			file.transactionId = rs.getInt("TRANSACTION_ID");
+			result.add(file);
+					
+		}
+		return result;
+	}
+	
 	public void attachFile(TransactionFile file) throws Exception {
 
 		String query = "INSERT INTO TRANSACTION_FILES (TRANSACTION_ID, FILE_NAME, FILE_TYPE, SUMMARY,  FILE_OBJECT, DATE_ADDED, DESCRIPTION) VALUES (?,?,?,?,?,?,?)";

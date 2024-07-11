@@ -89,7 +89,26 @@ public class Transaction implements ValueObject {
 	public boolean isAlreadyInitialized;
 
 	public String beneficiary;
+	
+	public List<TransactionFile> transactionFilesMetaData;
+	
+	
 
+	public List<TransactionFile> getTransactionFilesMetaData() {
+		return transactionFilesMetaData;
+	}
+
+	public void setTransactionFilesMetaData(List<TransactionFile> transactionFilesMetaData) {
+		this.transactionFilesMetaData = transactionFilesMetaData;
+	}
+
+	public void addTransactionFilesMetaData(TransactionFile file) {
+		if(this.transactionFilesMetaData == null) {
+			this.transactionFilesMetaData = new ArrayList<TransactionFile>();
+		}
+		this.transactionFilesMetaData.add(file);
+	}
+	
 	public String getObjectiveName() {
 		return objectiveName;
 	}

@@ -161,6 +161,9 @@ public abstract class AbstractSqlLiteOperationManager extends AbstractSqlLiteMan
 		t.customField2 = rs.getString("CUSTOM_FIELD_2");
 		t.customField3 = rs.getString("CUSTOM_FIELD_3");
 		t.sumOfGroup = rs.getFloat("TOTAL_VALUE");
+		
+		
+		
 		return t;
 	}
 

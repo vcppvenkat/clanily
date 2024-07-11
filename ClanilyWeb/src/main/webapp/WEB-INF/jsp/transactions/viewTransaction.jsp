@@ -235,19 +235,15 @@
 
 									</thead>
 									<tbody>
-										<tr>
-											<td><a href="">Bosch dishwasher bill</a></td>
-											<td>12-Jun-2024</td>
-											<td>PDF</td>
-											<td><a href="#"><i class="text-danger pe-7s-trash"></i></a></td>
-										</tr>
-										<tr>
-											<td><a href="">Bosch dishwasher warranty card</a></td>
-											<td>12-Jun-2024</td>
-											<td>PDF</td>
-											<td><a href="#"><i class="text-danger pe-7s-trash"></i></a></td>
-										</tr>
-
+										<c:forEach items="${transaction.transactionFilesMetaData}"
+											var="file">
+											<tr>
+												<td><a href="">${file.summary }</a></td>
+												<td>${file.dateAddedString }</td>
+												<td>${file.fileType }</td>
+												<td><a href="#"><i class="text-danger pe-7s-trash"></i></a></td>
+											</tr>
+										</c:forEach>
 
 
 									</tbody>

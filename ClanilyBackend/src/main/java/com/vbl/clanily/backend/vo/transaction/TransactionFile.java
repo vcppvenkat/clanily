@@ -1,5 +1,6 @@
 package com.vbl.clanily.backend.vo.transaction;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.vbl.clanily.backend.vo.ValueObject;
@@ -14,6 +15,15 @@ public class TransactionFile implements ValueObject {
 	public String description;
 	public byte[] file;
 	public Date dateAdded;
+	private SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+	
+	public String getDateAddedString() {
+		String transactionDateString = "dd-mmm-yyyy";
+		if (dateAdded != null) {
+			transactionDateString = dateFormat.format(dateAdded);
+		}
+		return transactionDateString;
+	}
 
 	public String getFileName() {
 		return fileName;
