@@ -190,6 +190,9 @@
 	                                    <td>${ groupTransaction.accountName }</td>
 	                                </tr>
                                 </c:forEach>
+                                <tr>
+                                	<td colspan="6" ></td>
+                                </tr>
                             </tbody>
                             <tfoot>
                                 <tr class="bg-silver text-white font-extra-bold">
