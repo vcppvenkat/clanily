@@ -141,7 +141,10 @@
                                 <div class="form-group">
                                     <div class="col-lg-12">
                                         <a class="btn btn-default" href="/transactions/viewTransaction?transactionId=${transaction.transactionId}">Discard</a>&ensp;
+                                        
+                                        <!-- 
                                         <a class="btn btn-primary btn-outline" href="AddTransaction.html">Add New Transaction</a>&ensp;
+                                         -->
                                         <a class="btn btn-primary pull-right" href="/transactions/saveGroupTransaction?transactionId=${transaction.transactionId}">Save changes</a>
                                     </div>
                                 </div>

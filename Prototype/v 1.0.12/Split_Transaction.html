@@ -32,7 +32,6 @@
     <link rel="stylesheet" href="fonts/pe-icon-7-stroke/css/helper.css" />
     <link rel="stylesheet" href="styles/style.css">
 
-
 </head>
 
 <body class="fixed-navbar sidebar-scroll">
@@ -133,6 +132,8 @@
             </div>
         </nav>
     </div>
+
+    <!-- Navigation -->
     <aside id="menu">
         <div id="navigation">
             <div class="profile-picture">
@@ -162,7 +163,7 @@
                         <span class="nav-label">Home</span>
                     </a>
                 </li>
-                <li class="active">
+                <li>
                     <a href="transactions.html">
                         <span class="nav-label">Transactions</span>
                     </a>
@@ -173,7 +174,7 @@
                     </a>
                 </li>
 
-                <li>
+                <li class="active">
                     <a href="projects.html">
                         <span class="nav-label">Projects</span>
                     </a>
@@ -204,266 +205,153 @@
 
     <!-- Main Wrapper -->
     <div id="wrapper">
-
         <div class="normalheader small-header">
             <div class="hpanel">
                 <div class="panel-body">
                     <h2 class="font-light m-b-xs">
-                        View Transaction
+                        Manage Transactions
                     </h2>
-                    <small>Add new transaction</small>
+                    <small>Split your transactions</small>
                 </div>
             </div>
         </div>
-
-
         <div class="content">
+            <div class="row">
+                <div class="alert alert-danger">
+                  <h5>This is sample error message</h5>
+                </div>
+              </div>
 
             <div class="row">
-                <div class="col-lg-12">
-                    <a class="btn btn-primary m-r-sm">Edit Transaction</a>
-                </div>
-                <div class="hr-line-dashed"></div>
-                <div class="col-lg-4">
-                    <div class="hpanel">
-                        
-                        <div class="panel-heading">
-                            <table class="table table-responsive">
-                                <thead>
-                                    <th colspan="2">
-                                        Basic details
-                                    </th>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="">Clearence</td>
-                                        <td class="">
-                                            Cleared <a href="#" class="pull-right link">Change</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="">Summary</td>
-                                        <td class="">Netflix Subscriptions Netflix...</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Type</td>
-                                        <td>
-                                            <span class="text-danger">
-                                                Expense
-                                            </span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Account</td>
-                                        <td>HDFC -> SBI Venkat</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Category</td>
-                                        <td>Home Maintenance</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Amount</td>
-                                        <td>1,23,34.38</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Date</td>
-                                        <td>12-Dec-2024</td>
-                                    </tr>
-                                    <tr>
-                                        <td>User</td>
-                                        <td>Venkat</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Payee</td>
-                                        <td>Amazon India</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Objective</td>
-                                        <td>Taigin</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Loan</td>
-                                        <td>Parent Expense</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Project</td>
-                                        <td>Ooty trip - 2023</td>
-                                    </tr>
-                                    
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="panel-heading">
-                            <h5 class="font-bold">Notes</h5>
-                            <small class="text-muted">
-                                
-                                    This is test notes written by the user. This can be 250 chars long in total, through which one can add multiple lines of comments, some remembering moments, through which you can remember this transaction. This will be used when you search a transaction.
-                                
-                            </small>
-                            
-                        </div>
-                            
-                            <div class="panel-heading">
-                                <h5>Meta data details</h5>
-                                <table class="table table-responsive">
-                                    
-                                    <tbody>
-                                        <tr>
-                                            <td>Transaction Id</td>
-                                            <td>12345</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="">Addition Type</td>
-                                            <td class="">Imported</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Date Added</td>
-                                            <td>
-                                                12-Dec-2024 12:34 PM
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Last Modified</td>
-                                            <td>01-Jan-2024 09:28 AM</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Created User</td>
-                                            <td>Venkat</td>
-                                        </tr>
-                                        
-                                        
-                                        
-                                    </tbody>
-                                </table>
+                <div class="hpanel">
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <div class="col-lg-12">
+                                <a class="btn btn-default" href="transactions.html">Discard</a>&ensp;
+                                <a class="btn btn-primary pull-right" href="transactions.html">Save changes</a>
                             </div>
-                            <div class="panel-heading">
-                                <h6 class="font-bold">Original Notes</h6>
-                                <small class="text-muted">
-                                    
-                                        This is test notes written by the user. This can be 250 chars long in total, through which one can add multiple lines of comments, some remembering moments, through which you can remember this transaction. This will be used when you search a transaction.
-                                    
-                                </small>
-                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="col-lg-8">
-                        <div class="hpanel">
-                            
-                            <div class="panel-heading">
-                                <h5 class="font-bold">Group transactions</h5>
-                                <div class="hr-line-solid"></div>
-                                <table class="table table-responsive">
-                                    <thead>
-                                        <th>Summary</th>
-                                        <th>Amount</th>
-                                        <th>Account</th>
-                                        <th>Category</th>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>Sample summary with description...</td>
-                                            <td class="text-danger">1,22,34.30</td>
-                                            <td>HDFC Bank</td>
-                                            <td>Home Maintenance</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Netflix Subscriptions</td>
-                                            <td class="text-success">1,22,34.30</td>
-                                            <td>HDFC Bank</td>
-                                            <td>Home Maintenance</td>
-                                        </tr>
-                                    </tbody>
-                                    <tfoot>
-                                        <tr class="bg-silver text-white font-extra-bold">
-                                            <td>Total</td>
-                                            <td>1000 / 1000</td>
-                                            <td colspan="2"></td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="4">
-                                                <a class="btn btn-primary2 btn-outline btn-sm" href="GroupTransaction.html">Group transaction</a>
-                                            </td>
-                                        </tr>
-                                    </tfoot>
-                                    
-                                </table>
-                            </div>
-                            <div class="panel-heading">
-                                <h5 class="font-bold">Split transactions</h5>
-                                <div class="hr-line-solid"></div>
-                                <div class="well">
-                                    No split transactions found. Please click below button to split the transaction
-                                </div>
-                                <a class="btn btn-primary2 btn-outline btn-sm" href="Split_Transaction.html">Split transaction</a>
-                            </div>
-                        </div>
-                        <div class="panel-heading">
-                            <h4 class="font-bold">Attachments 
-                                <a class="pull-right btn btn-primary2 btn-outline btn-sm" href="AttachFile_Details.html">Add attachments</a>
-                            </h4>
-                                <div class="hr-line-solid"></div>
-                            <table class="table table-responsive">
-                                <thead>
-                                    <tr>
-                                        <th>
-                                            Summary
-                                        </th>
-                                        <th>Date added</th>
-                                        <th>Type</th>
-                                        <th></th>
-                                    </tr>
-                                    
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td><a href="">Bosch dishwasher bill</a></td>
-                                        <td>12-Jun-2024</td>
-                                        <td>PDF</td>
-                                        <td><a href="#"><i class="text-danger pe-7s-trash"></i></a></td>
-                                    </tr>
-                                    <tr>
-                                        <td> <a href="">Bosch dishwasher warranty card</a> </td>
-                                        <td>12-Jun-2024</td>
-                                        <td>PDF</td>
-                                        <td><a href="#"><i class="text-danger pe-7s-trash"></i></a></td>
-                                    </tr>
-                                    
-                                    
-                                    
-                                </tbody>
-                            </table>
-                        </div>
-                    
 
-                    
-                </div>
+                    <table class="table">
+                        <thead>
+                            <tr class="bg-light">
+                                <th></th>
+                                <th>Original summary of the transaction goes here</th>
+                                <th>Home daily needs</th>
+                                <th>1,652.78</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="btn-group">
+                                        <a data-toggle="dropdown" class="link dropdown-toggle">...</a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="#">Edit</a></li>
+                                            <li><a href="#">Adjust</a></li>
+                                            <li class="divider"></li>
+                                            
+                                            <li><a href="#">Delete</a></li>
+                                        </ul>
+                                    </div>
+                                </td>
+                                <td>This is a custom summary</td>
+                                <td>Shopping</td>
+                                <td>168.00</td>
+                                
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="btn-group">
+                                        <a data-toggle="dropdown" class="link dropdown-toggle">...</a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="#">Edit</a></li>
+                                            <li><a href="#">Adjust</a></li>
+                                            <li class="divider"></li>
+                                            
+                                            <li><a href="#">Delete</a></li>
+                                        </ul>
+                                    </div>
+                                </td>
+                                <td>This is a second custom summary</td>
+                                <td>Home Maintenance</td>
+                                <td>868.00</td>
+                                
+                            </tr>
 
-                
-                
+                            <tr>
+                                <td>
+                                    <a class="btn btn-success btn-sm">Add</a>
+                                </td>
+                                <td>
+                                    <input class="input-sm" style="width: 100%;" placeholder="Enter the summary of transaction" />
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <select class="js-source-states-2" style="width: 85%;">
+                                            <optgroup label="Need">
+                                                <option value="AK">Home
+                                                    Daily
+                                                    Needs</option>
+                                                <option value="HI">Home
+                                                    Maintenance</option>
+                                                <option value="HI">Vehicle
+                                                    Maintenance</option>
+                                            </optgroup>
+                                            <optgroup label="Want">
+                                                <option value="CA">EB
+                                                    Bill</option>
+                                                <option value="NV">Home
+                                                    Rent</option>
+                                            </optgroup>
+    
+                                            <optgroup label="Others">
+                                                <option value="AL">Lend</option>
+                                                <option value="AR">Subscriptions</option>
+                                                <option value="IL">Personal
+                                                    Grooming</option>
+    
+                                            </optgroup>
+    
+                                        </select>
+                                    </div>
+                                    
+                                </td>
+                                <td>
+                                    <input class="input-sm" placeholder="0.00" />
+                                    <a href="#" class="btn btn-link">Adjust</a>
+                                </td>
+                                
+                            </tr>
+
+
+                        </tbody>
+                    </table>
             </div>
+
+
+
+
+
         </div>
 
-
-
+        <!-- Right sidebar -->
 
 
         <!-- Footer-->
         <footer class="footer">
-            <span class="pull-right">
-                Example text
-            </span>
+            <span class="pull-right"> Example text </span>
             Company 2015-2020
         </footer>
-
     </div>
 
 
 
-
-
-
-
+  
     <!-- Vendor scripts -->
     <script src="vendor/jquery/dist/jquery.min.js"></script>
     <script src="vendor/jquery-ui/jquery-ui.min.js"></script>
@@ -482,7 +370,7 @@
 
     <!-- App scripts -->
     <script src="scripts/homer.js"></script>
-
+    
     <script>
 
         $(function () {

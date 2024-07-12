@@ -37,6 +37,12 @@ public class TransactionService extends ClanilyService {
 
 	public void groupTransaction(int transactionId, List<Integer> children) throws Exception {
 		
+		Transaction parent = TransactionDBTranslator.getInstance().getById(transactionId);
+		if(parent.splitParentId > 0 ) {
+			throw new Exception("A child transaction cannot become group parent. Note: This transaction is a child of another group already. ");
+		}
+		
+		
 		for (int child : children) {
 			Transaction t = TransactionDBTranslator.getInstance().getById(child);
 			// check id is valid
@@ -45,11 +51,11 @@ public class TransactionService extends ClanilyService {
 			
 			// check if the given id is already a children
 			if(t.groupParentId > 0 && t.groupParentId != transactionId) {
-				throw new Exception("An existing grouped member cannot be re-grouped : "+ t.summary);
+				throw new Exception("An existing grouped member cannot be re-grouped : "+ t.summary + ", " + t.transactionDateString + ", " + t.transactionAmountString);
 			}
 			
 			if(t.splitParentId > 0 && t.splitParentId != transactionId) {
-				throw new Exception("An existing split member cannot be grouped : " + t.summary);
+				throw new Exception("An existing split member cannot be grouped : " + t.summary + ", " + t.transactionDateString + ", " + t.transactionAmountString);
 			}
 			
 			
@@ -163,7 +169,7 @@ public class TransactionService extends ClanilyService {
     	        	tFile.fileType = "JPEG";
     	        	tFile.summary = temp.summary;
     	        	tFile.transactionId = temp.transactionId;
-    	        	TransactionDBTranslator.getInstance().attachFile(tFile);
+    	        	//TransactionDBTranslator.getInstance().attachFile(tFile);
     	        }
 	            
 	        } catch (IOException ex) {
