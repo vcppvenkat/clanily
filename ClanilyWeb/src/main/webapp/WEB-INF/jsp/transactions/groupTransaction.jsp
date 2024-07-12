@@ -142,7 +142,10 @@
                                 <div class="form-group">
                                     <div class="col-lg-12">
                                         <a class="btn btn-default" href="/transactions/viewTransaction?transactionId=${transaction.transactionId}">Discard</a>&ensp;
+                                        
+                                        <!-- 
                                         <a class="btn btn-primary btn-outline" href="AddTransaction.html">Add New Transaction</a>&ensp;
+                                         -->
                                         <a class="btn btn-primary pull-right" href="/transactions/saveGroupTransaction?transactionId=${transaction.transactionId}">Save changes</a>
                                     </div>
                                 </div>
@@ -188,6 +191,81 @@
 	                                    <td>${ groupTransaction.accountName }</td>
 	                                </tr>
                                 </c:forEach>
+                                
+                                <tr>
+                                    <td><a href="#"><i class="fa fa-minus"></i></a></td>
+                                    <td>
+                                        <input class="input-sm" placeholder="Summary" style="width: 100%;" />
+                                    </td>
+                                    <td>
+                                        <div class="input-group date" style="width: 75%;">
+                                            <input type="text" class="form-control input-sm" ><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                                        </div>
+                                    </td>
+                                    <td class="text-danger">
+                                        <input class="input-sm" placeholder="0.00" style="width: 100%;" value="189.75"/>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <select class="js-source-states-2" style="width: 85%;">
+                                                <optgroup label="Need">
+                                                    <option value="AK">Home
+                                                        Daily
+                                                        Needs</option>
+                                                    <option value="HI">Home
+                                                        Maintenance</option>
+                                                    <option value="HI">Vehicle
+                                                        Maintenance</option>
+                                                </optgroup>
+                                                <optgroup label="Want">
+                                                    <option value="CA">EB
+                                                        Bill</option>
+                                                    <option value="NV">Home
+                                                        Rent</option>
+                                                </optgroup>
+        
+                                                <optgroup label="Others">
+                                                    <option value="AL">Lend</option>
+                                                    <option value="AR">Subscriptions</option>
+                                                    <option value="IL">Personal
+                                                        Grooming</option>
+        
+                                                </optgroup>
+        
+                                            </select>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <select class="js-source-states-2" style="width: 85%;">
+                                                <optgroup label="Need">
+                                                    <option value="AK">Home
+                                                        Daily
+                                                        Needs</option>
+                                                    <option value="HI">Home
+                                                        Maintenance</option>
+                                                    <option value="HI">Vehicle
+                                                        Maintenance</option>
+                                                </optgroup>
+                                                <optgroup label="Want">
+                                                    <option value="CA">EB
+                                                        Bill</option>
+                                                    <option value="NV">Home
+                                                        Rent</option>
+                                                </optgroup>
+        
+                                                <optgroup label="Others">
+                                                    <option value="AL">Lend</option>
+                                                    <option value="AR">Subscriptions</option>
+                                                    <option value="IL">Personal
+                                                        Grooming</option>
+        
+                                                </optgroup>
+        
+                                            </select>
+                                        </div>
+                                    </td>
+                                </tr>
                             </tbody>
                             <tfoot>
                                 <tr class="bg-silver text-white font-extra-bold">
