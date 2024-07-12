@@ -530,5 +530,11 @@ public class Transaction implements ValueObject {
 			return false;
 		Transaction other = (Transaction) obj;
 		return transactionId == other.transactionId;
+	}
+
+	@Override
+	public String toString() {
+		return "Transaction [transactionId=" + transactionId + ", summary=" + summary + ", transactionAmount="
+				+ transactionAmount + "]";
 	}	
 }

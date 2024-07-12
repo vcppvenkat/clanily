@@ -36,7 +36,8 @@ public class TransactionService extends ClanilyService {
 	}
 
 	public void groupTransaction(int transactionId, List<Integer> children) throws Exception {
-		
+		Transaction parentTransaction = TransactionDBTranslator.getInstance().getById(transactionId);
+		float childrenSum = TransactionDBTranslator.getInstance().sumOfTransactions(children);		
 		for (int child : children) {
 			Transaction t = TransactionDBTranslator.getInstance().getById(child);
 			// check id is valid
@@ -54,11 +55,10 @@ public class TransactionService extends ClanilyService {
 			
 			
 			// Validate sum of all ids
-			float childrenSum = TransactionDBTranslator.getInstance().sumOfTransactions(children);
-			if(childrenSum > t.transactionAmount) {
+			if(childrenSum < parentTransaction.transactionAmount) {
 				throw new Exception("Sum of children cannot exceed transaction total. Tip: Adjust with additional income / expense");
 			}
-			if(childrenSum < t.transactionAmount) {
+			if(childrenSum > parentTransaction.transactionAmount) {
 				throw new Exception("Sum of children cannot be less than transaction total. Tip: Adjust with additional income / expense");
 			}
 		}
@@ -140,6 +140,7 @@ public class TransactionService extends ClanilyService {
 			
 			
 			// insert an attachment
+			/*
 			String file = "/Users/venkat/Downloads/4C89E125-7C20-4358-8C97-FA542164E737_1_102_o.jpeg";
 			File image = new File(file);
 	        FileInputStream fis = new FileInputStream(image);
@@ -169,7 +170,7 @@ public class TransactionService extends ClanilyService {
 	        } catch (IOException ex) {
 	            System.err.println(ex.getMessage());
 	        }
-	       
+	       */
 	        	
 	        	
 	        	

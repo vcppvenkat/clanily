@@ -33,6 +33,7 @@
 
 
         <div class="content">
+        	<jsp:include page="../showMessage.jsp"></jsp:include>
             <div class="row">
             	<form:form action="/transactions/groupTransactionSearch" method="post" cssClass="form-horizontal" modelAttribute="groupTransactionSearchCriteria">
             		<form:hidden path="transactionId" value="${transaction.transactionId}" />

@@ -262,7 +262,7 @@ public class TransactionController implements ControllerAttributes {
 				if (transaction.getGroupTransactionIds() != null && !transaction.getGroupTransactionIds().isEmpty())
 					continue;
 
-				if (transaction.getGroupParentId() > 0)
+				if (transaction.getGroupParentId() > 0 && transaction.getGroupParentId() != t.getTransactionId())
 					continue;
 
 				filteredSearchResultTransactions.add(transaction);
