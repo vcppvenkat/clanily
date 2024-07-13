@@ -30,8 +30,6 @@
                 </div>
             </div>
         </div>
-
-
         <div class="content">
         	<jsp:include page="../showMessage.jsp"></jsp:include>
             <div class="row">
