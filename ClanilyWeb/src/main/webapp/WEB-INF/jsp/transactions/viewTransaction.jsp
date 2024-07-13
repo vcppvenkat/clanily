@@ -221,7 +221,7 @@
 								<h4 class="font-bold">
 									Attachments <a
 										class="pull-right btn btn-primary2 btn-outline btn-sm"
-										href="AttachFile_Details.html">Add attachments</a>
+										href="/transactions/addAttachmentForm?transactionId=${transaction.transactionId}">Add attachments</a>
 								</h4>
 								<div class="hr-line-solid"></div>
 								<table class="table table-responsive">
@@ -241,7 +241,7 @@
 												<td><a href="">${file.summary }</a></td>
 												<td>${file.dateAddedString }</td>
 												<td>${file.fileType }</td>
-												<td><a href="#"><i class="text-danger pe-7s-trash"></i></a></td>
+												<td><a href="/transactions/deleteAttachment?transactionId=${transaction.transactionId}&fileId=${file.transactionFileId}"><i class="text-danger pe-7s-trash"></i></a></td>
 											</tr>
 										</c:forEach>
 

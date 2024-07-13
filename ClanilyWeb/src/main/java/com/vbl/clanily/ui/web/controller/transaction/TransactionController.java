@@ -391,6 +391,7 @@ public class TransactionController implements ControllerAttributes {
 		try {
 			List<Integer> associatedGroupTransactionIds = getSessionGroupTransactionIds(session);
 			TransactionService.getInstance().groupTransaction(transactionId, associatedGroupTransactionIds);
+			rad.addFlashAttribute("successMessage", "Saved successfully!");
 		} catch (Exception e) {
 			rad.addFlashAttribute("errorMessage", e.getMessage());
 			ClanilyLogger.LogMessage(getClass(), e);
@@ -401,11 +402,32 @@ public class TransactionController implements ControllerAttributes {
 		return mav;
 	}
 
+	@GetMapping("/addAttachmentForm")
+	public ModelAndView addAttachmentForm(int transactionId, 
+			HttpSession session, RedirectAttributes rad, ModelAndView mav) {
+		Transaction t = null;
+		mav.setViewName("/transactions/addAttachmentForm");
+		try {
+			t = TransactionService.getInstance().getById(transactionId);
+			if(t == null || t.getTransactionId() == 0)
+				throw new Exception("Invalid transaction!");
+			mav.addObject("transaction", t);
+		} catch (Exception e) {
+			mav.setViewName("redirect:/transactions/");
+			rad.addFlashAttribute("errorMessage", e.getMessage());
+			ClanilyLogger.LogMessage(getClass(), e);
+		}
+		return mav;
+	}
+
 	@PostMapping("/addAttachment")
 	public ModelAndView addAttachment(int transactionId, @RequestParam("transactionFile") MultipartFile inputFile,
+			String summary, String description,
 			HttpSession session, RedirectAttributes rad, ModelAndView mav) {
+		Transaction t = null;
 		mav.setViewName("redirect:/transactions/viewTransaction?transactionId=" + transactionId);
 		try {
+			t = TransactionService.getInstance().getById(transactionId);
 			String extension = FilenameUtils.getExtension(inputFile.getOriginalFilename());
 
 			if (!"txt".equalsIgnoreCase(extension)) {
@@ -417,20 +439,40 @@ public class TransactionController implements ControllerAttributes {
 
 			TransactionFile transactionFile = new TransactionFile();
 			transactionFile.setTransactionId(transactionId);
-			transactionFile.setDescription("W.R.T. " + transactionId);
-			transactionFile.setSummary("W.R.T. " + transactionId);
+			transactionFile.setDescription(description);
+			transactionFile.setSummary(summary);
 			transactionFile.setFile(fileData);
 			transactionFile.setFileName(inputFile.getOriginalFilename());
 			transactionFile.setFileType(extension);
 			TransactionService.getInstance().attachFile(transactionFile);
 			System.out.println(fileDataStr);
+			rad.addFlashAttribute("successMessage", "Attachment saved successfully!");
+		} catch (Exception e) {
+			mav.setViewName("redirect:/transactions/addAttachmentForm?transactionId=" + transactionId);
+			rad.addFlashAttribute("errorMessage", e.getMessage());
+			ClanilyLogger.LogMessage(getClass(), e);
+		}
 
+		return mav;
+	}
+
+	@GetMapping("/deleteAttachment")
+	public ModelAndView deleteAttachment(int transactionId, int fileId,
+			HttpSession session, RedirectAttributes rad, ModelAndView mav) {
+		Transaction t = null;
+		mav.setViewName("redirect:/transactions/viewTransaction?transactionId=" + transactionId);
+		try {
+			t = TransactionService.getInstance().getById(transactionId);
+			if(t == null || t.getTransactionId() == 0)
+				throw new Exception("Invalid transaction!");
+
+			//TransactionService.getInstance().
+			rad.addFlashAttribute("successMessage", "Attachment saved successfully!");
 		} catch (Exception e) {
 			mav.setViewName("redirect:/transactions/");
 			rad.addFlashAttribute("errorMessage", e.getMessage());
 			ClanilyLogger.LogMessage(getClass(), e);
 		}
-
 		return mav;
 	}
 
