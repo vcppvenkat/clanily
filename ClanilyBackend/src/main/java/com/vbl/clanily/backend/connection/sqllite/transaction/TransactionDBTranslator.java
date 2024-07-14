@@ -388,6 +388,16 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 		return result;
 	}
 	
+	public void deleteAttachment(int transactionFileId) throws Exception {
+
+		String query = "delete from TRANSACTION_FILES where TRANSACTION_FILE_ID = " + transactionFileId;
+
+		PreparedStatement s = connection.prepareStatement(query);
+		s.executeUpdate();
+		s.close();
+
+	}
+	
 	public void attachFile(TransactionFile file) throws Exception {
 
 		String query = "INSERT INTO TRANSACTION_FILES (TRANSACTION_ID, FILE_NAME, FILE_TYPE, SUMMARY,  FILE_OBJECT, DATE_ADDED, DESCRIPTION) VALUES (?,?,?,?,?,?,?)";
