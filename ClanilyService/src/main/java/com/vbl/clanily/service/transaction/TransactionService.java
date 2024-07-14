@@ -37,32 +37,37 @@ public class TransactionService extends ClanilyService {
 
 	public void groupTransaction(int transactionId, List<Integer> children) throws Exception {
 		Transaction parentTransaction = TransactionDBTranslator.getInstance().getById(transactionId);
-		float childrenSum = TransactionDBTranslator.getInstance().sumOfTransactions(children);		
+		float childrenSum = TransactionDBTranslator.getInstance().sumOfTransactions(children);
 		for (int child : children) {
 			Transaction t = TransactionDBTranslator.getInstance().getById(child);
 			// check id is valid
 			if (t == null)
 				throw new Exception("Invalid child : " + child);
-			
+
 			// check if the given id is already a children
-			if(t.groupParentId > 0 && t.groupParentId != transactionId) {
-				throw new Exception("An existing grouped member cannot be re-grouped : "+ t.summary);
+			if (t.groupParentId > 0 && t.groupParentId != transactionId) {
+				throw new Exception("An existing grouped member cannot be re-grouped : " + t.summary);
 			}
-			
-			if(t.splitParentId > 0 && t.splitParentId != transactionId) {
+
+			if (t.splitParentId > 0 && t.splitParentId != transactionId) {
 				throw new Exception("An existing split member cannot be grouped : " + t.summary);
 			}
-			
-			
+
 			// Validate sum of all ids
-			if(childrenSum < parentTransaction.transactionAmount) {
-				throw new Exception("Sum of children cannot exceed transaction total. Tip: Adjust with additional income / expense");
+			if (childrenSum < parentTransaction.transactionAmount) {
+				throw new Exception(
+						"Sum of children cannot exceed transaction total. Tip: Adjust with additional income / expense");
 			}
-			if(childrenSum > parentTransaction.transactionAmount) {
-				throw new Exception("Sum of children cannot be less than transaction total. Tip: Adjust with additional income / expense");
+			if (childrenSum > parentTransaction.transactionAmount) {
+				throw new Exception(
+						"Sum of children cannot be less than transaction total. Tip: Adjust with additional income / expense");
 			}
 		}
 		TransactionDBTranslator.getInstance().groupTransaction(transactionId, children);
+	}
+
+	public void deleteAttachment(int transactionFileId) throws Exception {
+		TransactionDBTranslator.getInstance().deleteAttachment(transactionFileId);
 	}
 
 	public void attachFile(TransactionFile file) throws Exception {
@@ -135,52 +140,31 @@ public class TransactionService extends ClanilyService {
 					}
 				}
 			}
-			
-			
-			
-			
+
 			// insert an attachment
 			/*
-			String file = "/Users/venkat/Downloads/4C89E125-7C20-4358-8C97-FA542164E737_1_102_o.jpeg";
-			File image = new File(file);
-	        FileInputStream fis = new FileInputStream(image);
-	        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-	        byte[] buf = new byte[1024];
-	        byte[] person_image = null;
-	        try {
-	            for (int readNum; (readNum = fis.read(buf)) != -1;)
-	            {
-	                bos.write(buf, 0, readNum);
-	                person_image = bos.toByteArray();
-	            }
-	            
-	            
-	            for(Transaction temp : result.values()) {
-    	        	TransactionFile tFile = new TransactionFile();
-    	        	tFile.dateAdded = new Date();
-    	        	tFile.description = "This is added via auto code from service for testing";
-    	        	tFile.file = person_image;
-    	        	tFile.fileName = temp.summary;
-    	        	tFile.fileType = "JPEG";
-    	        	tFile.summary = temp.summary;
-    	        	tFile.transactionId = temp.transactionId;
-    	        	TransactionDBTranslator.getInstance().attachFile(tFile);
-    	        }
-	            
-	        } catch (IOException ex) {
-	            System.err.println(ex.getMessage());
-	        }
-	       */
-	        	
-	        	
-	        	
-	        	
+			 * String file =
+			 * "/Users/venkat/Downloads/4C89E125-7C20-4358-8C97-FA542164E737_1_102_o.jpeg";
+			 * File image = new File(file); FileInputStream fis = new
+			 * FileInputStream(image); ByteArrayOutputStream bos = new
+			 * ByteArrayOutputStream(); byte[] buf = new byte[1024]; byte[] person_image =
+			 * null; try { for (int readNum; (readNum = fis.read(buf)) != -1;) {
+			 * bos.write(buf, 0, readNum); person_image = bos.toByteArray(); }
+			 * 
+			 * 
+			 * for(Transaction temp : result.values()) { TransactionFile tFile = new
+			 * TransactionFile(); tFile.dateAdded = new Date(); tFile.description =
+			 * "This is added via auto code from service for testing"; tFile.file =
+			 * person_image; tFile.fileName = temp.summary; tFile.fileType = "JPEG";
+			 * tFile.summary = temp.summary; tFile.transactionId = temp.transactionId;
+			 * TransactionDBTranslator.getInstance().attachFile(tFile); }
+			 * 
+			 * } catch (IOException ex) { System.err.println(ex.getMessage()); }
+			 */
+
 			return result;
 		}
-		
-		
-		
-		
+
 		throw new Exception("Input search criteria object is null");
 	}
 
