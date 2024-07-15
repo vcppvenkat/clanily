@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.vbl.clanily.backend.connection.sqllite.account.AccountDBTranslator;
 import com.vbl.clanily.backend.vo.account.Account;
+import com.vbl.clanily.backend.vo.settings.Beneficiary;
 import com.vbl.clanily.backend.vo.settings.Category;
 import com.vbl.clanily.backend.vo.settings.Objective;
 import com.vbl.clanily.backend.vo.settings.Payee;
@@ -55,6 +56,16 @@ public abstract class AbstractSqlLiteOperationManager extends AbstractSqlLiteMan
 		c.active = rs.getBoolean("ACTIVE");
 
 		return c;
+	}
+
+	protected Beneficiary copyBeneficiary(Beneficiary b, ResultSet rs) throws Exception {
+		if (b == null) {
+			b = new Beneficiary();
+		}
+		b.beneficiaryId = rs.getInt("BENEFICIARY_ID");
+		b.beneficiaryName = rs.getString("BENEFICIARY_NAME");
+
+		return b;
 	}
 
 	protected Payee copyPayee(Payee payee, ResultSet rs) throws Exception {
@@ -141,7 +152,7 @@ public abstract class AbstractSqlLiteOperationManager extends AbstractSqlLiteMan
 		t.accountId = rs.getInt("ACCOUNT_ID");
 		t.account = AccountDBTranslator.getInstance().getById(t.accountId);
 		t.accountName = rs.getString("ACCOUNT_NAME");
-		
+
 		t.payeeId = rs.getInt("PAYEE_ID");
 		t.payeeName = rs.getString("PAYEE_NAME");
 		t.transactionUserId = rs.getString("TRANSACTION_USER_ID");
@@ -161,9 +172,7 @@ public abstract class AbstractSqlLiteOperationManager extends AbstractSqlLiteMan
 		t.customField2 = rs.getString("CUSTOM_FIELD_2");
 		t.customField3 = rs.getString("CUSTOM_FIELD_3");
 		t.sumOfGroup = rs.getFloat("TOTAL_VALUE");
-		
-		
-		
+
 		return t;
 	}
 
