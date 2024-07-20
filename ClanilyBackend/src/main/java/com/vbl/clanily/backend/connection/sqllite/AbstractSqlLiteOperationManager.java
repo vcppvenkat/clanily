@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.vbl.clanily.backend.connection.sqllite.account.AccountDBTranslator;
 import com.vbl.clanily.backend.vo.account.Account;
+import com.vbl.clanily.backend.vo.loan.Loan;
 import com.vbl.clanily.backend.vo.settings.Beneficiary;
 import com.vbl.clanily.backend.vo.settings.Category;
 import com.vbl.clanily.backend.vo.settings.Objective;
@@ -19,6 +20,7 @@ public abstract class AbstractSqlLiteOperationManager extends AbstractSqlLiteMan
 		return (str != null && !str.isEmpty());
 	}
 
+	@SuppressWarnings("rawtypes")
 	protected boolean isValid(List list) {
 		return (list != null && !list.isEmpty());
 	}
@@ -39,6 +41,7 @@ public abstract class AbstractSqlLiteOperationManager extends AbstractSqlLiteMan
 		return value != null && value.length > 0;
 	}
 
+	@SuppressWarnings("rawtypes")
 	protected boolean containsValue(List list) {
 		return list != null && !list.isEmpty();
 	}
@@ -56,6 +59,27 @@ public abstract class AbstractSqlLiteOperationManager extends AbstractSqlLiteMan
 		c.active = rs.getBoolean("ACTIVE");
 
 		return c;
+	}
+
+	protected Loan copyLoan(Loan l, ResultSet rs) throws Exception {
+		if (l == null) {
+			l = new Loan();
+		}
+		l.loanId = rs.getInt("LOAN_ID");
+		l.loanSummary = rs.getString("SUMMARY");
+		l.startDate = rs.getLong("START_DATE");
+		l.endDate = rs.getLong("END_DATE");
+		l.noEndDate = rs.getBoolean("NO_END_DATE");
+		l.loanType = rs.getString("LOAN_TYPE");
+		l.amount = rs.getFloat("AMOUNT");
+		l.loanStatus = rs.getString("LOAN_STATUS");
+		l.description = rs.getString("DESCRIPTION");
+		l.payeeId = rs.getInt("PAYEE_ID");
+		l.interestPerAnum = rs.getFloat("INTEREST_PER_ANUM");
+		l.createdTs = rs.getLong("CREATED_TS");
+		l.internal = rs.getBoolean("INTERNAL");
+
+		return l;
 	}
 
 	protected Beneficiary copyBeneficiary(Beneficiary b, ResultSet rs) throws Exception {

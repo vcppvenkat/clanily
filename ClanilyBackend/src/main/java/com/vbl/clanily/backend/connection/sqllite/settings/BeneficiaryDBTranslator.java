@@ -16,6 +16,7 @@ import com.vbl.clanily.backend.vo.settings.Beneficiary;
 public class BeneficiaryDBTranslator extends AbstractSqlLiteOperationManager implements ClanilyDBOperation {
 
 	private static final BeneficiaryDBTranslator thisInstance = new BeneficiaryDBTranslator();
+	
 
 	public static BeneficiaryDBTranslator getInstance() {
 		return thisInstance;

@@ -35,6 +35,14 @@ public class TransactionService extends ClanilyService {
 		return thisInstance;
 	}
 
+	public List<Transaction> getGroupChildren(int transactionId) {
+		return null;
+	}
+
+	public List<Transaction> getSplitChildren(int transactionId) {
+		return null;
+	}
+
 	public void groupTransaction(int transactionId, List<Integer> children) throws Exception {
 		Transaction parentTransaction = TransactionDBTranslator.getInstance().getById(transactionId);
 		float childrenSum = TransactionDBTranslator.getInstance().sumOfTransactions(children);
