@@ -390,7 +390,7 @@ public class TransactionController implements ControllerAttributes {
 
 		try {
 			List<Integer> associatedGroupTransactionIds = getSessionGroupTransactionIds(session);
-			TransactionService.getInstance().groupTransaction(transactionId, associatedGroupTransactionIds);
+			TransactionService.getInstance().mergeTransaction(transactionId, associatedGroupTransactionIds);
 			rad.addFlashAttribute("successMessage", "Saved successfully!");
 		} catch (Exception e) {
 			rad.addFlashAttribute("errorMessage", e.getMessage());

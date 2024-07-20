@@ -423,7 +423,7 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 		throw new OperationNotSupportedException("Insert all for transactions is not supported.");
 	}
 
-	public void ungroupTransaction(int transactionId) throws Exception {
+	public void unmergeTransaction(int transactionId) throws Exception {
 		String query = "UPDATE TRANSACTIONS SET GROUP_PARENT_ID=0 WHERE GROUP_PARENT_ID=?";
 		PreparedStatement s = connection.prepareStatement(query);
 		s.setInt(1, transactionId);
@@ -431,8 +431,8 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 		s.close();
 	}
 
-	public void groupTransaction(int transactionId, List<Integer> children) throws Exception {
-		ungroupTransaction(transactionId);
+	public void mergeTransaction(int transactionId, List<Integer> children) throws Exception {
+		unmergeTransaction(transactionId);
 		String query = "UPDATE TRANSACTIONS SET GROUP_PARENT_ID=? WHERE TRANSACTION_ID=?";
 		PreparedStatement s = connection.prepareStatement(query);
 		for (int child : children) {

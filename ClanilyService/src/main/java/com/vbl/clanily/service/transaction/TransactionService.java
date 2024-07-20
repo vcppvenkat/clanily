@@ -43,7 +43,7 @@ public class TransactionService extends ClanilyService {
 		return null;
 	}
 
-	public void groupTransaction(int transactionId, List<Integer> children) throws Exception {
+	public void mergeTransaction(int transactionId, List<Integer> children) throws Exception {
 		Transaction parentTransaction = TransactionDBTranslator.getInstance().getById(transactionId);
 		float childrenSum = TransactionDBTranslator.getInstance().sumOfTransactions(children);
 		for (int child : children) {
@@ -71,7 +71,7 @@ public class TransactionService extends ClanilyService {
 						"Sum of children cannot be less than transaction total. Tip: Adjust with additional income / expense");
 			}
 		}
-		TransactionDBTranslator.getInstance().groupTransaction(transactionId, children);
+		TransactionDBTranslator.getInstance().mergeTransaction(transactionId, children);
 	}
 
 	public void deleteAttachment(int transactionFileId) throws Exception {
