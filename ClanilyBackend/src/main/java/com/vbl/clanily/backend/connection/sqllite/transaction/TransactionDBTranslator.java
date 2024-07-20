@@ -42,7 +42,7 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 			query += " SUM(TRANSACTION_AMOUNT) OVER(PARTITION BY " + search.searchGroupName + ") AS TOTAL_VALUE, ";
 		}
 
-		query += " SUM(TRANSACTION_AMOUNT) OVER(PARTITION BY " + search.searchGroupName + ") AS TOTAL_VALUE, ";
+		query += " printf('%.2f',SUM(TRANSACTION_AMOUNT)) OVER(PARTITION BY " + search.searchGroupName + ") AS TOTAL_VALUE, ";
 		query += " (SELECT SUM(TRANSACTION_AMOUNT) FROM TRANSACTIONS AS GROUP_T WHERE  GROUP_T.GROUP_PARENT_ID = TRANSACTIONS.TRANSACTION_ID) AS SUM_OF_GROUP, "
 				+ " (SELECT SUM(TRANSACTION_AMOUNT) FROM TRANSACTIONS AS GROUP_P WHERE  GROUP_P.SPLIT_PARENT_ID = TRANSACTIONS.TRANSACTION_ID) AS SUM_OF_SPLIT "
 				+ " FROM  TRANSACTIONS, CATEGORY, ACCOUNTS , USERS, PAYEE  , OBJECTIVES, PROJECTS , LOANS "
@@ -292,6 +292,8 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 
 		return t;
 	}
+	
+	
 
 	/*
 	 * public List<Transaction> getByGroupId(int groupParentId) throws Exception {
