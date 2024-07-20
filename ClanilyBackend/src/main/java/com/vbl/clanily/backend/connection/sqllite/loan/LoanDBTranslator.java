@@ -303,7 +303,7 @@ public class LoanDBTranslator extends AbstractSqlLiteOperationManager implements
 	public float getTotalPaidByBorrowedLoan(int loanId) throws Exception {
 		float sum = 0.0f;
 		Statement st = connection.createStatement();
-		String query = " SELECT printf('%.2f',SUM(ABS(TRANSACTION_AMOUNT)))AS SUM_OF_TRX FROM TRANSACTIONS WHERE TRANSACTION_TYPE = 'Expense' AND LOAN_ID = "
+		String query = " SELECT SUM(ABS(TRANSACTION_AMOUNT)) AS SUM_OF_TRX FROM TRANSACTIONS WHERE TRANSACTION_TYPE = 'Expense' AND LOAN_ID = "
 				+ loanId;
 		ResultSet rs = st.executeQuery(query);
 
@@ -320,7 +320,7 @@ public class LoanDBTranslator extends AbstractSqlLiteOperationManager implements
 	public float getTotalPaidByLentLoan(int loanId) throws Exception {
 		float sum = 0.0f;
 		Statement st = connection.createStatement();
-		String query = " SELECT printf('%.2f',SUM(ABS(TRANSACTION_AMOUNT)) )AS SUM_OF_TRX FROM TRANSACTIONS WHERE TRANSACTION_TYPE = 'Income' AND LOAN_ID = "
+		String query = " SELECT SUM(ABS(TRANSACTION_AMOUNT) )AS SUM_OF_TRX FROM TRANSACTIONS WHERE TRANSACTION_TYPE = 'Income' AND LOAN_ID = "
 				+ loanId;
 		ResultSet rs = st.executeQuery(query);
 
