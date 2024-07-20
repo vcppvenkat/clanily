@@ -33,7 +33,7 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 		Statement st = null;
 		TransactionSearchCriteria search = (TransactionSearchCriteria) searchCriteria;
 		st = connection.createStatement();
-		String query = "SELECT TRANSACTIONS.*, CATEGORY_NAME , USER_NAME,  PAYEE_NAME , OBJECTIVE_NAME, PROJECT_NAME, LOAN_NAME, ACCOUNT_NAME, ";
+		String query = "SELECT TRANSACTIONS.*, CATEGORY_NAME , USER_NAME,  PAYEE_NAME , OBJECTIVE_NAME, PROJECT_NAME, LOANS.SUMMARY AS LOAN_NAME, ACCOUNT_NAME, ";
 
 		if ("Date".equals(search.groupBy)) {
 			query += " SUM(TRANSACTION_AMOUNT) OVER(PARTITION BY strftime('%d-%m-%Y', EFFECTIVE_DATE / 1000, 'unixepoch') ) AS TOTAL_VALUE, ";
@@ -42,7 +42,7 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 			query += " SUM(TRANSACTION_AMOUNT) OVER(PARTITION BY " + search.searchGroupName + ") AS TOTAL_VALUE, ";
 		}
 
-		query += " printf('%.2f',SUM(TRANSACTION_AMOUNT)) OVER(PARTITION BY " + search.searchGroupName + ") AS TOTAL_VALUE, ";
+		query += " SUM(TRANSACTION_AMOUNT) OVER(PARTITION BY " + search.searchGroupName + ") AS TOTAL_VALUE, ";
 		query += " (SELECT SUM(TRANSACTION_AMOUNT) FROM TRANSACTIONS AS GROUP_T WHERE  GROUP_T.GROUP_PARENT_ID = TRANSACTIONS.TRANSACTION_ID) AS SUM_OF_GROUP, "
 				+ " (SELECT SUM(TRANSACTION_AMOUNT) FROM TRANSACTIONS AS GROUP_P WHERE  GROUP_P.SPLIT_PARENT_ID = TRANSACTIONS.TRANSACTION_ID) AS SUM_OF_SPLIT "
 				+ " FROM  TRANSACTIONS, CATEGORY, ACCOUNTS , USERS, PAYEE  , OBJECTIVES, PROJECTS , LOANS "
@@ -225,7 +225,7 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 	public Transaction getById(int id) throws Exception {
 		Transaction t = new Transaction();
 		Statement st = connection.createStatement();
-		String query = "SELECT TRANSACTIONS.*, CATEGORY_NAME , USER_NAME,  PAYEE_NAME , OBJECTIVE_NAME, PROJECT_NAME, LOAN_NAME, ACCOUNT_NAME, ";
+		String query = "SELECT TRANSACTIONS.*, CATEGORY_NAME , USER_NAME,  PAYEE_NAME , OBJECTIVE_NAME, PROJECT_NAME, LOANS.SUMMARY AS LOAN_NAME, ACCOUNT_NAME, ";
 
 		query += " (SELECT SUM(TRANSACTION_AMOUNT) FROM TRANSACTIONS AS GROUP_T WHERE  GROUP_T.GROUP_PARENT_ID = TRANSACTIONS.TRANSACTION_ID) AS SUM_OF_GROUP, "
 				+ " (SELECT SUM(TRANSACTION_AMOUNT) FROM TRANSACTIONS AS GROUP_P WHERE  GROUP_P.SPLIT_PARENT_ID = TRANSACTIONS.TRANSACTION_ID) AS SUM_OF_SPLIT "
