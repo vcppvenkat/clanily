@@ -1,5 +1,6 @@
 package com.vbl.clanily.service.settings;
 
+import java.util.Date;
 import java.util.List;
 
 import com.vbl.clanily.backend.connection.sqllite.settings.BeneficiaryDBTranslator;
@@ -34,6 +35,23 @@ public class BeneficiaryService extends ClanilyService {
 
 	@Override
 	public int insert(ValueObject value) throws Exception {
+		Beneficiary b = (Beneficiary) value;
+		if(!isValid(b.beneficiaryName)) {
+			throw new Exception("Beneficiary name is mandatory and cannot be empty");
+		}
+		if(b.beneficiaryName.length() < 3) {
+			throw new Exception("Beneficiary name should be minimum 3 letters");
+		}
+		if(b.beneficiaryName.length() >25) {
+			throw new Exception("Beneficiary name cannot contain more than 25 letters");
+		}
+		Beneficiary _old = getByUniqueName(b.beneficiaryName);
+		if(_old != null) {
+			throw new Exception("Beneficiary name is already added or a reserved word. Please choose another name");
+		}
+		
+		b.internal = false;
+		b.createdDate = new Date();
 		return BeneficiaryDBTranslator.getInstance().insert(value);
 	}
 
