@@ -36,7 +36,7 @@ public class Transaction implements ValueObject {
 	public String transactionType;
 
 	public int accountId;
-	//public int toAccountId;
+	// public int toAccountId;
 	public String accountName;
 	public Account account;
 
@@ -88,11 +88,19 @@ public class Transaction implements ValueObject {
 
 	public boolean isAlreadyInitialized;
 
-	public String beneficiary;
-	
+	public String beneficiaryName;
+
+	public int beneficiaryId;
+
 	public List<TransactionFile> transactionFilesMetaData;
-	
-	
+
+	public boolean hasMergedChildren() {
+		return (groupTransactionIds != null && !groupTransactionIds.isEmpty());
+	}
+
+	public boolean hasSplitChildren() {
+		return false;
+	}
 
 	public List<TransactionFile> getTransactionFilesMetaData() {
 		return transactionFilesMetaData;
@@ -103,12 +111,12 @@ public class Transaction implements ValueObject {
 	}
 
 	public void addTransactionFilesMetaData(TransactionFile file) {
-		if(this.transactionFilesMetaData == null) {
+		if (this.transactionFilesMetaData == null) {
 			this.transactionFilesMetaData = new ArrayList<TransactionFile>();
 		}
 		this.transactionFilesMetaData.add(file);
 	}
-	
+
 	public String getObjectiveName() {
 		return objectiveName;
 	}
@@ -145,7 +153,6 @@ public class Transaction implements ValueObject {
 		this.transactionDateString = transactionDateString;
 	}
 
-	
 	public boolean isAutoSync() {
 		return autoSync;
 	}
@@ -434,12 +441,20 @@ public class Transaction implements ValueObject {
 		this.customField3 = customField3;
 	}
 
-	public String getBeneficiary() {
-		return beneficiary;
+	public String getBeneficiaryName() {
+		return beneficiaryName;
 	}
 
-	public void setBeneficiary(String beneficiary) {
-		this.beneficiary = beneficiary;
+	public void setBeneficiaryName(String beneficiary) {
+		this.beneficiaryName = beneficiary;
+	}
+
+	public int getBeneficiaryId() {
+		return beneficiaryId;
+	}
+
+	public void setBeneficiaryId(int beneficiaryId) {
+		this.beneficiaryId = beneficiaryId;
 	}
 
 	public Date getEffectiveDate() {
@@ -536,5 +551,5 @@ public class Transaction implements ValueObject {
 	public String toString() {
 		return "Transaction [transactionId=" + transactionId + ", summary=" + summary + ", transactionAmount="
 				+ transactionAmount + "]";
-	}	
+	}
 }

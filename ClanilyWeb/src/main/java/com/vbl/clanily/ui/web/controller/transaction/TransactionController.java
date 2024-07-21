@@ -1093,7 +1093,6 @@ public class TransactionController implements ControllerAttributes {
 					break;
 				}
 				case "Beneficiary": {
-					t.displayGroupValue = t.beneficiary;
 					break;
 				}
 				case "Payee": {

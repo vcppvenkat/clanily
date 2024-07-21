@@ -33,7 +33,7 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 		Statement st = null;
 		TransactionSearchCriteria search = (TransactionSearchCriteria) searchCriteria;
 		st = connection.createStatement();
-		String query = "SELECT TRANSACTIONS.*, CATEGORY_NAME , USER_NAME,  PAYEE_NAME , OBJECTIVE_NAME, PROJECT_NAME, LOANS.SUMMARY AS LOAN_NAME, ACCOUNT_NAME, ";
+		String query = "SELECT TRANSACTIONS.*, CATEGORY_NAME , USER_NAME,  PAYEE_NAME , OBJECTIVE_NAME, PROJECT_NAME, LOANS.SUMMARY AS LOAN_NAME, ACCOUNT_NAME, BENEFICIARY_NAME, ";
 
 		if ("Date".equals(search.groupBy)) {
 			query += " SUM(TRANSACTION_AMOUNT) OVER(PARTITION BY strftime('%d-%m-%Y', EFFECTIVE_DATE / 1000, 'unixepoch') ) AS TOTAL_VALUE, ";
@@ -43,9 +43,9 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 		}
 
 		query += " SUM(TRANSACTION_AMOUNT) OVER(PARTITION BY " + search.searchGroupName + ") AS TOTAL_VALUE, ";
-		query += " (SELECT SUM(TRANSACTION_AMOUNT) FROM TRANSACTIONS AS GROUP_T WHERE  GROUP_T.GROUP_PARENT_ID = TRANSACTIONS.TRANSACTION_ID) AS SUM_OF_GROUP, "
+		query += " (SELECT SUM(TRANSACTION_AMOUNT) FROM TRANSACTIONS AS GROUP_T WHERE  GROUP_T.MERGE_PARENT_ID = TRANSACTIONS.TRANSACTION_ID) AS SUM_OF_GROUP, "
 				+ " (SELECT SUM(TRANSACTION_AMOUNT) FROM TRANSACTIONS AS GROUP_P WHERE  GROUP_P.SPLIT_PARENT_ID = TRANSACTIONS.TRANSACTION_ID) AS SUM_OF_SPLIT "
-				+ " FROM  TRANSACTIONS, CATEGORY, ACCOUNTS , USERS, PAYEE  , OBJECTIVES, PROJECTS , LOANS "
+				+ " FROM  TRANSACTIONS, CATEGORY, ACCOUNTS , USERS, PAYEE  , OBJECTIVES, PROJECTS , LOANS, BENEFICIARY "
 				+ " WHERE TRANSACTIONS.CATEGORY_ID = CATEGORY.CATEGORY_ID "
 				+ " AND TRANSACTIONS.ACCOUNT_ID = ACCOUNTS.ACCOUNT_ID   "
 				+ " AND TRANSACTIONS.TRANSACTION_USER_ID = USERS.USER_ID "
@@ -131,7 +131,7 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 				}
 				query = query.substring(0, query.length() - 1);
 				query += " ) ";
-				
+
 				query += " ) ";
 
 			}
@@ -145,19 +145,6 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 				query += " ) ";
 			}
 
-			/*
-			 * if (containsValue(search.groupParentIds)) { query +=
-			 * " AND TRANSACTIONS.SPLIT_PARENT_ID IN ( "; for (int id :
-			 * search.splitParentIds) { query += id + ","; } query = query.substring(0,
-			 * query.length() - 1); query += " ) "; }
-			 * 
-			 * if (containsValue(search.splitParentIds)) { query +=
-			 * " AND TRANSACTIONS.GROUP_PARENT_ID IN ( "; for (int id :
-			 * search.groupParentIds) { query += id + ","; } query = query.substring(0,
-			 * query.length() - 1); query += " ) "; }
-			 * 
-			 */
-
 			if (search.transactionId > 0) {
 				query += " AND TRANSACTION_ID = " + search.transactionId;
 			}
@@ -166,7 +153,7 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 				query += " AND CLEARED = '1' ";
 			}
 
-			query += " AND (TRANSACTIONS.GROUP_PARENT_ID = 0)";
+			query += " AND (TRANSACTIONS.MERGE_PARENT_ID = 0)";
 
 		}
 
@@ -181,7 +168,7 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 		ResultSet rs = st.executeQuery(query);
 		while (rs.next()) {
 			transaction = copyTransaction(null, rs);
-			amendGroupTransactionIds(transaction);	
+			amendGroupTransactionIds(transaction);
 			result.add(transaction);
 		}
 		rs.close();
@@ -198,7 +185,6 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 			query += id + ",";
 		query = query.substring(0, query.length() - 1);
 		query += ")";
-		
 
 		Statement s = connection.createStatement();
 
@@ -213,7 +199,7 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 
 	private void amendGroupTransactionIds(Transaction transaction) throws Exception {
 		Statement st1 = connection.createStatement();
-		String query = " SELECT TRANSACTION_ID FROM TRANSACTIONS WHERE GROUP_PARENT_ID = " + transaction.transactionId;
+		String query = " SELECT TRANSACTION_ID FROM TRANSACTIONS WHERE MERGE_PARENT_ID = " + transaction.transactionId;
 		ResultSet rs1 = st1.executeQuery(query);
 		while (rs1.next()) {
 			transaction.addGroupTransactionId(rs1.getInt("TRANSACTION_ID"));
@@ -225,11 +211,11 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 	public Transaction getById(int id) throws Exception {
 		Transaction t = new Transaction();
 		Statement st = connection.createStatement();
-		String query = "SELECT TRANSACTIONS.*, CATEGORY_NAME , USER_NAME,  PAYEE_NAME , OBJECTIVE_NAME, PROJECT_NAME, LOANS.SUMMARY AS LOAN_NAME, ACCOUNT_NAME, ";
+		String query = "SELECT TRANSACTIONS.*, CATEGORY_NAME , USER_NAME,  PAYEE_NAME , OBJECTIVE_NAME, PROJECT_NAME, LOANS.SUMMARY AS LOAN_NAME, ACCOUNT_NAME, BENEFICIARY_NAME, ";
 
-		query += " (SELECT SUM(TRANSACTION_AMOUNT) FROM TRANSACTIONS AS GROUP_T WHERE  GROUP_T.GROUP_PARENT_ID = TRANSACTIONS.TRANSACTION_ID) AS SUM_OF_GROUP, "
+		query += " (SELECT SUM(TRANSACTION_AMOUNT) FROM TRANSACTIONS AS GROUP_T WHERE  GROUP_T.MERGE_PARENT_ID = TRANSACTIONS.TRANSACTION_ID) AS SUM_OF_GROUP, "
 				+ " (SELECT SUM(TRANSACTION_AMOUNT) FROM TRANSACTIONS AS GROUP_P WHERE  GROUP_P.SPLIT_PARENT_ID = TRANSACTIONS.TRANSACTION_ID) AS SUM_OF_SPLIT "
-				+ " FROM  TRANSACTIONS, CATEGORY, ACCOUNTS , USERS, PAYEE  , OBJECTIVES, PROJECTS , LOANS "
+				+ " FROM  TRANSACTIONS, CATEGORY, ACCOUNTS , USERS, PAYEE  , OBJECTIVES, PROJECTS , LOANS, BENEFICIARY "
 				+ " WHERE TRANSACTIONS.CATEGORY_ID = CATEGORY.CATEGORY_ID "
 				+ " AND TRANSACTIONS.ACCOUNT_ID = ACCOUNTS.ACCOUNT_ID   "
 				+ " AND TRANSACTIONS.TRANSACTION_USER_ID = USERS.USER_ID "
@@ -264,11 +250,12 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 			t.projectName = rs.getString("PROJECT_NAME");
 			t.objectiveId = rs.getInt("OBJECTIVE_ID");
 			t.objectiveName = rs.getString("OBJECTIVE_NAME");
-			t.beneficiary = rs.getString("BENEFICIARY");
+			t.beneficiaryId = rs.getInt("BENEFICIARY_ID");
+			t.beneficiaryName = rs.getString("BENEFICIARY_NAME");
 			t.splitParentId = rs.getInt("SPLIT_PARENT_ID");
 			t.loanId = rs.getInt("LOAN_ID");
 			t.loanName = rs.getString("LOAN_NAME");
-			t.groupParentId = rs.getInt("GROUP_PARENT_ID");
+			t.groupParentId = rs.getInt("MERGE_PARENT_ID");
 			t.transferTransactionId = rs.getInt("TRANSFER_TRANSACTION_ID");
 			t.recurrenceId = rs.getInt("RECURRENCE_ID");
 			t.customField1 = rs.getString("CUSTOM_FIELD_1");
@@ -280,41 +267,15 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 		}
 
 		rs.close();
-		
 
 		// associate transaction file metadata
-		t.transactionFilesMetaData = getTransactionFilesMetadata(t.transactionId).values() ;
+		t.transactionFilesMetaData = getTransactionFilesMetadata(t.transactionId).values();
 		System.out.println("Printing - " + t.transactionFilesMetaData.size());
-		
+
 		amendGroupTransactionIds(t);
-		
-		
 
 		return t;
 	}
-	
-	
-
-	/*
-	 * public List<Transaction> getByGroupId(int groupParentId) throws Exception {
-	 * List<Integer> groupIds = new ArrayList<Integer>(); List<Transaction>
-	 * parentTransactions = null; Statement st = connection.createStatement();
-	 * String query =
-	 * "SELECT TRANSACTION_ID FROM TRANSACTIONS WHERE GROUP_PARENT_ID =  " +
-	 * groupParentId;
-	 * 
-	 * ResultSet rs = st.executeQuery(query);
-	 * 
-	 * while (rs.next()) { groupIds.add(rs.getInt("TRANSACTION_ID")); }
-	 * 
-	 * if(isValid(groupIds)) { TransactionSearchCriteria search = new
-	 * TransactionSearchCriteria();
-	 * 
-	 * } rs.close();
-	 * 
-	 * return groupIds; }
-	 * 
-	 */
 
 	@Override
 	public Transaction getByUniqueName(String name) throws Exception {
@@ -326,7 +287,7 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 		int rowId = -1;
 		Transaction t = (Transaction) value;
 
-		String query = "INSERT INTO TRANSACTIONS (SUMMARY, TRANSACTION_DATE, CATEGORY_ID, TRANSACTION_TYPE, ACCOUNT_ID, TRANSACTION_AMOUNT, PAYEE_ID, NOTES, PROJECT_ID, TRANSACTION_USER_ID, OBJECTIVE_ID, SPLIT_PARENT_ID, IMPORTED_NOTES, INSERT_TYPE, LOAN_ID, CLEARED, GROUP_PARENT_ID, TRANSFER_TRANSACTION_ID, RECURRENCE_ID, CUSTOM_FIELD_1,CUSTOM_FIELD_2,CUSTOM_FIELD_3, BENEFICIARY, EFFECTIVE_DATE) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		String query = "INSERT INTO TRANSACTIONS (SUMMARY, TRANSACTION_DATE, CATEGORY_ID, TRANSACTION_TYPE, ACCOUNT_ID, TRANSACTION_AMOUNT, PAYEE_ID, NOTES, PROJECT_ID, TRANSACTION_USER_ID, OBJECTIVE_ID, SPLIT_PARENT_ID, IMPORTED_NOTES, INSERT_TYPE, LOAN_ID, CLEARED, MERGE_PARENT_ID, TRANSFER_TRANSACTION_ID, RECURRENCE_ID, CUSTOM_FIELD_1,CUSTOM_FIELD_2,CUSTOM_FIELD_3, BENEFICIARY_ID, EFFECTIVE_DATE) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 		PreparedStatement s = connection.prepareStatement(query);
 
 		s.setString(1, t.summary);
@@ -351,7 +312,7 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 		s.setString(20, t.customField1);
 		s.setString(21, t.customField1);
 		s.setString(22, t.customField3);
-		s.setString(23, t.beneficiary);
+		s.setInt(23, t.beneficiaryId);
 		s.setLong(24, t.effectiveDate.getTime());
 		s.executeUpdate();
 
@@ -365,17 +326,18 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 		s.close();
 		return rowId;
 	}
-	
+
 	public TransactionFile getTransactionFile(int transactionFileId) throws Exception {
 		throw new UnsupportedOperationException("This method is currently not supported");
 	}
-	
+
 	public SearchResult<TransactionFile> getTransactionFilesMetadata(int transactionId) throws Exception {
 		SearchResult<TransactionFile> result = new SearchResult<TransactionFile>();
-		String query = "SELECT TRANSACTION_FILE_ID, TRANSACTION_ID, FILE_NAME, DATE_ADDED, DESCRIPTION, FILE_TYPE, SUMMARY FROM TRANSACTION_FILES WHERE TRANSACTION_ID = " + transactionId;
+		String query = "SELECT TRANSACTION_FILE_ID, TRANSACTION_ID, FILE_NAME, DATE_ADDED, DESCRIPTION, FILE_TYPE, SUMMARY FROM TRANSACTION_FILES WHERE TRANSACTION_ID = "
+				+ transactionId;
 		Statement s = connection.createStatement();
 		ResultSet rs = s.executeQuery(query);
-		while(rs.next()) {
+		while (rs.next()) {
 			TransactionFile file = new TransactionFile();
 			file.dateAdded = new Date(rs.getLong("DATE_ADDED"));
 			file.description = rs.getString("DESCRIPTION");
@@ -385,11 +347,11 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 			file.transactionFileId = rs.getInt("TRANSACTION_FILE_ID");
 			file.transactionId = rs.getInt("TRANSACTION_ID");
 			result.add(file);
-					
+
 		}
 		return result;
 	}
-	
+
 	public void deleteAttachment(int transactionFileId) throws Exception {
 
 		String query = "delete from TRANSACTION_FILES where TRANSACTION_FILE_ID = " + transactionFileId;
@@ -399,7 +361,7 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 		s.close();
 
 	}
-	
+
 	public void attachFile(TransactionFile file) throws Exception {
 
 		String query = "INSERT INTO TRANSACTION_FILES (TRANSACTION_ID, FILE_NAME, FILE_TYPE, SUMMARY,  FILE_OBJECT, DATE_ADDED, DESCRIPTION) VALUES (?,?,?,?,?,?,?)";
@@ -424,7 +386,7 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 	}
 
 	public void unmergeTransaction(int transactionId) throws Exception {
-		String query = "UPDATE TRANSACTIONS SET GROUP_PARENT_ID=0 WHERE GROUP_PARENT_ID=?";
+		String query = "UPDATE TRANSACTIONS SET MERGE_PARENT_ID=0 WHERE MERGE_PARENT_ID=?";
 		PreparedStatement s = connection.prepareStatement(query);
 		s.setInt(1, transactionId);
 		s.executeUpdate();
@@ -433,7 +395,7 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 
 	public void mergeTransaction(int transactionId, List<Integer> children) throws Exception {
 		unmergeTransaction(transactionId);
-		String query = "UPDATE TRANSACTIONS SET GROUP_PARENT_ID=? WHERE TRANSACTION_ID=?";
+		String query = "UPDATE TRANSACTIONS SET MERGE_PARENT_ID=? WHERE TRANSACTION_ID=?";
 		PreparedStatement s = connection.prepareStatement(query);
 		for (int child : children) {
 			s.setInt(1, transactionId);
@@ -445,7 +407,7 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 
 	@Override
 	public boolean update(ValueObject value) throws Exception {
-		String query = "UPDATE TRANSACTIONS SET SUMMARY = ?, TRANSACTION_DATE=?, CATEGORY_ID = ?, TRANSACTION_TYPE=?, ACCOUNT_ID=?, TRANSACTION_AMOUNT=?, PAYEE_ID=?, NOTES=?, PROJECT_ID=?, TRANSACTION_USER_ID=?, OBJECTIVE_ID=?,  SPLIT_PARENT_ID=?, LOAN_ID = ?, CLEARED = ?, GROUP_PARENT_ID=?, TRANSFER_TRANSACTION_ID=?, RECURRENCE_ID=?, CUSTOM_FIELD_1=?, CUSTOM_FIELD_2=?, CUSTOM_FIELD_3=?, BENEFICIARY=?, EFFECTIVE_DATE=? WHERE TRANSACTION_ID=?";
+		String query = "UPDATE TRANSACTIONS SET SUMMARY = ?, TRANSACTION_DATE=?, CATEGORY_ID = ?, TRANSACTION_TYPE=?, ACCOUNT_ID=?, TRANSACTION_AMOUNT=?, PAYEE_ID=?, NOTES=?, PROJECT_ID=?, TRANSACTION_USER_ID=?, OBJECTIVE_ID=?,  SPLIT_PARENT_ID=?, LOAN_ID = ?, CLEARED = ?, MERGE_PARENT_ID=?, TRANSFER_TRANSACTION_ID=?, RECURRENCE_ID=?, CUSTOM_FIELD_1=?, CUSTOM_FIELD_2=?, CUSTOM_FIELD_3=?, BENEFICIARY_ID=?, EFFECTIVE_DATE=? WHERE TRANSACTION_ID=?";
 		boolean result = false;
 		Transaction t = (Transaction) value;
 
@@ -470,7 +432,7 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 		s.setString(18, t.customField1);
 		s.setString(19, t.customField1);
 		s.setString(20, t.customField3);
-		s.setString(21, t.beneficiary);
+		s.setInt(21, t.beneficiaryId);
 		s.setLong(22, t.effectiveDate.getTime());
 
 		s.setInt(23, t.transactionId);

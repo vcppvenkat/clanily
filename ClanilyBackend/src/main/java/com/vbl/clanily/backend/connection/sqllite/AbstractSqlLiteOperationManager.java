@@ -186,10 +186,11 @@ public abstract class AbstractSqlLiteOperationManager extends AbstractSqlLiteMan
 		t.cleared = rs.getBoolean("CLEARED");
 		t.projectId = rs.getInt("PROJECT_ID");
 		t.objectiveId = rs.getInt("OBJECTIVE_ID");
-		t.beneficiary = rs.getString("BENEFICIARY");
+		t.beneficiaryId = rs.getInt("BENEFICIARY_ID");
+		t.beneficiaryName = rs.getString("BENEFICIARY_NAME");
 		t.splitParentId = rs.getInt("SPLIT_PARENT_ID");
 		t.loanId = rs.getInt("LOAN_ID");
-		t.groupParentId = rs.getInt("GROUP_PARENT_ID");
+		t.groupParentId = rs.getInt("MERGE_PARENT_ID");
 		t.transferTransactionId = rs.getInt("TRANSFER_TRANSACTION_ID");
 		t.recurrenceId = rs.getInt("RECURRENCE_ID");
 		t.customField1 = rs.getString("CUSTOM_FIELD_1");

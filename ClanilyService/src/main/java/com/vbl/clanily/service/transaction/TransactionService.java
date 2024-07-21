@@ -343,8 +343,8 @@ public class TransactionService extends ClanilyService {
 			_input.effectiveDate = _input.transactionDate;
 		}
 
-		if (!isValid(_input.beneficiary)) {
-			_input.beneficiary = "Family";
+		if (!isValid(_input.beneficiaryName)) {
+			_input.beneficiaryName = "Family";
 		}
 		return TransactionDBTranslator.getInstance().insert(value);
 
