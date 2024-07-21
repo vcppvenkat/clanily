@@ -72,7 +72,7 @@ public class BeneficiaryDBTranslator extends AbstractSqlLiteOperationManager imp
 	public Beneficiary getByUniqueName(String name) throws Exception {
 		Beneficiary b = null;
 		Statement st = connection.createStatement();
-		String query = "SELECT * FROM BENEFICIARY WHERE BENEFICIARY_NAME = '" + name + "'";
+		String query = "SELECT * FROM BENEFICIARY WHERE UPPER(BENEFICIARY_NAME) = '" + name.toUpperCase() + "'";
 
 		ResultSet rs = st.executeQuery(query);
 
