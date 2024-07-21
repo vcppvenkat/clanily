@@ -54,7 +54,7 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 				+ " AND TRANSACTIONS.PROJECT_ID = PROJECTS.PROJECT_ID " + " AND TRANSACTIONS.LOAN_ID = LOANS.LOAN_ID ";
 
 		if (containsValue(search.summary)) {
-			query += " AND ( UPPER(SUMMARY) LIKE '%" + search.summary.toUpperCase() + "%' ";
+			query += " AND ( UPPER(TRANSACTIONS.SUMMARY) LIKE '%" + search.summary.toUpperCase() + "%' ";
 			query += " AND UPPER(TRANSACTIONS.NOTES) LIKE '%" + search.summary.toUpperCase() + "%' ";
 			query += " AND  UPPER(IMPORTED_NOTES) LIKE '%" + search.summary.toUpperCase() + "%' )";
 		} else {
