@@ -24,7 +24,6 @@
 		<div class="content">
 
 			<div class="row">
-
 				<div class="col-md-4">
 					<div class="hpanel">
 						<div class="panel-body">
@@ -35,7 +34,7 @@
 									<i class="pe-7s-star fa-5x"></i>
 								</div>
 								<p class="small">Manage your Categories by adding, modifying, view the complete report of a Category, or remove it if you dont need it anymore.</p>
-								<a class="btn btn-primary" href="/category/">Manage Categories</a>
+								<a class="btn btn-primary btn-sm" href="/category/">Manage Categories</a>
 							</div>
 						</div>
 					</div>
@@ -71,7 +70,23 @@
 						</div>
 					</div>
 				</div>
-
+				<div class="col-md-4">
+					<div class="hpanel">
+						<div class="panel-body">
+							<div class="text-center">
+								<h2 class="m-b-xs">Beneficiaries</h2>
+								<p class="font-bold text-info">Manage beneficiaries</p>
+								<div class="m">
+									<i class="pe-7s-science fa-5x"></i>
+								</div>
+								<p class="small">
+									Beneficiaries are those who actually get benefitted from a transaction. it may be our family members or someone else.	
+								</p>
+								<a class="btn btn-primary btn-sm" href="/beneficiary/">Manage Beneficiaries</a>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 
 
