@@ -225,6 +225,7 @@ public class TransactionController implements ControllerAttributes {
 				t.setGroupTransactions(associatedGroupTransactionDetails);
 			}
 			mav.addObject("sumOfGroupedTransactionAmount", sumOfGroupedTransactionAmount);
+			mav.addObject("groupedTransactionsRemainingAmount", t.getTransactionAmount() - sumOfGroupedTransactionAmount);
 
 			TransactionSearchCriteria searchCriteria = getGroupTransactionSearchCriteria(session);
 			System.out.println("from date ? " + searchCriteria.getSearchFromDateString());
@@ -292,6 +293,7 @@ public class TransactionController implements ControllerAttributes {
 			
 			mav.addObject("accounts", accountResult.values());
 		} catch (Exception e) {
+			e.printStackTrace();
 			rad.addFlashAttribute("errorMessage", e.getMessage());
 			ClanilyLogger.LogMessage(getClass(), e);
 			mav.setViewName("redirect:/transactions/");
@@ -383,14 +385,41 @@ public class TransactionController implements ControllerAttributes {
 		return mav;
 	}
 
-	@GetMapping("/saveGroupTransaction")
-	public ModelAndView pushGroupTransaction(int transactionId, HttpSession session, RedirectAttributes rad,
+	@PostMapping("/saveGroupTransaction")
+	public ModelAndView pushGroupTransaction(int transactionId, 
+			String gtMasterSummary,
+			String gtMasterDate,
+			String gtMasterCategory,
+			String gtMasterAccount,
+			float gtMasterAmount,
+			HttpSession session, RedirectAttributes rad,
 			ModelAndView mav) {
 		mav.setViewName("redirect:/transactions/viewTransaction?transactionId=" + transactionId);
 
+		System.out.println(transactionId);
+		System.out.println(gtMasterSummary);
+		System.out.println(gtMasterDate);
+		System.out.println(gtMasterAmount);
+		System.out.println(gtMasterCategory);
+		System.out.println(gtMasterAccount);
 		try {
-			List<Integer> associatedGroupTransactionIds = getSessionGroupTransactionIds(session);
-			TransactionService.getInstance().mergeTransaction(transactionId, associatedGroupTransactionIds);
+			List<Integer> associatedGroupTransactionIds = getSessionGroupTransactionIds(session);			
+			Transaction masterTransaction = new Transaction();
+			masterTransaction.setSummary(gtMasterSummary);
+			masterTransaction.setNotes(gtMasterSummary);
+			masterTransaction.setTransactionDate(CALENDAR_DATE_FORMAT.parse(gtMasterDate));
+			masterTransaction.setCategoryId(1);
+			masterTransaction.setAccountId(1);
+			masterTransaction.setTransactionAmount(gtMasterAmount);
+			masterTransaction.setTransactionType(gtMasterAmount >=0 ? "Income" : "Expense");
+			masterTransaction.setTransactionUserId("venkatramanp");
+			int masterTransactionId = TransactionService.getInstance().insert(masterTransaction);
+			List<Integer> mergeTransactionIds = new ArrayList<>();
+			for(Integer id : associatedGroupTransactionIds) {
+				mergeTransactionIds.add(id);
+			}
+			mergeTransactionIds.add(transactionId);
+			TransactionService.getInstance().mergeTransaction(masterTransactionId, mergeTransactionIds);
 			rad.addFlashAttribute("successMessage", "Saved successfully!");
 		} catch (Exception e) {
 			rad.addFlashAttribute("errorMessage", e.getMessage());

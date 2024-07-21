@@ -5,6 +5,7 @@
 
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib uri="jakarta.tags.core" prefix="c"%>
+<%@ taglib uri="jakarta.tags.functions" prefix="fn"%>
 <%@page session="true"%>
 
 <html>
@@ -147,9 +148,9 @@
 							</div>
 
 							<div class="col-lg-2 m-t-lg">
-								<button class="btn btn-success btn-block" data-toggle="collapse"
-									data-target="#collapseSearchResults" aria-expanded="false"
-									aria-controls="collapseSearchResults">Search
+								<button type="submit" class="btn btn-success btn-block"
+									data-toggle="collapse" data-target="#collapseSearchResults"
+									aria-expanded="false" aria-controls="collapseSearchResults">Search
 									Transaction</button>
 							</div>
 						</div>
@@ -162,7 +163,8 @@
 
 			</div>
 
-			<div class="row collapse" id="collapseSearchResults">
+			<div class="row collapse ${fn:length(searchResult) > 0 ? 'in' : ''}"
+				id="collapseSearchResults">
 				<div class="col-lg-12">
 
 
@@ -216,139 +218,150 @@
 				</div>
 			</div>
 
-			<div class="row">
+			<form:form action="/transactions/saveGroupTransaction"
+				method="post" cssClass="form-horizontal">
+				<input type="hidden" name="transactionId"
+						value="${transaction.transactionId}" />
 
-				<div class="col-lg-12">
-					<h3>Selected Transactions</h3>
-					<table class="table toggle-arrow-tiny table-responsive">
-						<thead>
-							<tr>
-								<th></th>
-								<th>Summary</th>
-								<th>Date</th>
-								<th>Amount</th>
-								<th>Category</th>
-								<th>Account</th>
-							</tr>
-						</thead>
-						<tbody>
-							<c:forEach items="${transaction.groupTransactions}"
-								var="groupTransaction">
+
+				<div class="row">
+
+
+
+
+					<div class="col-lg-12">
+						<h3>Selected Transactions</h3>
+						<table class="table toggle-arrow-tiny table-responsive">
+							<thead>
 								<tr>
-									<td><a
-										href="/transactions/popGroupTransaction?transactionId=${transaction.transactionId}&groupTransactionId=${groupTransaction.transactionId}"><i
-											class="fa fa-minus"></i></a></td>
-									<td class="">${ groupTransaction.summary }</td>
-									<td>${groupTransaction.transactionDateString}</td>
-									<c:choose>
-										<c:when
-											test="${groupTransaction.transactionType eq 'Expense'}">
-											<td class="text-danger">${groupTransaction.transactionAmountString}</td>
-										</c:when>
-										<c:when
-											test="${groupTransaction.transactionType eq 'Income' }">
-											<td class="text-success">${groupTransaction.transactionAmountString}</td>
-										</c:when>
-										<c:when
-											test="${groupTransaction.transactionType eq 'Incoming Transfer' or  t.transactionType eq 'Outgoing Transfer'}">
-											<td class="text-info">${groupTransaction.transactionAmountString}</td>
-										</c:when>
-									</c:choose>
-
-									<td>${ groupTransaction.categoryName }</td>
-									<td>${ groupTransaction.accountName }</td>
+									<th></th>
+									<th>Summary</th>
+									<th>Date</th>
+									<th>Amount</th>
+									<th>Category</th>
+									<th>Account</th>
 								</tr>
-							</c:forEach>
+							</thead>
+							<tbody>
+								<c:forEach items="${transaction.groupTransactions}"
+									var="groupTransaction">
+									<tr>
+										<td><a
+											href="/transactions/popGroupTransaction?transactionId=${transaction.transactionId}&groupTransactionId=${groupTransaction.transactionId}"><i
+												class="fa fa-minus"></i></a></td>
+										<td class="">${ groupTransaction.summary }</td>
+										<td>${groupTransaction.transactionDateString}</td>
+										<c:choose>
+											<c:when
+												test="${groupTransaction.transactionType eq 'Expense'}">
+												<td class="text-danger">${groupTransaction.transactionAmountString}</td>
+											</c:when>
+											<c:when
+												test="${groupTransaction.transactionType eq 'Income' }">
+												<td class="text-success">${groupTransaction.transactionAmountString}</td>
+											</c:when>
+											<c:when
+												test="${groupTransaction.transactionType eq 'Incoming Transfer' or  t.transactionType eq 'Outgoing Transfer'}">
+												<td class="text-info">${groupTransaction.transactionAmountString}</td>
+											</c:when>
+										</c:choose>
 
-							<tr>
-								<td></td>
-								<td><input class="form-control" placeholder="Summary" /></td>
-								<td>
-									<div class="input-group date">
-										<input type="text" class="form-control "><span
-											class="input-group-addon"><i
-											class="glyphicon glyphicon-th"></i></span>
-									</div>
-								</td>
-								<td class="text-danger"><input class="form-control"
-									placeholder="0.00" value="189.75" /></td>
-								<td>
-									<div class="form-group">
-										<select class="js-source-states-2 form-control">
-											<optgroup label="Need">
-												<option value="AK">Home Daily Needs</option>
-												<option value="HI">Home Maintenance</option>
-												<option value="HI">Vehicle Maintenance</option>
-											</optgroup>
-											<optgroup label="Want">
-												<option value="CA">EB Bill</option>
-												<option value="NV">Home Rent</option>
-											</optgroup>
+										<td>${ groupTransaction.categoryName }</td>
+										<td>${ groupTransaction.accountName }</td>
+									</tr>
+								</c:forEach>
 
-											<optgroup label="Others">
-												<option value="AL">Lend</option>
-												<option value="AR">Subscriptions</option>
-												<option value="IL">Personal Grooming</option>
+								<tr>
+									<td></td>
+									<td><input name="gtMasterSummary" class="form-control" placeholder="Summary" /></td>
+									<td>
+										<div class="input-group date">
+											<input name="gtMasterDate" type="text" class="form-control "><span
+												class="input-group-addon"><i
+												class="glyphicon glyphicon-th"></i></span>
+										</div>
+									</td>
+									<td class="text-danger"><input name="gtMasterAmount"
+										class="form-control" placeholder="0.00"
+										value="${groupedTransactionsRemainingAmount}" /></td>
+									<td>
+										<div class="form-group">
+											<select name="gtMasterCategory"
+												class="js-source-states-2 form-control">
+												<optgroup label="Need">
+													<option value="AK">Home Daily Needs</option>
+													<option value="HI">Home Maintenance</option>
+													<option value="HI">Vehicle Maintenance</option>
+												</optgroup>
+												<optgroup label="Want">
+													<option value="CA">EB Bill</option>
+													<option value="NV">Home Rent</option>
+												</optgroup>
 
-											</optgroup>
+												<optgroup label="Others">
+													<option value="AL">Lend</option>
+													<option value="AR">Subscriptions</option>
+													<option value="IL">Personal Grooming</option>
 
-										</select>
-									</div>
-								</td>
-								<td>
-									<div class="form-group">
-										<select class="js-source-states-2">
-											<optgroup label="Need">
-												<option value="AK">Home Daily Needs</option>
-												<option value="HI">Home Maintenance</option>
-												<option value="HI">Vehicle Maintenance</option>
-											</optgroup>
-											<optgroup label="Want">
-												<option value="CA">EB Bill</option>
-												<option value="NV">Home Rent</option>
-											</optgroup>
+												</optgroup>
 
-											<optgroup label="Others">
-												<option value="AL">Lend</option>
-												<option value="AR">Subscriptions</option>
-												<option value="IL">Personal Grooming</option>
+											</select>
+										</div>
+									</td>
+									<td>
+										<div class="form-group">
+											<select name="gtMasterAccount" class="js-source-states-2">
+												<optgroup label="Need">
+													<option value="AK">Home Daily Needs</option>
+													<option value="HI">Home Maintenance</option>
+													<option value="HI">Vehicle Maintenance</option>
+												</optgroup>
+												<optgroup label="Want">
+													<option value="CA">EB Bill</option>
+													<option value="NV">Home Rent</option>
+												</optgroup>
 
-											</optgroup>
+												<optgroup label="Others">
+													<option value="AL">Lend</option>
+													<option value="AR">Subscriptions</option>
+													<option value="IL">Personal Grooming</option>
 
-										</select>
-									</div>
-								</td>
-							</tr>
-						</tbody>
+												</optgroup>
 
-
-					</table>
-				</div>
-			</div>
-
-			<div class="row">
-				<div class="hpanel">
-					<div class="panel-body">
-						<div class="form-group">
-							<div class="col-lg-12">
-								<a class="btn btn-default"
-									href="/transactions/viewTransaction?transactionId=${transaction.transactionId}">Discard</a>&ensp;
-
-								<!-- 
-                                        <a class="btn btn-primary btn-outline" href="AddTransaction.html">Add New Transaction</a>&ensp;
-                                         -->
-								<a class="btn btn-primary pull-right"
-									href="/transactions/saveGroupTransaction?transactionId=${transaction.transactionId}">Save
-									changes</a>
-							</div>
-						</div>
+											</select>
+										</div>
+									</td>
+								</tr>
+							</tbody>
 
 
+						</table>
 					</div>
 				</div>
-			</div>
+
+				<div class="row">
+					<div class="hpanel">
+						<div class="panel-body">
+							<div class="form-group">
+								<div class="col-lg-12">
+									<a class="btn btn-default"
+										href="/transactions/viewTransaction?transactionId=${transaction.transactionId}">Discard</a>&ensp;
+
+									<!-- 
+                                        <a class="btn btn-primary btn-outline" href="AddTransaction.html">Add New Transaction</a>&ensp;
+                                         -->
+									<button type="submit" class="btn btn-primary pull-right">
+										Save changes
+									</button>
+								</div>
+							</div>
 
 
+						</div>
+					</div>
+				</div>
+
+			</form:form>
 
 
 
@@ -511,10 +524,6 @@
 
 			// DateTimePicker
 			$('#datetimepicker1').datetimepicker();
-
-			
-			
-			
 
 		});
 	</script>
