@@ -59,7 +59,7 @@
 									<td class="text-center">1,276</td>
 									<td class="text-center">12,678.28</td>
 									<td class="text-center">
-										<a id="beneficiaryDelete" href="#" value="${beneficiary.beneficiaryId}"><strong><i class="fa fa-remove font-extra-bold"></i></strong></a>
+										<a href="#" onclick="deleteBeneficiary(${beneficiary.beneficiaryId})"><strong><i class="fa fa-remove font-extra-bold"></i></strong></a>
 									</td>
 									</tr>
 								</c:forEach>
@@ -119,22 +119,21 @@
 			$('#example1').footable();
 
 		});
-
-		$('#beneficiaryDelete').click(function(event){
-			event.preventDefault();
+		
+		function deleteBeneficiary(beneficiaryId) {
 			var newForm = $('<form>', {
 				'action': '/beneficiary/deleteBeneficiary',
 				'target': '_top',
 				'method': 'post'
 			}).append($('<input>', {
 				'name': 'beneficiaryId',
-				'value': $('#beneficiaryDelete').attr('value'),
+				'value': beneficiaryId,
 				'type': 'hidden'
 			}));
 			newForm.appendTo('body');
 			newForm.submit();
 			newForm.remove();
-		});
+		}
 	</script>
 </body>
 </html>

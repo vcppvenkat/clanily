@@ -42,6 +42,10 @@ public class BeneficiaryController implements ControllerAttributes{
 		BeneficiarySearchCriteria search = getSearchCriteria(session);
 		SearchResult<?> result = searchBeneficiaries(search);
 		mav.addObject("values", result.values());
+		
+		session.setAttribute(SEARCH_CRITERIA, search);
+		session.setAttribute(THIS_PAGE, "settings");
+		
 		return mav;
 	}
 	
@@ -56,6 +60,9 @@ public class BeneficiaryController implements ControllerAttributes{
 			mav.setViewName("redirect:/beneficiary/");
 			e.printStackTrace();
 		}
+		finally {
+			session.setAttribute(THIS_PAGE, "settings");
+		}
 		return mav;
 	}
 	
@@ -64,16 +71,16 @@ public class BeneficiaryController implements ControllerAttributes{
 		ModelAndView mav = new ModelAndView();
 		
 		try {
-			b.setCreatedDate(new Date()); // TODO remove this line once it got added in Table defaults or in DB Services
 			BeneficiaryService.getInstance().insert(b);
 			rad.addFlashAttribute("successMessage", "Beneficiary added successfully");
 			mav.setViewName("redirect:/beneficiary/");
 		} catch (Exception e) {
 			mav.setViewName("redirect:/beneficiary/loadNewBeneficiaryPage");
 			rad.addFlashAttribute("errorMessage", e.getMessage());
+			rad.addFlashAttribute("beneficiaryName", b.getBeneficiaryName());
 			e.printStackTrace();
 		} finally {
-
+			session.setAttribute(THIS_PAGE, "settings");
 		}
 
 		return mav;
@@ -91,7 +98,7 @@ public class BeneficiaryController implements ControllerAttributes{
 			mav.setViewName("/settings/beneficiary");
 			model.addAttribute("errorMessage", e.getMessage());
 		} finally {
-
+			session.setAttribute(THIS_PAGE, "settings");
 		}
 
 		return mav;

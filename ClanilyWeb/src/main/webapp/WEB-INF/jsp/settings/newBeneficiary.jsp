@@ -49,7 +49,7 @@
 									<label class="col-sm-2 control-label">Beneficiary name</label>
 
 									<div class="col-sm-10">
-										<form:input path="beneficiaryName" type="text" class="form-control" placeholder="Maximum 25 chars"></form:input>
+										<form:input id="beneficiaryName" value="${beneficiaryName}" path="beneficiaryName" type="text" class="form-control" placeholder="Maximum 25 chars"></form:input>
 									</div>
 								</div>
 								<div class="hr-line-dashed"></div>
@@ -59,7 +59,7 @@
 
 					<div class="col-lg-12">
 						<div class="form-group">
-							<a class="btn btn-default" href="/category/">Discard</a>
+							<a class="btn btn-default" href="/beneficiary/">Discard</a>
 							<button type="submit" class="btn btn-primary pull-right">Add Beneficiary</button>
 						</div>
 					</div>
@@ -82,65 +82,7 @@
 
 	<script>
 		$(function() {
-
-			$('#categoryStatusInactive').on('click', function() {
-				$('#categoryStatusInactive').removeClass('btn-outline');
-				$('#categoryStatusActive').addClass('btn-outline');
-				document.getElementById('currentStatus').value = 'false';
-			});
-
-			$('#categoryStatusActive').on('click', function() {
-				$('#categoryStatusActive').removeClass('btn-outline');
-				$('#categoryStatusInactive').addClass('btn-outline');
-				document.getElementById('currentStatus').value = 'true';
-			});
-
-			$(".js-source-states").select2();
-
-			$('#categoryTypeIncome')
-					.on(
-							'click',
-							function() {
-								$('#categoryTags').empty();
-								$('#categoryTags')
-										.append(
-												'<option value="noTag" selected="selected">No Tag</option>');
-								<c:forEach var="categoryTag" items="${incomeCategoryTags}">
-								$('#categoryTags')
-										.append(
-												'<option value="${categoryTag}">${categoryTag}</option>');
-								</c:forEach>
-
-								$('#categoryTypeIncome').removeClass(
-										'btn-outline');
-								$('#categoryTypeExpense').addClass(
-										'btn-outline');
-								document.getElementById('currentType').value = 'Income';
-
-							});
-
-			$('#categoryTypeExpense')
-					.on(
-							'click',
-							function() {
-								$('#categoryTags').empty();
-								$('#categoryTags')
-										.append(
-												'<option value="noTag" selected="selected">No Tag</option>');
-								<c:forEach var="categoryTag" items="${expenseCategoryTags}" varStatus="loop">
-								$('#categoryTags')
-										.append(
-												'<option value="${categoryTag}">${categoryTag}</option>');
-								</c:forEach>
-
-								$('#categoryTypeExpense').removeClass(
-										'btn-outline');
-								$('#categoryTypeIncome')
-										.addClass('btn-outline');
-
-								document.getElementById('currentType').value = 'Expense';
-							});
-
+			$('#beneficiaryName').focus();
 		});
 	</script>
 
