@@ -82,7 +82,10 @@
 
 	<script>
 		$(function() {
-			$('#beneficiaryName').focus();
+			var input = $('#beneficiaryName');
+			var len = input.val().length;
+			input.focus();
+			input[0].setSelectionRange(len, len);
 		});
 	</script>
 
