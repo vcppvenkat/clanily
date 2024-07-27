@@ -79,7 +79,7 @@ public class TransactionService extends ClanilyService {
 		}
 		
 		if(sum != parentTransaction.transactionAmount) {
-			throw new Exception("Sum of children is nott equal to parent. Please adjust the amount accordingly");
+			//throw new Exception("Sum of children is nott equal to parent. Please adjust the amount accordingly");
 		}
 		
 		TransactionDBTranslator.getInstance().mergeTransaction(transactionId, children);
