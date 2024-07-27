@@ -1,9 +1,5 @@
 package com.vbl.clanily.service.transaction;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -46,6 +42,7 @@ public class TransactionService extends ClanilyService {
 	public void mergeTransaction(int transactionId, List<Integer> children) throws Exception {
 		Transaction parentTransaction = TransactionDBTranslator.getInstance().getById(transactionId);
 		float childrenSum = TransactionDBTranslator.getInstance().sumOfTransactions(children);
+		float sum = 0.0f;
 		for (int child : children) {
 			Transaction t = TransactionDBTranslator.getInstance().getById(child);
 			// check id is valid
@@ -60,8 +57,15 @@ public class TransactionService extends ClanilyService {
 			if (t.splitParentId > 0 && t.splitParentId != transactionId) {
 				throw new Exception("An existing split member cannot be grouped : " + t.summary);
 			}
+			
+			sum += t.transactionAmount;
+			
+			
 
 			// Validate sum of all ids
+			// Temporarily suspended
+			
+			/*
 			if (childrenSum < parentTransaction.transactionAmount) {
 				throw new Exception(
 						"Sum of children cannot exceed transaction total. Tip: Adjust with additional income / expense");
@@ -70,7 +74,14 @@ public class TransactionService extends ClanilyService {
 				throw new Exception(
 						"Sum of children cannot be less than transaction total. Tip: Adjust with additional income / expense");
 			}
+			
+			*/
 		}
+		
+		if(sum != parentTransaction.transactionAmount) {
+			throw new Exception("Sum of children is nott equal to parent. Please adjust the amount accordingly");
+		}
+		
 		TransactionDBTranslator.getInstance().mergeTransaction(transactionId, children);
 	}
 

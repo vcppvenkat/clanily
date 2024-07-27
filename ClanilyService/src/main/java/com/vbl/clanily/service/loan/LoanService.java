@@ -1,6 +1,5 @@
 package com.vbl.clanily.service.loan;
 
-import java.sql.ResultSet;
 import java.util.List;
 
 import com.vbl.clanily.backend.connection.sqllite.loan.LoanDBTranslator;
@@ -43,7 +42,12 @@ public class LoanService extends ClanilyService {
 
 	@Override
 	public int insert(ValueObject value) throws Exception {
-		return LoanDBTranslator.getInstance().insert(value);
+		if(value == null)
+			throw new Exception("Input object cannot be null");
+		Loan loan = (Loan) value;
+		
+		
+		return LoanDBTranslator.getInstance().insert(loan);
 	}
 
 	@Override

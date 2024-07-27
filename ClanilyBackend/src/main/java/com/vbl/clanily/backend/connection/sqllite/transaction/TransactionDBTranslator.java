@@ -168,7 +168,7 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 		ResultSet rs = st.executeQuery(query);
 		while (rs.next()) {
 			transaction = copyTransaction(null, rs);
-			amendGroupTransactionIds(transaction);
+			amendMergeTransactionIds(transaction);
 			result.add(transaction);
 		}
 		rs.close();
@@ -197,7 +197,7 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 		return sum;
 	}
 
-	private void amendGroupTransactionIds(Transaction transaction) throws Exception {
+	private void amendMergeTransactionIds(Transaction transaction) throws Exception {
 		Statement st1 = connection.createStatement();
 		String query = " SELECT TRANSACTION_ID FROM TRANSACTIONS WHERE MERGE_PARENT_ID = " + transaction.transactionId;
 		ResultSet rs1 = st1.executeQuery(query);
@@ -272,7 +272,7 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 		t.transactionFilesMetaData = getTransactionFilesMetadata(t.transactionId).values();
 		System.out.println("Printing - " + t.transactionFilesMetaData.size());
 
-		amendGroupTransactionIds(t);
+		amendMergeTransactionIds(t);
 
 		return t;
 	}
