@@ -48,6 +48,8 @@ public class TransactionController implements ControllerAttributes {
 
 	private static final String SEARCH_CRITERIA = "transactionSearchCriteria";
 	private static final String SEARCH_GROUP_TRANSACTION = "groupTransactionSearchCriteria";
+	private static final String SEARCH_GROUP_TRANS_RESULT = "groupTransactionSearchResult";
+	private static final String SEARCH_GROUP_TRANS_RESULT_FLAG = "yes";
 	private static final String CHOSEN_GROUP_TRANSACTION = "chosenGroupTransactions";
 	private static final String TRANSACTION_TYPE_EXPENSE = "Expense";
 	private static final String TRANSACTION_TYPE_INCOME = "Income";
@@ -205,6 +207,7 @@ public class TransactionController implements ControllerAttributes {
 			t = TransactionService.getInstance().getById(transactionId);
 			List<Integer> associatedGroupTransactionIds = new ArrayList<>();
 			if (f) {
+				resetGroupTransactionSearchCriteria(session);
 				if (t.getGroupTransactionIds() != null)
 					associatedGroupTransactionIds = t.getGroupTransactionIds();
 				session.setAttribute(CHOSEN_GROUP_TRANSACTION, associatedGroupTransactionIds);
@@ -227,70 +230,68 @@ public class TransactionController implements ControllerAttributes {
 			mav.addObject("sumOfGroupedTransactionAmount", sumOfGroupedTransactionAmount);
 			mav.addObject("groupedTransactionsRemainingAmount", t.getTransactionAmount() - sumOfGroupedTransactionAmount);
 
-			TransactionSearchCriteria searchCriteria = getGroupTransactionSearchCriteria(session);
-			System.out.println("from date ? " + searchCriteria.getSearchFromDateString());
-			System.out.println("to date ? " + searchCriteria.getSearchToDateString());
-			if(searchCriteria.getSearchFromDateString() != null && searchCriteria.getSearchFromDateString().length() > 1) {
-				Date fromDate = CALENDAR_DATE_FORMAT.parse(searchCriteria.getSearchFromDateString());
-				searchCriteria.setFromDate(fromDate);
-			}
-			if(searchCriteria.getSearchToDateString() != null && searchCriteria.getSearchToDateString().length() > 1) {
-				Date toDate = CALENDAR_DATE_FORMAT.parse(searchCriteria.getSearchToDateString());
-				Calendar calendar = Calendar.getInstance();
-				calendar.setTime(toDate);
-				calendar.set(Calendar.HOUR_OF_DAY, 23);
-				calendar.set(Calendar.MINUTE, 59);
-				calendar.set(Calendar.SECOND, 59);
-				calendar.set(Calendar.MILLISECOND, 999);				
-				searchCriteria.setToDate(calendar.getTime());
-			}
-
-			SearchResult<Transaction> result = getTransactions(searchCriteria);
-			List<Transaction> searchResultTransactions = result.values();
 			List<Transaction> filteredSearchResultTransactions = new ArrayList<>();
-			int transactionIndex = 0;
-
-			for (Transaction transaction : searchResultTransactions) {
-				if (transactionIndex == 20)
-					break;
-
-				if (associatedGroupTransactionIds.contains(transaction.getTransactionId()))
-					continue;
-
-				if (transactionId == transaction.getTransactionId())
-					continue;
-
-				if (transaction.getGroupTransactionIds() != null && !transaction.getGroupTransactionIds().isEmpty())
-					continue;
-
-				if (transaction.getGroupParentId() > 0 && transaction.getGroupParentId() != t.getTransactionId())
-					continue;
-
-				filteredSearchResultTransactions.add(transaction);
-				transactionIndex++;
-			}
-
-			mav.addObject("searchResult", filteredSearchResultTransactions);
-			List<Category> categories = new ArrayList<>();
-			if (searchCriteria.getCurrentTransactionView().trim().length() > 0) {
-				if (searchCriteria.getCurrentTransactionView().contains(TRANSACTION_TYPE_EXPENSE))
-					categories.addAll(CategoryService.getInstance().getAllExpenseCategories().values());
-
-				if (searchCriteria.getCurrentTransactionView().contains(TRANSACTION_TYPE_INCOME))
-					categories.addAll(CategoryService.getInstance().getAllIncomeCategories().values());
-			} else {
-				categories.addAll(CategoryService.getInstance().getAllExpenseCategories().values());
-				categories.addAll(CategoryService.getInstance().getAllIncomeCategories().values());
-			}
-
-			mav.addObject("categories", categories);
+			if(SEARCH_GROUP_TRANS_RESULT_FLAG.equals(session.getAttribute(SEARCH_GROUP_TRANS_RESULT))) {
+				TransactionSearchCriteria searchCriteria = getGroupTransactionSearchCriteria(session);
+				System.out.println("from date ? " + searchCriteria.getSearchFromDateString());
+				System.out.println("to date ? " + searchCriteria.getSearchToDateString());
+				if(searchCriteria.getSearchFromDateString() != null && searchCriteria.getSearchFromDateString().length() > 1) {
+					Date fromDate = CALENDAR_DATE_FORMAT.parse(searchCriteria.getSearchFromDateString());
+					searchCriteria.setFromDate(fromDate);
+				}
+				if(searchCriteria.getSearchToDateString() != null && searchCriteria.getSearchToDateString().length() > 1) {
+					Date toDate = CALENDAR_DATE_FORMAT.parse(searchCriteria.getSearchToDateString());
+					Calendar calendar = Calendar.getInstance();
+					calendar.setTime(toDate);
+					calendar.set(Calendar.HOUR_OF_DAY, 23);
+					calendar.set(Calendar.MINUTE, 59);
+					calendar.set(Calendar.SECOND, 59);
+					calendar.set(Calendar.MILLISECOND, 999);				
+					searchCriteria.setToDate(calendar.getTime());
+				}
 			
+				SearchResult<Transaction> result = getTransactions(searchCriteria);
+				List<Transaction> searchResultTransactions = result.values();
+				
+				
+				int transactionIndex = 0;
+	
+				for (Transaction transaction : searchResultTransactions) {
+					if (transactionIndex == 20)
+						break;
+	
+					if (associatedGroupTransactionIds.contains(transaction.getTransactionId()))
+						continue;
+	
+					if (transactionId == transaction.getTransactionId())
+						continue;
+	
+					if (transaction.getGroupTransactionIds() != null && !transaction.getGroupTransactionIds().isEmpty())
+						continue;
+	
+					if (transaction.getGroupParentId() > 0 && transaction.getGroupParentId() != t.getTransactionId())
+						continue;
+	
+					filteredSearchResultTransactions.add(transaction);
+					transactionIndex++;
+				}
+				session.setAttribute(SEARCH_GROUP_TRANS_RESULT, null);
+			}
+			mav.addObject("searchResult", filteredSearchResultTransactions);
+
+			List<Category> categories = new ArrayList<>();			
+			if (t.getTransactionType().contains(TRANSACTION_TYPE_EXPENSE))
+				categories.addAll(CategoryService.getInstance().getAllExpenseCategories().values());
+			else if (t.getTransactionType().contains(TRANSACTION_TYPE_INCOME))
+				categories.addAll(CategoryService.getInstance().getAllIncomeCategories().values());
+			mav.addObject("categories", categories);
+
 			// search for list of accounts
 			SearchResult<Account> accountResult = AccountService.getInstance().search(new AccountSearchCriteria());
 			if (accountResult.values() == null || accountResult.values().isEmpty()) {
 				throw new Exception("No accounts found");
 			} 
-			
+
 			mav.addObject("accounts", accountResult.values());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -312,6 +313,7 @@ public class TransactionController implements ControllerAttributes {
 		searchCriteria.setTransactionId(0);
 		try {
 			session.setAttribute(SEARCH_GROUP_TRANSACTION, searchCriteria);
+			session.setAttribute(SEARCH_GROUP_TRANS_RESULT, SEARCH_GROUP_TRANS_RESULT_FLAG);
 		} catch (Exception e) {
 			rad.addFlashAttribute("errorMessage", e.getMessage());
 			ClanilyLogger.LogMessage(getClass(), e);
@@ -394,7 +396,7 @@ public class TransactionController implements ControllerAttributes {
 			float gtMasterAmount,
 			HttpSession session, RedirectAttributes rad,
 			ModelAndView mav) {
-		mav.setViewName("redirect:/transactions/viewTransaction?transactionId=" + transactionId);
+		mav.setViewName("redirect:/transactions/");
 
 		System.out.println(transactionId);
 		System.out.println(gtMasterSummary);
@@ -1169,6 +1171,12 @@ public class TransactionController implements ControllerAttributes {
 			return (TransactionSearchCriteria) session.getAttribute(SEARCH_CRITERIA);
 		}
 
+	}
+
+	private void resetGroupTransactionSearchCriteria(HttpSession session) {
+		TransactionSearchCriteria search = new TransactionSearchCriteria();
+		search.setCurrentTransactionView(TRANSACTION_TYPE_EXPENSE);
+		session.setAttribute(SEARCH_GROUP_TRANSACTION, search);
 	}
 
 	private TransactionSearchCriteria getGroupTransactionSearchCriteria(HttpSession session) {

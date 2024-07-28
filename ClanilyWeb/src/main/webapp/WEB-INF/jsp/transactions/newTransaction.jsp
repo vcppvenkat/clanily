@@ -108,7 +108,6 @@
 
 										</div>
 										<div class="col-lg-6" style="padding-right: 0%;">
-
 											<form:select path="toAccountId" id="toAccountSelect" cssClass="js-source-states" style="width: 100%;">
 
 												<c:forEach items="${accounts}" var="account">
@@ -116,7 +115,6 @@
 												</c:forEach>
 
 											</form:select>
-
 										</div>
 
 									</div>
