@@ -51,7 +51,7 @@ public class TransactionService extends ClanilyService {
 
 			// check if the given id is already a children
 			if (t.groupParentId > 0 && t.groupParentId != transactionId) {
-				throw new Exception("An existing grouped member cannot be re-grouped : " + t.summary);
+				throw new Exception("An existing merged member cannot be re-merged : " + t.summary);
 			}
 
 			if (t.splitParentId > 0 && t.splitParentId != transactionId) {
@@ -357,6 +357,8 @@ public class TransactionService extends ClanilyService {
 		if (!isValid(_input.beneficiaryName)) {
 			_input.beneficiaryName = "Family";
 		}
+		_input.beneficiaryId = 1;
+		_input.projectId = 1;
 		return TransactionDBTranslator.getInstance().insert(value);
 
 	}
