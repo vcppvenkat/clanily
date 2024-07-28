@@ -42,7 +42,7 @@ public class LoanController implements ControllerAttributes {
 		Loan loan1 = new Loan();
 		loan1.loanSummary = "MURUGAN HOUSE CONTRUCTION - 2019";
 		loan1.amount = 75000;
-		loan1.totalPaid = 45000;
+		loan1.totalPaid = 69000;
 		
 		Loan loan2 = new Loan();
 		loan2.loanSummary = "LOAN FROM PARENTS - JAN 2024";

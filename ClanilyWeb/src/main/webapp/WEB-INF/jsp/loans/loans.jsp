@@ -64,7 +64,7 @@
 			</div>
 			<div class="hr-line-dashed"></div>
 			<div class="row">
-				<c:forEach var="loan" items="${values}">
+				<c:forEach  var="loan" items="${values}">
 					<div class="col-lg-4">
 						<div class="hpanel stats">
 							<div class="panel-body h-200">
@@ -75,10 +75,10 @@
 								<div class="m-t-xl">
 									<h3 class="m-b-xs">${loan.amount}</h3>
 									<span class="text-muted no-margins"> ${loan.description} </span>
-	
+									
 									<div class="progress m-t-xs full progress-small">
-										<div style="width: 55%" aria-valuemax="100" aria-valuemin="0"
-											aria-valuenow="55" role="progressbar"
+										<div style="width: ${BigDecimal.valueOf((loan.totalPaid /loan.amount) * 100).setScale(2, RoundingMode.HALF_UP)}%" aria-valuemax="100" aria-valuemin="0"
+											aria-valuenow="${BigDecimal.valueOf((loan.totalPaid /loan.amount) * 100).setScale(2, RoundingMode.HALF_UP)}" role="progressbar"
 											class=" progress-bar progress-bar-success">
 											<span class="sr-only">${loan.loanStatus}</span>
 										</div>
