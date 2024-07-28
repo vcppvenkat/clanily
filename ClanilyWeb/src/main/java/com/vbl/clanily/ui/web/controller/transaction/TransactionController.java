@@ -495,7 +495,7 @@ public class TransactionController implements ControllerAttributes {
 			if(t == null || t.getTransactionId() == 0)
 				throw new Exception("Invalid transaction!");
 
-			//TransactionService.getInstance().
+			TransactionService.getInstance().deleteAttachment(fileId);
 			rad.addFlashAttribute("successMessage", "Attachment saved successfully!");
 		} catch (Exception e) {
 			mav.setViewName("redirect:/transactions/");
