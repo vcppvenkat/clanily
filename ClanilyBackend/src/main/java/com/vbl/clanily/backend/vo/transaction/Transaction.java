@@ -67,16 +67,16 @@ public class Transaction implements ValueObject {
 	public int loanId;
 	public String loanName;
 
-	public int groupParentId;
-	public Transaction groupTransaction;
-	public List<Transaction> groupTransactions;
-	public List<Integer> groupTransactionIds;
+	public int mergeParentId;
+
+	public List<Transaction> mergeTransactions;
+	public List<Integer> mergeTransactionIds;
 
 	public int transferTransactionId;
 	public Transaction transferTransaction;
 
 	public float sumOfSplit;
-	public float sumOfGroup;
+	public float sumOfMergedTransactions;
 
 	public int recurrenceId;
 
@@ -95,7 +95,7 @@ public class Transaction implements ValueObject {
 	public List<TransactionFile> transactionFilesMetaData;
 
 	public boolean hasMergedChildren() {
-		return (groupTransactionIds != null && !groupTransactionIds.isEmpty());
+		return (mergeTransactionIds != null && !mergeTransactionIds.isEmpty());
 	}
 
 	public boolean hasSplitChildren() {
@@ -353,28 +353,20 @@ public class Transaction implements ValueObject {
 		this.loanId = loanId;
 	}
 
-	public int getGroupParentId() {
-		return groupParentId;
+	public int getMergeParentId() {
+		return mergeParentId;
 	}
 
-	public void setGroupParentId(int groupParentId) {
-		this.groupParentId = groupParentId;
+	public void setMergeParentId(int mergeParentId) {
+		this.mergeParentId = mergeParentId;
 	}
 
-	public Transaction getGroupTransaction() {
-		return groupTransaction;
+	public List<Transaction> getMergeTransactions() {
+		return mergeTransactions;
 	}
 
-	public void setGroupTransaction(Transaction groupTransaction) {
-		this.groupTransaction = groupTransaction;
-	}
-
-	public List<Transaction> getGroupTransactions() {
-		return groupTransactions;
-	}
-
-	public void setGroupTransactions(List<Transaction> groupTransactions) {
-		this.groupTransactions = groupTransactions;
+	public void setMergeTransactions(List<Transaction> mergeTransactions) {
+		this.mergeTransactions = mergeTransactions;
 	}
 
 	public int getTransferTransactionId() {
@@ -401,12 +393,12 @@ public class Transaction implements ValueObject {
 		this.sumOfSplit = sumOfSplit;
 	}
 
-	public float getSumOfGroup() {
-		return sumOfGroup;
+	public float getSumOfMergedTransactions() {
+		return sumOfMergedTransactions;
 	}
 
-	public void setSumOfGroup(float sumOfGroup) {
-		this.sumOfGroup = sumOfGroup;
+	public void setSumOfMergedTransactions(float sumOfMergedTransactions) {
+		this.sumOfMergedTransactions = sumOfMergedTransactions;
 	}
 
 	public int getRecurrenceId() {
@@ -513,20 +505,20 @@ public class Transaction implements ValueObject {
 		this.transactionUserName = transactionUserName;
 	}
 
-	public List<Integer> getGroupTransactionIds() {
-		return groupTransactionIds;
+	public List<Integer> getMergeTransactionIds() {
+		return mergeTransactionIds;
 	}
 
-	public void setGroupTransactionIds(List<Integer> groupTransactionIds) {
-		this.groupTransactionIds = groupTransactionIds;
+	public void setMergeTransactionIds(List<Integer> mergeTransactionIds) {
+		this.mergeTransactionIds = mergeTransactionIds;
 	}
 
-	public void addGroupTransactionId(int groupTransactionId) {
-		if (groupTransactionId > 0) {
-			if (this.groupTransactionIds == null) {
-				this.groupTransactionIds = new ArrayList<Integer>();
+	public void addMergeTransactionId(int mergeTransactionId) {
+		if (mergeTransactionId > 0) {
+			if (this.mergeTransactionIds == null) {
+				this.mergeTransactionIds = new ArrayList<Integer>();
 			}
-			this.groupTransactionIds.add(groupTransactionId);
+			this.mergeTransactionIds.add(mergeTransactionId);
 		}
 	}
 

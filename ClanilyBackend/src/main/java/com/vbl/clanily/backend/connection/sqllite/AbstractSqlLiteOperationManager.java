@@ -190,13 +190,13 @@ public abstract class AbstractSqlLiteOperationManager extends AbstractSqlLiteMan
 		t.beneficiaryName = rs.getString("BENEFICIARY_NAME");
 		t.splitParentId = rs.getInt("SPLIT_PARENT_ID");
 		t.loanId = rs.getInt("LOAN_ID");
-		t.groupParentId = rs.getInt("MERGE_PARENT_ID");
+		t.mergeParentId = rs.getInt("MERGE_PARENT_ID");
 		t.transferTransactionId = rs.getInt("TRANSFER_TRANSACTION_ID");
 		t.recurrenceId = rs.getInt("RECURRENCE_ID");
 		t.customField1 = rs.getString("CUSTOM_FIELD_1");
 		t.customField2 = rs.getString("CUSTOM_FIELD_2");
 		t.customField3 = rs.getString("CUSTOM_FIELD_3");
-		t.sumOfGroup = rs.getFloat("TOTAL_VALUE");
+		t.sumOfMergedTransactions = rs.getFloat("TOTAL_VALUE");
 
 		return t;
 	}

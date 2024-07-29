@@ -52,7 +52,7 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 				+ " AND (TRANSACTIONS.PAYEE_ID <>-1  AND TRANSACTIONS.PAYEE_ID = PAYEE.PAYEE_ID) "
 				+ " AND TRANSACTIONS.OBJECTIVE_ID = OBJECTIVES.OBJECTIVE_ID "
 				+ " AND TRANSACTIONS.PROJECT_ID = PROJECTS.PROJECT_ID " + " AND TRANSACTIONS.LOAN_ID = LOANS.LOAN_ID "
-				+ " AND TRANSACTIONS.BENEFICIARY_ID = BENEFICIARY.BENEFICIARY_ID " ;
+				+ " AND TRANSACTIONS.BENEFICIARY_ID = BENEFICIARY.BENEFICIARY_ID ";
 
 		if (containsValue(search.summary)) {
 			query += " AND ( UPPER(TRANSACTIONS.SUMMARY) LIKE '%" + search.summary.toUpperCase() + "%' ";
@@ -203,7 +203,7 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 		String query = " SELECT TRANSACTION_ID FROM TRANSACTIONS WHERE MERGE_PARENT_ID = " + transaction.transactionId;
 		ResultSet rs1 = st1.executeQuery(query);
 		while (rs1.next()) {
-			transaction.addGroupTransactionId(rs1.getInt("TRANSACTION_ID"));
+			transaction.addMergeTransactionId(rs1.getInt("TRANSACTION_ID"));
 		}
 		rs1.close();
 	}
@@ -256,7 +256,7 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 			t.splitParentId = rs.getInt("SPLIT_PARENT_ID");
 			t.loanId = rs.getInt("LOAN_ID");
 			t.loanName = rs.getString("LOAN_NAME");
-			t.groupParentId = rs.getInt("MERGE_PARENT_ID");
+			t.mergeParentId = rs.getInt("MERGE_PARENT_ID");
 			t.transferTransactionId = rs.getInt("TRANSFER_TRANSACTION_ID");
 			t.recurrenceId = rs.getInt("RECURRENCE_ID");
 			t.customField1 = rs.getString("CUSTOM_FIELD_1");
@@ -307,7 +307,7 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 		s.setString(14, t.insertionType);
 		s.setInt(15, t.loanId);
 		s.setBoolean(16, t.cleared);
-		s.setInt(17, t.groupParentId);
+		s.setInt(17, t.mergeParentId);
 		s.setInt(18, t.transferTransactionId);
 		s.setInt(19, t.recurrenceId);
 		s.setString(20, t.customField1);
@@ -427,7 +427,7 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 		s.setInt(12, t.splitParentId);
 		s.setInt(13, t.loanId);
 		s.setBoolean(14, t.cleared);
-		s.setInt(15, t.groupParentId);
+		s.setInt(15, t.mergeParentId);
 		s.setInt(16, t.transferTransactionId);
 		s.setInt(17, t.recurrenceId);
 		s.setString(18, t.customField1);

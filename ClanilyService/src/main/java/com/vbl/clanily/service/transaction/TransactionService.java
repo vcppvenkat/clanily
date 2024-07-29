@@ -1,6 +1,5 @@
 package com.vbl.clanily.service.transaction;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -39,9 +38,28 @@ public class TransactionService extends ClanilyService {
 		return null;
 	}
 
-	public void mergeTransaction(int transactionId, List<Integer> children) throws Exception {
-		Transaction parentTransaction = TransactionDBTranslator.getInstance().getById(transactionId);
+	public void unmergeTransaction(int parentTransactionId) throws Exception {
+		Transaction parent = getById(parentTransactionId);
+		if (parent == null)
+			throw new Exception("Invalid parent transaction id: " + parentTransactionId);
+
+		if (!parent.hasMergedChildren()) {
+
+		}
+
+	}
+
+	public void mergeTransaction(Transaction parent, List<Integer> children) throws Exception {
+
+		if (parent == null) {
+			throw new Exception("Invalid parent transaction details. Input is null");
+		}
+		// create parent transaction
+		parent.insertionType = "MERGE_PARENT";
+		parent.transactionId = insert(parent);
+
 		float childrenSum = TransactionDBTranslator.getInstance().sumOfTransactions(children);
+		
 		float sum = 0.0f;
 		for (int child : children) {
 			Transaction t = TransactionDBTranslator.getInstance().getById(child);
@@ -50,39 +68,30 @@ public class TransactionService extends ClanilyService {
 				throw new Exception("Invalid child : " + child);
 
 			// check if the given id is already a children
-			if (t.groupParentId > 0 && t.groupParentId != transactionId) {
+			if (t.mergeParentId > 0 && t.mergeParentId != parent.transactionId) {
 				throw new Exception("An existing merged member cannot be re-merged : " + t.summary);
 			}
 
-			if (t.splitParentId > 0 && t.splitParentId != transactionId) {
+			if (t.splitParentId > 0 && t.splitParentId != parent.transactionId) {
 				throw new Exception("An existing split member cannot be grouped : " + t.summary);
 			}
-			
+
 			sum += t.transactionAmount;
-			
-			
 
 			// Validate sum of all ids
-			// Temporarily suspended
-			
-			/*
-			if (childrenSum < parentTransaction.transactionAmount) {
+
+			if (childrenSum != parent.transactionAmount) {
 				throw new Exception(
 						"Sum of children cannot exceed transaction total. Tip: Adjust with additional income / expense");
 			}
-			if (childrenSum > parentTransaction.transactionAmount) {
-				throw new Exception(
-						"Sum of children cannot be less than transaction total. Tip: Adjust with additional income / expense");
-			}
-			
-			*/
+
 		}
-		
-		if(sum != parentTransaction.transactionAmount) {
-			//throw new Exception("Sum of children is nott equal to parent. Please adjust the amount accordingly");
+
+		if (sum != parent.transactionAmount) {
+			throw new Exception("Sum of children is nott equal to parent. Please adjust the amount accordingly");
 		}
-		
-		TransactionDBTranslator.getInstance().mergeTransaction(transactionId, children);
+
+		TransactionDBTranslator.getInstance().mergeTransaction(parent.transactionId, children);
 	}
 
 	public void deleteAttachment(int transactionFileId) throws Exception {
@@ -246,7 +255,8 @@ public class TransactionService extends ClanilyService {
 				_input.transactionAmount *= -1;
 			}
 		} else {
-			throw new Exception("Transaction amount cannot be 0. It must be a valid currency value");
+			if (!_input.insertionType.equals("MERGE_PARENT") || !_input.insertionType.equals("SPLIT_PARENT"))
+				throw new Exception("Transaction amount cannot be 0. It must be a valid currency value");
 		}
 
 		// validate transaction date
@@ -506,6 +516,7 @@ public class TransactionService extends ClanilyService {
 	}
 
 	public void importTransactionsTemp(List<String[]> values) throws Exception {
+		/*
 		Transaction t = null;
 		int index = 0;
 		// 2023-12-17T06:30:00+00:00
@@ -548,6 +559,7 @@ public class TransactionService extends ClanilyService {
 			insert(t);
 
 		}
+		*/
 
 	}
 
