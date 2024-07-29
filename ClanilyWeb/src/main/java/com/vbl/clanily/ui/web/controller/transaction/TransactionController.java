@@ -175,14 +175,14 @@ public class TransactionController implements ControllerAttributes {
 		Transaction t = null;
 		try {
 			t = TransactionService.getInstance().getById(transactionId);
-			List<Integer> associatedGroupTrantractionIds = t.getGroupTransactionIds();
+			List<Integer> associatedGroupTrantractionIds = t.getMergeTransactionIds();
 			List<Transaction> associatedGroupTransactions = null;
 			if (associatedGroupTrantractionIds != null && !associatedGroupTrantractionIds.isEmpty()) {
 				associatedGroupTransactions = new ArrayList<>();
 				for (int groupTransactionId : associatedGroupTrantractionIds) {
 					associatedGroupTransactions.add(TransactionService.getInstance().getById(groupTransactionId));
 				}
-				t.setGroupTransactions(associatedGroupTransactions);
+				t.setMergeTransactions(associatedGroupTransactions);
 			}
 			mav.addObject("attachment", new TransactionFile());
 
@@ -208,8 +208,8 @@ public class TransactionController implements ControllerAttributes {
 			List<Integer> associatedGroupTransactionIds = new ArrayList<>();
 			if (f) {
 				resetGroupTransactionSearchCriteria(session);
-				if (t.getGroupTransactionIds() != null)
-					associatedGroupTransactionIds = t.getGroupTransactionIds();
+				if (t.getMergeTransactionIds() != null)
+					associatedGroupTransactionIds = t.getMergeTransactionIds();
 				session.setAttribute(CHOSEN_GROUP_TRANSACTION, associatedGroupTransactionIds);
 			} else {
 				associatedGroupTransactionIds = getSessionGroupTransactionIds(session);
@@ -225,7 +225,7 @@ public class TransactionController implements ControllerAttributes {
 					sumOfGroupedTransactionAmount += groupedTransaction.getTransactionAmount();
 					associatedGroupTransactionDetails.add(groupedTransaction);
 				}
-				t.setGroupTransactions(associatedGroupTransactionDetails);
+				t.setMergeTransactions(associatedGroupTransactionDetails);
 			}
 			mav.addObject("sumOfGroupedTransactionAmount", sumOfGroupedTransactionAmount);
 			mav.addObject("groupedTransactionsRemainingAmount", t.getTransactionAmount() - sumOfGroupedTransactionAmount);
@@ -265,11 +265,11 @@ public class TransactionController implements ControllerAttributes {
 	
 					if (transactionId == transaction.getTransactionId())
 						continue;
-	
-					if (transaction.getGroupTransactionIds() != null && !transaction.getGroupTransactionIds().isEmpty())
+
+					if (transaction.getMergeTransactionIds() != null && !transaction.getMergeTransactionIds().isEmpty())
 						continue;
 	
-					if (transaction.getGroupParentId() > 0 && transaction.getGroupParentId() != t.getTransactionId())
+					if (transaction.getMergeParentId() > 0 && transaction.getMergeParentId() != t.getTransactionId())
 						continue;
 	
 					filteredSearchResultTransactions.add(transaction);
@@ -415,13 +415,13 @@ public class TransactionController implements ControllerAttributes {
 			masterTransaction.setTransactionAmount(gtMasterAmount);
 			masterTransaction.setTransactionType(gtMasterAmount >=0 ? "Income" : "Expense");
 			masterTransaction.setTransactionUserId("venkatramanp");
-			int masterTransactionId = TransactionService.getInstance().insert(masterTransaction);
+
 			List<Integer> mergeTransactionIds = new ArrayList<>();
 			for(Integer id : associatedGroupTransactionIds) {
 				mergeTransactionIds.add(id);
 			}
 			mergeTransactionIds.add(transactionId);
-			TransactionService.getInstance().mergeTransaction(masterTransactionId, mergeTransactionIds);
+			TransactionService.getInstance().mergeTransaction(masterTransaction, mergeTransactionIds);
 			rad.addFlashAttribute("successMessage", "Saved successfully!");
 		} catch (Exception e) {
 			rad.addFlashAttribute("errorMessage", e.getMessage());
