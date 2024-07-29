@@ -13,25 +13,15 @@
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!--<link rel="shortcut icon" type="image/ico" href="favicon.ico" />-->
 
-    <!-- Vendor styles -->
     <link rel="stylesheet" href="vendor/fontawesome/css/font-awesome.css" />
     <link rel="stylesheet" href="vendor/metisMenu/dist/metisMenu.css" />
     <link rel="stylesheet" href="vendor/animate.css/animate.css" />
     <link rel="stylesheet" href="vendor/bootstrap/dist/css/bootstrap.css" />
-    <link rel="stylesheet" href="vendor/xeditable/bootstrap3-editable/css/bootstrap-editable.css" />
-    <link rel="stylesheet" href="vendor/select2-3.5.2/select2.css" />
-    <link rel="stylesheet" href="vendor/select2-bootstrap/select2-bootstrap.css" />
-    <link rel="stylesheet" href="vendor/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.css" />
-    <link rel="stylesheet" href="vendor/bootstrap-datepicker-master/dist/css/bootstrap-datepicker3.min.css" />
-    <link rel="stylesheet" href="vendor/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" />
-    <link rel="stylesheet" href="vendor/clockpicker/dist/bootstrap-clockpicker.min.css" />
-    <link rel="stylesheet" href="vendor/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
 
     <!-- App styles -->
     <link rel="stylesheet" href="fonts/pe-icon-7-stroke/css/pe-icon-7-stroke.css" />
     <link rel="stylesheet" href="fonts/pe-icon-7-stroke/css/helper.css" />
     <link rel="stylesheet" href="styles/style.css">
-
 
 </head>
 
@@ -174,7 +164,7 @@
                         <span class="nav-label">Accounts</span>
                     </a>
                 </li>
-                <li>
+                <li class="active">
                     <a href="events.html">
                         <span class="nav-label">Events</span>
                     </a>
@@ -194,7 +184,7 @@
                         <span class="nav-label">Reports</span>
                     </a>
                 </li>
-                <li class="active">
+                <li>
                     <a href="settings.html">
                         <span class="nav-label">Settings</span>
                     </a>
@@ -216,79 +206,205 @@
             </div>
         </div>
         <div class="content">
-            <div class="row m-b-xl">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="font-bold">Event name goes here</h2>
+                    <small>Description of the event goes here, which can grow to 1000 chars normally. This section will
+                        not be effectively used by end user, however, this is available for any notes taking purpose.
+                        Description of the event goes here, which can grow to 1000 chars normally. This section will not
+                        be effectively used by end user, however, this is available for any notes taking purpose.
+                        Description of the event goes here, which can grow to 1000 chars normally. This section will not
+                        be effectively used by end user, however, this is available for any notes taking purpose</small>
+                </div>
+            </div>
+            <div class="row m-t-md m-b-md">
                 <div class="col-lg-12">
                     <div class="m-b">
                         <a class="btn btn-primary m-r-xs" href="AddEvent.html">Edit basic details</a>
-                        <a class="btn btn-primary btn-outline m-r-sm" href="#">Force Complete</a>
+                        <a class="btn btn-primary btn-outline m-r-sm" href="#" data-toggle="modal"
+                            data-target="#forceCompleteConfirm">Force Complete</a>
                         <a class="btn btn-primary btn-outline m-r-sm" href="#">Extend</a>
-                        <a class="btn btn-primary btn-outline m-r-sm" href="#">Cancel Project</a>
+                        <a class="btn btn-primary btn-outline m-r-sm" href="#">Cancel Event</a>
                     </div>
                 </div>
             </div>
+
             <div class="row">
                 <div class="col-md-3">
-                    <div class="hpanel">
+                    <div class="hpanel hbggreen">
                         <div class="panel-body">
                             <div class="stats-title pull-left">
                                 <h4>Total Planned</h4>
                             </div>
                             <div class="stats-icon pull-right">
-                                <i class="pe-7s-shuffle fa-4x"></i>
+                                <i class="fa fa-rupee fa-4x"></i>
                             </div>
                             <div class="m-t-xl">
-                                <h2 class="text-info">34,462.80</h2>
+                                <h2 class="">34,462.80</h2>
 
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="hpanel">
+                    <div class="hpanel hbgblue">
                         <div class="panel-body">
                             <div class="stats-title pull-left">
                                 <h4>Total Spent</h4>
                             </div>
                             <div class="stats-icon pull-right">
-                                <i class="pe-7s-shuffle fa-4x"></i>
+                                <i class="fa fa-rupee fa-4x"></i>
                             </div>
                             <div class="m-t-xl">
-                                <h2 class="text-warning">462.80</h2>
+                                <h2 class="">462.80</h2>
 
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="hpanel">
+                    <div class="hpanel hbgyellow">
                         <div class="panel-body">
                             <div class="stats-title pull-left">
                                 <h4>Remaining</h4>
                             </div>
                             <div class="stats-icon pull-right">
-                                <i class="pe-7s-shuffle fa-4x"></i>
+                                <i class="fa fa-rupee fa-4x"></i>
                             </div>
                             <div class="m-t-xl">
-                                <h2 class="text-success">1,34,462.80</h2>
+                                <h2 class="">1,34,462.80</h2>
 
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="hpanel">
+                    <div class="hpanel hbgred">
                         <div class="panel-body">
                             <div class="stats-title pull-left">
                                 <h4>Over Spent</h4>
                             </div>
                             <div class="stats-icon pull-right">
-                                <i class="pe-7s-shuffle fa-4x"></i>
+                                <i class="fa fa-rupee fa-4x"></i>
                             </div>
                             <div class="m-t-xl">
-                                <h2 class="text-danger">462.80</h2>
+                                <h2 class="">462.80</h2>
 
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="hpanel">
+
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-3 text-center">
+                                    <div class="small">
+                                        <i class="fa fa-bolt"></i> Total Planned
+                                    </div>
+                                    <div>
+                                        <h1 class="font-extra-bold m-t-xl m-b-xs">
+                                            <i class="fa fa-rupee"></i> 2,26,802.90
+                                        </h1>
+                                        <small>On 12-Jul-2024</small>
+                                    </div>
+                                    <div class="small m-t-xl">
+                                        <i class="fa fa-clock-o"></i> Data from the date of event
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="text-center small">
+                                        <i class="fa fa-rupee"></i> Amount spent during this event
+                                    </div>
+                                    <div class="flot-chart" style="height: 160px">
+                                        <div class="flot-chart-content" id="flot-line-chart"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 text-center">
+                                    <div class="small">
+                                        <i class="fa fa-clock-o"></i> Active duration
+                                    </div>
+                                    <div>
+                                        <h1 class="font-extra-bold m-t-xl m-b-xs">
+                                            102 days
+                                        </h1>
+                                        <small>from start to end</small>
+                                    </div>
+                                    <div class="small m-t-xl">
+                                        <i class="fa fa-clock-o"></i> Last transaction on 12-Aug-2024
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-footer">
+                            <span class="pull-right">
+                                You have two new messages from <a href="">Monica Bolt</a>
+                            </span>
+                            Last update: 21.05.2015
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="hpanel">
+
+                        <div class="panel-body">
+                            <div><iframe class="chartjs-hidden-iframe" tabindex="-1"
+                                    style="display: block; overflow: hidden; border: 0px; margin: 0px; inset: 0px; height: 100%; width: 100%; position: absolute; pointer-events: none; z-index: -1;"></iframe>
+                                <canvas id="doughnutChart" ></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4" >
+                    <div class="hpanel">
+                        <div class="panel-body text-center h-200">
+                            <i class="pe-7s-graph2 fa-4x"></i>
+                            <h1 class="m-xs">$802,40</h1>
+                            <small>Lorem ipsum dolor sit amet, consectetur adipiscing elit vestibulum consectetur adipiscing elit.</small>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="hpanel stats">
+                        <div class="panel-body h-200">
+                            <div class="stats-title pull-left">
+                                <h4>Total Spent</h4>
+                            </div>
+                            <div class="stats-icon pull-right">
+                                <i class="pe-7s-battery fa-4x"></i>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="m-t-xs">
+    
+                                <div class="row">
+                                    <div class="col-xs-6" style="">
+                                        <small class="stat-label">Today</small>
+                                        <h4>$170,20 <i class="fa fa-level-up text-success"></i></h4>
+                                    </div>
+                                    <div class="col-xs-6" style="">
+                                        <small class="stat-label">Last week</small>
+                                        <h4>$580,90 <i class="fa fa-level-up text-success"></i></h4>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-6" style="">
+                                        <small class="stat-label">Today</small>
+                                        <h4>$620,20 <i class="fa fa-level-up text-success"></i></h4>
+                                    </div>
+                                    <div class="col-xs-6" style="">
+                                        <small class="stat-label">Last week</small>
+                                        <h4>$140,70 <i class="fa fa-level-up text-success"></i></h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
                     </div>
                 </div>
             </div>
@@ -298,69 +414,69 @@
                 </div>
                 <div class="col-lg-12">
                     <div class="hpanel">
-                        
+
                         <div class="panel-body">
                             <div class="table-responsive">
                                 <table cellpadding="1" cellspacing="1" class="table">
                                     <thead>
                                         <tr>
-                                            <th>Name</th>
-                                            <th>Phone</th>
-                                            <th>Street Address</th>
-                                            <th>City</th>
-                                            <th>Country</th>
+                                            <th>Summary</th>
+                                            <th>Amount</th>
+                                            <th>Date</th>
+                                            <th>Category</th>
+                                            <th>Account</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>Abraham</td>
-                                            <td>076 9477 4896</td>
-                                            <td>294-318 Duis Ave</td>
-                                            <td>Vosselaar</td>
-                                            <td>Belgium</td>
+                                            <td><a href="#" class="text-info">Test transaction for this event</a></td>
+                                            <td class="text-danger">12,892.09</td>
+                                            <td>12-Jul-2024</td>
+                                            <td>Home Maintenance</td>
+                                            <td>HDFC Savings</td>
+                                            <td><a href="#" data-toggle="modal"
+                                                    data-target="#removeTransactionConfirm"><i
+                                                        class="fa fa-remove"></i></a></td>
                                         </tr>
                                         <tr>
-                                            <td>Phelan</td>
-                                            <td>0500 034548</td>
-                                            <td>680-1097 Mi Rd.</td>
-                                            <td>Lavoir</td>
-                                            <td>Pakistan</td>
+                                            <td><a href="#" class="text-info">Event transaction 2</a></td>
+                                            <td class="text-success">11.00</td>
+                                            <td>13-Jul-2024</td>
+                                            <td>Shopping</td>
+                                            <td>KOTAK Savings</td>
+                                            <td><a href="#" data-target="#removeTransactionConfirm"><i
+                                                        class="fa fa-remove"></i></a></td>
                                         </tr>
+
                                         <tr>
-                                            <td>Raya</td>
-                                            <td>(01315) 27698</td>
-                                            <td>Ap #289-8161 In Avenue</td>
-                                            <td>Santomenna</td>
-                                            <td>Burkina Faso</td>
+                                            <td><a href="#" class="text-info">I have created this for event</a></td>
+                                            <td class="text-success">1,829.98</td>
+                                            <td>15-Jul-2024</td>
+                                            <td>Shopping</td>
+                                            <td>HDFC Savings</td>
+                                            <td><a href="#" data-target="#removeTransactionConfirm"><i
+                                                        class="fa fa-remove"></i></a></td>
                                         </tr>
+
                                         <tr>
-                                            <td>Azalia</td>
-                                            <td>0500 854198</td>
-                                            <td>226-4861 Augue. St.</td>
-                                            <td>Newtown</td>
-                                            <td>Christmas Island</td>
+                                            <td><a href="#" class="text-info">Simple transaction</a></td>
+                                            <td class="text-danger">11,928.90</td>
+                                            <td>19-Jul-2024</td>
+                                            <td>Home Maintenance</td>
+                                            <td>SBI Savings</td>
+                                            <td><a href="#" data-target="#removeTransactionConfirm"><i
+                                                        class="fa fa-remove"></i></a></td>
                                         </tr>
-                                        <tr>
-                                            <td>Garth</td>
-                                            <td>(01662) 59083</td>
-                                            <td>3219 Elit Avenue</td>
-                                            <td>Ternitz</td>
-                                            <td>Saint Martin</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Selma</td>
-                                            <td>0877 118 6905</td>
-                                            <td>P.O. Box 410, 7331 Nec, St.</td>
-                                            <td>Glenrothes</td>
-                                            <td>Korea, North</td>
-                                        </tr>
+
+
                                     </tbody>
                                 </table>
                             </div>
 
                         </div>
                         <div class="panel-footer">
-                            Table - 6 rows
+                            Totally 4 transactions with this event
                         </div>
                     </div>
                 </div>
@@ -369,9 +485,49 @@
 
         </div>
 
-        <!-- Right sidebar -->
+        <!-- All Modals -->
 
-
+        <div class="modal fade hmodal-danger" id="removeTransactionConfirm" tabindex="-1" role="dialog"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="color-line"></div>
+                    <div class="modal-header">
+                        <h4 class="modal-title">Remove Confirmation</h4>
+                        <small class="font-bold">Make sure you have chosen the right action</small>
+                    </div>
+                    <div class="modal-body">
+                        <p>Removing <strong>here goes the transaction summary with amount</strong> will change the total
+                            chart values and the totality of the event. Also this action cannot be undone. Please
+                            confirm
+                            remaining essentially unchanged.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Dont Remove</button>
+                        <button type="button" class="btn btn-primary">Yes. Remove</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade hmodal-danger" id="forceCompleteConfirm" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="color-line"></div>
+                    <div class="modal-header">
+                        <h4 class="modal-title">Force Complete Confirmation</h4>
+                        <small class="font-bold">Make sure you have chosen the right action</small>
+                    </div>
+                    <div class="modal-body">
+                        <p>You are about to forcefully complete this event <strong>Event name goes here</strong>. Would
+                            you still like to proceed? This action cannot be undone.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Skip</button>
+                        <button type="button" class="btn btn-primary">Yes. Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- Footer-->
         <footer class="footer">
             <span class="pull-right"> Example text </span>
@@ -384,153 +540,80 @@
     <script src="vendor/jquery-ui/jquery-ui.min.js"></script>
     <script src="vendor/slimScroll/jquery.slimscroll.min.js"></script>
     <script src="vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="vendor/jquery-flot/jquery.flot.js"></script>
+    <script src="vendor/jquery-flot/jquery.flot.resize.js"></script>
+    <script src="vendor/jquery-flot/jquery.flot.pie.js"></script>
+    <script src="vendor/flot.curvedlines/curvedLines.js"></script>
+    <script src="vendor/jquery.flot.spline/index.js"></script>
     <script src="vendor/metisMenu/dist/metisMenu.min.js"></script>
     <script src="vendor/iCheck/icheck.min.js"></script>
+    <script src="vendor/peity/jquery.peity.min.js"></script>
     <script src="vendor/sparkline/index.js"></script>
-    <script src="vendor/moment/moment.js"></script>
-    <script src="vendor/xeditable/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
-    <script src="vendor/select2-3.5.2/select2.min.js"></script>
-    <script src="vendor/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js"></script>
-    <script src="vendor/bootstrap-datepicker-master/dist/js/bootstrap-datepicker.min.js"></script>
-    <script src="vendor/clockpicker/dist/bootstrap-clockpicker.min.js"></script>
-    <script src="vendor/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
-    <script src="vendor/chartjs/Chart.min.js"></script>
 
     <!-- App scripts -->
     <script src="scripts/homer.js"></script>
+    <script src="scripts/charts.js"></script>
 
     <script>
 
         $(function () {
 
-            $('#datepicker').datepicker();
-            $("#datepicker").on("changeDate", function (event) {
-                $("#my_hidden_input").val(
-                    $("#datepicker").datepicker('getFormattedDate')
-                )
-            });
+            /**
+             * Flot charts data and options
+             */
+            var data1 = [[0, 55], [1, 48], [2, 40], [3, 36], [4, 40], [5, 60], [6, 50], [7, 51]];
+            var data2 = [[0, 56], [1, 49], [2, 41], [3, 38], [4, 46], [5, 67], [6, 57], [7, 59]];
 
-            $('#datapicker2').datepicker();
-            $('.input-group.date').datepicker({});
-            $('.input-daterange').datepicker({});
+            var chartUsersOptions = {
+                series: {
+                    splines: {
+                        show: true,
+                        tension: 0.4,
+                        lineWidth: 1,
+                        fill: 0.4
+                    },
+                },
+                grid: {
+                    tickColor: "#f0f0f0",
+                    borderWidth: 1,
+                    borderColor: 'f0f0f0',
+                    color: '#6a6c6f'
+                },
+                colors: ["#62cb31", "#efefef"],
+            };
 
-            $("#demo1").TouchSpin({
-                min: 0,
-                max: 100,
-                step: 0.1,
-                decimals: 2,
-                boostat: 5,
-                maxboostedstep: 10,
-            });
+            $.plot($("#flot-line-chart"), [data1, data2], chartUsersOptions);
 
-            $("#demo2").TouchSpin({
-                verticalbuttons: true
-            });
-
-            $("#demo3").TouchSpin({
-                postfix: '%'
-            });
-
-            $("#demo4").TouchSpin({
-                postfix: "a button",
-                postfix_extraclass: "btn btn-default"
-            });
-
-            $(".js-source-states").select2();
-            $(".js-source-states-2").select2();
-
-            //turn to inline mode
-            $.fn.editable.defaults.mode = 'inline';
-
-            //defaults
-            $.fn.editable.defaults.url = '#';
-
-            //editables
-            $('#username').editable({
-                url: '#',
-                type: 'text',
-                pk: 1,
-                name: 'username',
-                title: 'Enter username'
-            });
-
-            $('#firstname').editable({
-                validate: function (value) {
-                    if ($.trim(value) == '') return 'This field is required';
+            /**
+             * Flot charts 2 data and options
+             */
+            var chartIncomeData = [
+                {
+                    label: "line",
+                    data: [[1, 10], [2, 26], [3, 16], [4, 36], [5, 32], [6, 51]]
                 }
-            });
+            ];
 
-            $('#sex').editable({
-                prepend: "Savings",
-                source: [
-                    { value: 1, text: 'Savings' },
-                    { value: 2, text: 'Investment' },
-                    { value: 3, text: 'Credit Card' },
-                    { value: 4, text: 'Online Wallet' }
-                ],
-                display: function (value, sourceData) {
-                    var colors = { "": "gray", 1: "green", 2: "blue" },
-                        elem = $.grep(sourceData, function (o) { return o.value == value; });
+            var chartIncomeOptions = {
+                series: {
+                    lines: {
+                        show: true,
+                        lineWidth: 0,
+                        fill: true,
+                        fillColor: "#64cc34"
 
-                    if (elem.length) {
-                        $(this).text(elem[0].text).css("color", colors[value]);
-                    } else {
-                        $(this).empty();
                     }
+                },
+                colors: ["#62cb31"],
+                grid: {
+                    show: false
+                },
+                legend: {
+                    show: false
                 }
-            });
+            };
 
-            $('#dob').editable();
-
-            $('#event').editable({
-                placement: 'right',
-                combodate: {
-                    firstItem: 'name'
-                }
-            });
-
-            $('#comments').editable({
-                showbuttons: 'bottom'
-            });
-
-            $('#fruits').editable({
-                pk: 1,
-                limit: 3,
-                source: [
-                    { value: 1, text: 'banana' },
-                    { value: 2, text: 'peach' },
-                    { value: 3, text: 'apple' },
-                    { value: 4, text: 'watermelon' },
-                    { value: 5, text: 'orange' }
-                ]
-            });
-
-            $('#user .editable').on('hidden', function (e, reason) {
-                if (reason === 'save' || reason === 'nochange') {
-                    var $next = $(this).closest('tr').next().find('.editable');
-                    if ($('#autoopen').is(':checked')) {
-                        setTimeout(function () {
-                            $next.editable('show');
-                        }, 300);
-                    } else {
-                        $next.focus();
-                    }
-                }
-            });
-
-            // ClockPicker
-            $('.clockpicker').clockpicker({ autoclose: true });
-
-            // DateTimePicker
-            $('#datetimepicker1').datetimepicker();
-
-        });
-
-    </script>
-    <script>
-
-        $(function () {
-
+            $.plot($("#flot-income-chart"), chartIncomeData, chartIncomeOptions);
 
             /**
              * Options for Line chart
@@ -653,16 +736,16 @@
              * Data for Bar chart
              */
             var singleBarData = {
-                labels: ["January", "February", "March"],
+                labels: ["January", "February", "March", "April", "May", "June", "July"],
                 datasets: [
                     {
-                        label: "Category",
+                        label: "Dt 1",
                         backgroundColor: "rgba(98,203,49,0.5)",
                         borderColor: "rgba(98,203,49,0.8)",
                         highlightFill: "rgba(98,203,49,0.75)",
                         highlightStroke: "rgba(98,203,49,1)",
                         borderWidth: 1,
-                        data: [15, 20, 30]
+                        data: [15, 20, 30, 40, 30, 50, 60]
                     }
                 ]
             };
@@ -768,7 +851,11 @@
             new Chart(ctx, { type: 'radar', data: radarData, options: radarOptions });
         });
 
+
+
+
     </script>
+
 
 </body>
 
