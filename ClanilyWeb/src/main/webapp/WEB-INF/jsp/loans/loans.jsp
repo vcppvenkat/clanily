@@ -1,4 +1,9 @@
 <!DOCTYPE html>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib uri="jakarta.tags.core" prefix="c"%>
+<%@page session="true" import="java.math.BigDecimal,java.math.RoundingMode"%>
+
+
 <html>
 
 <head>
@@ -28,14 +33,27 @@
 
 				<div class="col-lg-12">
 					<div class="col-lg-3">
-						<input class="form-control" type="text">
+						<input class="form-control" type="text" placeholder="Search summary or description">
+					</div>
+					<div class="col-lg-1">
+                    </div>
+					<div class="col-lg-3">
+						<a href="AddLoan.html" class="btn btn-primary">Start a new loan</a>
+						
 					</div>
 					<div class="col-lg-3">
-						<a href="#" class="btn btn-primary2">Active</a>&nbsp; <a href="#"
-							class="btn btn-primary2 btn-outline">Completed</a>&nbsp; <a
-							href="#" class="btn btn-primary2 btn-outline">Overdue</a>&nbsp;
+						<div class="btn-group">
+                            <button data-toggle="dropdown" class="btn btn-primary2 btn-outline dropdown-toggle" aria-expanded="false">Active </button>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">New</a></li>
+                                <li><a href="#">Active</a></li>
+                                <li><a href="#">Overdue</a></li>
+                                <li><a href="#">Completed</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#">Cancelled</a></li>
+                            </ul>
+                        </div>
 					</div>
-					<div class="col-lg-4"></div>
 					<div class="col-lg-2">
 						<a href="#" class="btn btn-primary2">Borrowed</a>&nbsp; <a
 							href="#" class="btn btn-primary2 btn-outline">Lent</a>&nbsp;
@@ -46,48 +64,47 @@
 			</div>
 			<div class="hr-line-dashed"></div>
 			<div class="row">
-				<div class="col-lg-4">
-					<div class="hpanel stats">
-						<div class="panel-body h-200">
-							<div class="stats-title pull-left">
-								<a href="ViewLoan.html"><h4>Loan name goes here with
-										big name and max 50...</h4></a>
-							</div>
-
-							<div class="m-t-xl">
-								<h3 class="m-b-xs">89,000</h3>
-								<span class="text-muted no-margins"> Borrowed from
-									Parents </span>
-
-								<div class="progress m-t-xs full progress-small">
-									<div style="width: 55%" aria-valuemax="100" aria-valuemin="0"
-										aria-valuenow="55" role="progressbar"
-										class=" progress-bar progress-bar-success">
-										<span class="sr-only">35% Complete (success)</span>
+				<c:forEach  var="loan" items="${values}">
+					<div class="col-lg-4">
+						<div class="hpanel stats">
+							<div class="panel-body h-200">
+								<div class="stats-title pull-left">
+									<a href="ViewLoan.html"><h4>${loan.loanSummary}</h4></a>
+								</div>
+	
+								<div class="m-t-xl">
+									<h3 class="m-b-xs">${loan.amount}</h3>
+									<span class="text-muted no-margins"> ${loan.description} </span>
+									
+									<div class="progress m-t-xs full progress-small">
+										<div style="width: ${BigDecimal.valueOf((loan.totalPaid /loan.amount) * 100).setScale(2, RoundingMode.HALF_UP)}%" aria-valuemax="100" aria-valuemin="0"
+											aria-valuenow="${BigDecimal.valueOf((loan.totalPaid /loan.amount) * 100).setScale(2, RoundingMode.HALF_UP)}" role="progressbar"
+											class=" progress-bar progress-bar-success">
+											<span class="sr-only">${loan.loanStatus}</span>
+										</div>
+									</div>
+	
+									<div class="row">
+										<div class="col-xs-4">
+											<small class="stats-label">Paid</small>
+											<h4>${loan.totalPaid}</h4>
+										</div>
+	
+										<div class="col-xs-4">
+											<small class="stats-label">Remaining</small>
+											<h4>${loan.totalPending}</h4>
+										</div>
+										<div class="col-xs-4">
+											<small class="stats-label">% Completed</small>
+											<h4>${BigDecimal.valueOf((loan.totalPaid /loan.amount) * 100).setScale(2, RoundingMode.HALF_UP)}</h4>
+										</div>
 									</div>
 								</div>
-
-								<div class="row">
-									<div class="col-xs-4">
-										<small class="stats-label">Paid</small>
-										<h4>78,00</h4>
-									</div>
-
-									<div class="col-xs-4">
-										<small class="stats-label">Remaining</small>
-										<h4>7,000</h4>
-									</div>
-									<div class="col-xs-4">
-										<small class="stats-label">% Completed</small>
-										<h4>76.43%</h4>
-									</div>
-								</div>
 							</div>
+	
 						</div>
-
 					</div>
-				</div>
-
+				</c:forEach>
 			</div>
 
 
