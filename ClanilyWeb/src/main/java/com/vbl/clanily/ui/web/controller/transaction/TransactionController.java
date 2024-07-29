@@ -3,6 +3,8 @@ package com.vbl.clanily.ui.web.controller.transaction;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -175,14 +177,14 @@ public class TransactionController implements ControllerAttributes {
 		Transaction t = null;
 		try {
 			t = TransactionService.getInstance().getById(transactionId);
-			List<Integer> associatedGroupTrantractionIds = t.getGroupTransactionIds();
+			List<Integer> associatedGroupTrantractionIds = t.getMergeTransactionIds();
 			List<Transaction> associatedGroupTransactions = null;
 			if (associatedGroupTrantractionIds != null && !associatedGroupTrantractionIds.isEmpty()) {
 				associatedGroupTransactions = new ArrayList<>();
 				for (int groupTransactionId : associatedGroupTrantractionIds) {
 					associatedGroupTransactions.add(TransactionService.getInstance().getById(groupTransactionId));
 				}
-				t.setGroupTransactions(associatedGroupTransactions);
+				t.setMergeTransactions(associatedGroupTransactions);
 			}
 			mav.addObject("attachment", new TransactionFile());
 
@@ -208,8 +210,8 @@ public class TransactionController implements ControllerAttributes {
 			List<Integer> associatedGroupTransactionIds = new ArrayList<>();
 			if (f) {
 				resetGroupTransactionSearchCriteria(session);
-				if (t.getGroupTransactionIds() != null)
-					associatedGroupTransactionIds = t.getGroupTransactionIds();
+				if (t.getMergeTransactionIds() != null)
+					associatedGroupTransactionIds = t.getMergeTransactionIds();
 				session.setAttribute(CHOSEN_GROUP_TRANSACTION, associatedGroupTransactionIds);
 			} else {
 				associatedGroupTransactionIds = getSessionGroupTransactionIds(session);
@@ -225,14 +227,18 @@ public class TransactionController implements ControllerAttributes {
 					sumOfGroupedTransactionAmount += groupedTransaction.getTransactionAmount();
 					associatedGroupTransactionDetails.add(groupedTransaction);
 				}
-				t.setGroupTransactions(associatedGroupTransactionDetails);
+				t.setMergeTransactions(associatedGroupTransactionDetails);
 			}
+			float groupedTransactionsRemainingAmount = t.getTransactionAmount() + sumOfGroupedTransactionAmount;
 			mav.addObject("sumOfGroupedTransactionAmount", sumOfGroupedTransactionAmount);
-			mav.addObject("groupedTransactionsRemainingAmount", t.getTransactionAmount() - sumOfGroupedTransactionAmount);
+			mav.addObject("groupedTransactionsRemainingAmount", groupedTransactionsRemainingAmount);
+			mav.addObject("groupedTransactionsRemainingSummary", "Unknown " + (groupedTransactionsRemainingAmount>=0 ? "Income" : "Expense"));
+			mav.addObject("groupedTransactionsRemainingDate", "28-07-2024");
 
 			List<Transaction> filteredSearchResultTransactions = new ArrayList<>();
 			if(SEARCH_GROUP_TRANS_RESULT_FLAG.equals(session.getAttribute(SEARCH_GROUP_TRANS_RESULT))) {
 				TransactionSearchCriteria searchCriteria = getGroupTransactionSearchCriteria(session);
+				searchCriteria.setCurrentTransactionView("Income, Expense");
 				System.out.println("from date ? " + searchCriteria.getSearchFromDateString());
 				System.out.println("to date ? " + searchCriteria.getSearchToDateString());
 				if(searchCriteria.getSearchFromDateString() != null && searchCriteria.getSearchFromDateString().length() > 1) {
@@ -265,11 +271,11 @@ public class TransactionController implements ControllerAttributes {
 	
 					if (transactionId == transaction.getTransactionId())
 						continue;
-	
-					if (transaction.getGroupTransactionIds() != null && !transaction.getGroupTransactionIds().isEmpty())
+
+					if (transaction.getMergeTransactionIds() != null && !transaction.getMergeTransactionIds().isEmpty())
 						continue;
 	
-					if (transaction.getGroupParentId() > 0 && transaction.getGroupParentId() != t.getTransactionId())
+					if (transaction.getMergeParentId() > 0 && transaction.getMergeParentId() != t.getTransactionId())
 						continue;
 	
 					filteredSearchResultTransactions.add(transaction);
@@ -280,10 +286,9 @@ public class TransactionController implements ControllerAttributes {
 			mav.addObject("searchResult", filteredSearchResultTransactions);
 
 			List<Category> categories = new ArrayList<>();			
-			if (t.getTransactionType().contains(TRANSACTION_TYPE_EXPENSE))
-				categories.addAll(CategoryService.getInstance().getAllExpenseCategories().values());
-			else if (t.getTransactionType().contains(TRANSACTION_TYPE_INCOME))
-				categories.addAll(CategoryService.getInstance().getAllIncomeCategories().values());
+			categories.addAll(CategoryService.getInstance().getAllExpenseCategories().values());
+			categories.addAll(CategoryService.getInstance().getAllIncomeCategories().values());
+			Collections.sort(categories, Category.getCategoryNameSorter());
 			mav.addObject("categories", categories);
 
 			// search for list of accounts
@@ -415,13 +420,13 @@ public class TransactionController implements ControllerAttributes {
 			masterTransaction.setTransactionAmount(gtMasterAmount);
 			masterTransaction.setTransactionType(gtMasterAmount >=0 ? "Income" : "Expense");
 			masterTransaction.setTransactionUserId("venkatramanp");
-			int masterTransactionId = TransactionService.getInstance().insert(masterTransaction);
+
 			List<Integer> mergeTransactionIds = new ArrayList<>();
 			for(Integer id : associatedGroupTransactionIds) {
 				mergeTransactionIds.add(id);
 			}
 			mergeTransactionIds.add(transactionId);
-			TransactionService.getInstance().mergeTransaction(masterTransactionId, mergeTransactionIds);
+			TransactionService.getInstance().mergeTransaction(masterTransaction, mergeTransactionIds);
 			rad.addFlashAttribute("successMessage", "Saved successfully!");
 		} catch (Exception e) {
 			rad.addFlashAttribute("errorMessage", e.getMessage());
@@ -1197,5 +1202,13 @@ public class TransactionController implements ControllerAttributes {
 		} else {
 			return (ArrayList<Integer>) session.getAttribute(CHOSEN_GROUP_TRANSACTION);
 		}
+	}
+
+	private class CategorySorter implements Comparator<Category> {
+		@Override
+		public int compare(Category o1, Category o2) {
+			return o1.getCategoryName().compareTo(o2.getCategoryName());
+		}
+		
 	}
 }

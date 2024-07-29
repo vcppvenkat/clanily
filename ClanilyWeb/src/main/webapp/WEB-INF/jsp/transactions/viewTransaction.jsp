@@ -180,7 +180,7 @@
 										<th>Category</th>
 									</thead>
 									<tbody>
-										<c:forEach items="${transaction.groupTransactions}"
+										<c:forEach items="${transaction.mergeTransactions}"
 											var="groupTransaction">
 											<tr>
 												<td>${ groupTransaction.summary }</td>

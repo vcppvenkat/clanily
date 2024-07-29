@@ -94,7 +94,7 @@
 												<td></td>
 											</c:if>
 
-											<td>${t.sumOfGroup }</td>
+											<td>${t.sumOfMergedTransactions }</td>
 											<td></td>
 											<c:if test="${search.currentTransactionGroup ne 'Category' }">
 												<td></td>
