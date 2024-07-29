@@ -1,5 +1,7 @@
 package com.vbl.clanily.backend.vo.settings;
 
+import java.util.Comparator;
+
 import com.vbl.clanily.backend.vo.ValueObject;
 
 public class Category implements ValueObject, Comparable<Category> {
@@ -14,6 +16,7 @@ public class Category implements ValueObject, Comparable<Category> {
 
 	public int totalTransactions;
 	public float totalTransactionValue;
+	private final static CategoryNameSorter categoryNameSorter = new CategoryNameSorter();
 
 	public int getCategoryId() {
 		return categoryId;
@@ -95,5 +98,17 @@ public class Category implements ValueObject, Comparable<Category> {
 			return 1;
 		else
 			return 0;
+	}
+
+	public static Comparator<Category> getCategoryNameSorter() {
+		return categoryNameSorter;
+	}
+
+	private static class CategoryNameSorter implements Comparator<Category> {
+		@Override
+		public int compare(Category o1, Category o2) {
+			return o1.getCategoryName().compareTo(o2.getCategoryName());
+		}
+		
 	}
 }

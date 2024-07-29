@@ -243,7 +243,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<c:forEach items="${transaction.groupTransactions}"
+								<c:forEach items="${transaction.mergeTransactions}"
 									var="groupTransaction">
 									<tr>
 										<td><a
@@ -273,61 +273,33 @@
 
 								<tr>
 									<td></td>
-									<td><input name="gtMasterSummary" class="form-control" placeholder="Summary" /></td>
+									<td><input name="gtMasterSummary" value="${groupedTransactionsRemainingSummary}" class="form-control" placeholder="Summary" /></td>
 									<td>
 										<div class="input-group date">
-											<input name="gtMasterDate" type="text" class="form-control "><span
+											<input name="gtMasterDate" type="text" value="${groupedTransactionsRemainingDate}" class="form-control "><span
 												class="input-group-addon"><i
 												class="glyphicon glyphicon-th"></i></span>
 										</div>
 									</td>
-									<td class="text-danger"><input name="gtMasterAmount"
-										class="form-control" placeholder="0.00"
-										value="${groupedTransactionsRemainingAmount}" /></td>
+									<td class="text-danger">
+										<input name="gtMasterAmount" class="form-control ${groupedTransactionsRemainingAmount > 0 ? 'text-success' : 'text-danger' }" placeholder="0.00" readOnly
+											value="${groupedTransactionsRemainingAmount}" />
+									</td>
 									<td>
 										<div class="form-group">
-											<select name="gtMasterCategory"
-												class="js-source-states-2 form-control">
-												<optgroup label="Need">
-													<option value="AK">Home Daily Needs</option>
-													<option value="HI">Home Maintenance</option>
-													<option value="HI">Vehicle Maintenance</option>
-												</optgroup>
-												<optgroup label="Want">
-													<option value="CA">EB Bill</option>
-													<option value="NV">Home Rent</option>
-												</optgroup>
-
-												<optgroup label="Others">
-													<option value="AL">Lend</option>
-													<option value="AR">Subscriptions</option>
-													<option value="IL">Personal Grooming</option>
-
-												</optgroup>
-
+											<select name="gtMasterCategory" class="js-source-states-2 form-control">												
+												<c:forEach items="${categories}" var="category">
+													<option value="${category.categoryId}">${category.categoryName}</option>
+												</c:forEach>
 											</select>
 										</div>
 									</td>
 									<td>
 										<div class="form-group">
 											<select name="gtMasterAccount" class="js-source-states-2">
-												<optgroup label="Need">
-													<option value="AK">Home Daily Needs</option>
-													<option value="HI">Home Maintenance</option>
-													<option value="HI">Vehicle Maintenance</option>
-												</optgroup>
-												<optgroup label="Want">
-													<option value="CA">EB Bill</option>
-													<option value="NV">Home Rent</option>
-												</optgroup>
-
-												<optgroup label="Others">
-													<option value="AL">Lend</option>
-													<option value="AR">Subscriptions</option>
-													<option value="IL">Personal Grooming</option>
-
-												</optgroup>
-
+												<c:forEach items="${accounts}" var="account">
+													<option value="${account.accountId}">${account.accountName}</option>
+												</c:forEach>
 											</select>
 										</div>
 									</td>

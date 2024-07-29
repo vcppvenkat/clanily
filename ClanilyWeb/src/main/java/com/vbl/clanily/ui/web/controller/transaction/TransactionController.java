@@ -3,6 +3,8 @@ package com.vbl.clanily.ui.web.controller.transaction;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -227,12 +229,16 @@ public class TransactionController implements ControllerAttributes {
 				}
 				t.setMergeTransactions(associatedGroupTransactionDetails);
 			}
+			float groupedTransactionsRemainingAmount = t.getTransactionAmount() + sumOfGroupedTransactionAmount;
 			mav.addObject("sumOfGroupedTransactionAmount", sumOfGroupedTransactionAmount);
-			mav.addObject("groupedTransactionsRemainingAmount", t.getTransactionAmount() - sumOfGroupedTransactionAmount);
+			mav.addObject("groupedTransactionsRemainingAmount", groupedTransactionsRemainingAmount);
+			mav.addObject("groupedTransactionsRemainingSummary", "Unknown " + (groupedTransactionsRemainingAmount>=0 ? "Income" : "Expense"));
+			mav.addObject("groupedTransactionsRemainingDate", "28-07-2024");
 
 			List<Transaction> filteredSearchResultTransactions = new ArrayList<>();
 			if(SEARCH_GROUP_TRANS_RESULT_FLAG.equals(session.getAttribute(SEARCH_GROUP_TRANS_RESULT))) {
 				TransactionSearchCriteria searchCriteria = getGroupTransactionSearchCriteria(session);
+				searchCriteria.setCurrentTransactionView("Income, Expense");
 				System.out.println("from date ? " + searchCriteria.getSearchFromDateString());
 				System.out.println("to date ? " + searchCriteria.getSearchToDateString());
 				if(searchCriteria.getSearchFromDateString() != null && searchCriteria.getSearchFromDateString().length() > 1) {
@@ -280,10 +286,9 @@ public class TransactionController implements ControllerAttributes {
 			mav.addObject("searchResult", filteredSearchResultTransactions);
 
 			List<Category> categories = new ArrayList<>();			
-			if (t.getTransactionType().contains(TRANSACTION_TYPE_EXPENSE))
-				categories.addAll(CategoryService.getInstance().getAllExpenseCategories().values());
-			else if (t.getTransactionType().contains(TRANSACTION_TYPE_INCOME))
-				categories.addAll(CategoryService.getInstance().getAllIncomeCategories().values());
+			categories.addAll(CategoryService.getInstance().getAllExpenseCategories().values());
+			categories.addAll(CategoryService.getInstance().getAllIncomeCategories().values());
+			Collections.sort(categories, Category.getCategoryNameSorter());
 			mav.addObject("categories", categories);
 
 			// search for list of accounts
@@ -1197,5 +1202,13 @@ public class TransactionController implements ControllerAttributes {
 		} else {
 			return (ArrayList<Integer>) session.getAttribute(CHOSEN_GROUP_TRANSACTION);
 		}
+	}
+
+	private class CategorySorter implements Comparator<Category> {
+		@Override
+		public int compare(Category o1, Category o2) {
+			return o1.getCategoryName().compareTo(o2.getCategoryName());
+		}
+		
 	}
 }
