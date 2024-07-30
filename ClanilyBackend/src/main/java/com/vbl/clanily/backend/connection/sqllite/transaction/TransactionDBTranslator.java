@@ -450,12 +450,21 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 	@Override
 	public boolean updateAll(List<ValueObject> values) throws Exception {
 		throw new OperationNotSupportedException("Update all for transactions is not supported.");
+		
 	}
 
 	@Override
 	public boolean delete(int id) throws Exception {
-		// TODO Auto-generated method stub
-		return false;
+		String query = "DELETE FROM TRANSACTIONS WHERE TRANSACTION_ID = ? ";
+		boolean result = false;
+		PreparedStatement s = connection.prepareStatement(query);
+		s.setInt(1, id);
+		int rows = s.executeUpdate();
+		if (rows == 1)
+			result = true;
+		s.close();
+		return result;
+		
 	}
 
 	@Override

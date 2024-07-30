@@ -44,7 +44,18 @@ public class TransactionService extends ClanilyService {
 			throw new Exception("Invalid parent transaction id: " + parentTransactionId);
 
 		if (!parent.hasMergedChildren()) {
+			for (int childId : parent.mergeTransactionIds) {
+				Transaction child = TransactionDBTranslator.getInstance().getById(childId);
+				if (child != null) {
+					child.mergeParentId = 0;
+					TransactionDBTranslator.getInstance().update(child);
+				}
+				// remove merge parent
+				boolean deleted = TransactionDBTranslator.getInstance().delete(parentTransactionId);
+				if (!deleted)
+					throw new Exception("There was an issue while urmerging transaction");
 
+			}
 		}
 
 	}
@@ -59,7 +70,7 @@ public class TransactionService extends ClanilyService {
 		parent.transactionId = insert(parent);
 
 		float childrenSum = TransactionDBTranslator.getInstance().sumOfTransactions(children);
-		
+
 		float sum = 0.0f;
 		for (int child : children) {
 			Transaction t = TransactionDBTranslator.getInstance().getById(child);
@@ -517,49 +528,30 @@ public class TransactionService extends ClanilyService {
 
 	public void importTransactionsTemp(List<String[]> values) throws Exception {
 		/*
-		Transaction t = null;
-		int index = 0;
-		// 2023-12-17T06:30:00+00:00
-		SimpleDateFormat dt = new SimpleDateFormat("yyyy-M-d'T'HH:mm:ss+HH:mm");
-
-		int accountId = 3;
-		int payeeId = 1;
-		int projectId = 1;
-		String transactionUserId = "venkatramanp";
-		int objectiveId = 1;
-		int loanId = 1;
-		String beneficiary = "Family";
-
-		for (String[] array : values) {
-			if (index == 0) {
-				index++;
-				continue;
-			}
-
-			t = new Transaction();
-
-			t.summary = array[6];
-			t.transactionDate = dt.parse(array[0]);
-			t.categoryId = findCategoryId(array[3], array[4]);
-			t.transactionType = array[2];
-			t.accountId = accountId;
-			t.transactionAmount = Float.parseFloat(array[4]);
-			t.payeeId = payeeId;
-			t.notes = t.summary;
-			t.projectId = projectId;
-			t.transactionUserId = transactionUserId;
-			t.objectiveId = objectiveId;
-			t.importedNotes = t.summary;
-
-			// reduce summary
-			if (t.summary.length() > 50) {
-				t.summary = t.summary.substring(0, 49);
-			}
-
-			insert(t);
-
-		}
-		*/
+		 * Transaction t = null; int index = 0; // 2023-12-17T06:30:00+00:00
+		 * SimpleDateFormat dt = new SimpleDateFormat("yyyy-M-d'T'HH:mm:ss+HH:mm");
+		 * 
+		 * int accountId = 3; int payeeId = 1; int projectId = 1; String
+		 * transactionUserId = "venkatramanp"; int objectiveId = 1; int loanId = 1;
+		 * String beneficiary = "Family";
+		 * 
+		 * for (String[] array : values) { if (index == 0) { index++; continue; }
+		 * 
+		 * t = new Transaction();
+		 * 
+		 * t.summary = array[6]; t.transactionDate = dt.parse(array[0]); t.categoryId =
+		 * findCategoryId(array[3], array[4]); t.transactionType = array[2]; t.accountId
+		 * = accountId; t.transactionAmount = Float.parseFloat(array[4]); t.payeeId =
+		 * payeeId; t.notes = t.summary; t.projectId = projectId; t.transactionUserId =
+		 * transactionUserId; t.objectiveId = objectiveId; t.importedNotes = t.summary;
+		 * 
+		 * // reduce summary if (t.summary.length() > 50) { t.summary =
+		 * t.summary.substring(0, 49); }
+		 * 
+		 * insert(t);
+		 * 
+		 * }
+		 */
 
 	}
 
