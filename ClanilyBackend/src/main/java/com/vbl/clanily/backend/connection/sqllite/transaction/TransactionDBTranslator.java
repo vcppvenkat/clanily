@@ -172,6 +172,7 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 		while (rs.next()) {
 			transaction = copyTransaction(null, rs);
 			amendMergeTransactionIds(transaction);
+			amendSplitTransactionIds(transaction);
 			result.add(transaction);
 		}
 		rs.close();
@@ -206,6 +207,16 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 		ResultSet rs1 = st1.executeQuery(query);
 		while (rs1.next()) {
 			transaction.addMergeTransactionId(rs1.getInt("TRANSACTION_ID"));
+		}
+		rs1.close();
+	}
+	
+	private void amendSplitTransactionIds(Transaction transaction) throws Exception {
+		Statement st1 = connection.createStatement();
+		String query = " SELECT TRANSACTION_ID FROM TRANSACTIONS WHERE SPLIT_PARENT_ID = " + transaction.transactionId;
+		ResultSet rs1 = st1.executeQuery(query);
+		while (rs1.next()) {
+			transaction.addSplitTransactionId(rs1.getInt("TRANSACTION_ID"));
 		}
 		rs1.close();
 	}

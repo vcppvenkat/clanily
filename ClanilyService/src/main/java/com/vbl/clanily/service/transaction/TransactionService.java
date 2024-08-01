@@ -169,7 +169,7 @@ public class TransactionService extends ClanilyService {
 			throw new Exception("Given parent does not have any children to split.");
 		}
 		if(parent.hasMergedChildren()) {
-			throw new Exception("Fiven parent is already a merged parent.");
+			throw new Exception("Given parent is already a merged parent.");
 		}
 	}
 

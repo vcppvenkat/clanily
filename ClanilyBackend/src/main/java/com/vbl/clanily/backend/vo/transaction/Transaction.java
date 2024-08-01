@@ -63,6 +63,7 @@ public class Transaction implements ValueObject {
 	public int splitParentId;
 	public Transaction splitParent;
 	public List<Transaction> splitTransactions;
+	public List<Integer> splitTransactionIds;
 
 	public int loanId;
 	public String loanName;
@@ -99,7 +100,7 @@ public class Transaction implements ValueObject {
 	}
 
 	public boolean hasSplitChildren() {
-		return false;
+		return (splitTransactionIds != null && !splitTransactionIds.isEmpty());
 	}
 
 	public List<TransactionFile> getTransactionFilesMetaData() {
@@ -519,6 +520,15 @@ public class Transaction implements ValueObject {
 				this.mergeTransactionIds = new ArrayList<Integer>();
 			}
 			this.mergeTransactionIds.add(mergeTransactionId);
+		}
+	}
+	
+	public void addSplitTransactionId(int splitTransactionId) {
+		if (splitTransactionId > 0) {
+			if (this.splitTransactionIds == null) {
+				this.splitTransactionIds = new ArrayList<Integer>();
+			}
+			this.splitTransactionIds.add(splitTransactionId);
 		}
 	}
 
