@@ -1,5 +1,6 @@
 package com.vbl.clanily.service.transaction;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -105,8 +106,75 @@ public class TransactionService extends ClanilyService {
 		TransactionDBTranslator.getInstance().mergeTransaction(parent.transactionId, children);
 	}
 
-	public void deleteAttachment(int transactionFileId) throws Exception {
-		TransactionDBTranslator.getInstance().deleteAttachment(transactionFileId);
+	public void splitTransaction(int parentId, List<Transaction> children) throws Exception {
+
+		List<ValueObject> output = new ArrayList<ValueObject>();
+		Transaction parent = TransactionDBTranslator.getInstance().getById(parentId);
+		if (parent == null) {
+			throw new Exception("Invalid parent transaction details. Input is null");
+		}
+
+		float childrenSum = 0.0f;
+		for (Transaction child : children) {
+
+			if (child == null) {
+				throw new Exception("Invalid child as input");
+			}
+
+			// if this is a child of another parent
+			if (child.splitParentId > 0) {
+				throw new Exception("Cannot split a child of another split parent. New child: " + child.summary);
+			}
+
+			if (child.mergeParentId > 0) {
+				throw new Exception("Cannot split a child of another merged parent. New child: " + child.summary);
+			}
+
+			if (child.hasMergedChildren()) {
+				throw new Exception("An already merged parent cannot become child. Existing parent: " + child.summary);
+			}
+
+			if (child.hasSplitChildren()) {
+				throw new Exception("An already split parent cannot become child. Existing parent: " + child.summary);
+			}
+
+			if (!parent.transactionType.equals(child.transactionType)) {
+				throw new Exception(child.summary + ": Child does not have the same type of the parent.");
+			}
+
+			// Validate sum of all ids
+			childrenSum += child.transactionAmount;
+			output.add(child);
+			
+			child.splitParentId = parentId;
+			child.mergeParentId = 0;
+		}
+
+		if (childrenSum != parent.transactionAmount) {
+			throw new Exception(
+					"Sum of children cannot exceed transaction total. Tip: Adjust with additional income / expense");
+		}
+
+		TransactionDBTranslator.getInstance().insertAll(output);
+
+	}
+	
+	public void unsplitTransaction(int parentId) throws Exception {
+		Transaction parent = TransactionDBTranslator.getInstance().getById(parentId);
+		if(parent == null) {
+			throw new Exception("Invalid input. Given parent id does not exist: Parent Id: " + parentId);
+		}
+		
+		if(!parent.hasSplitChildren()) {
+			throw new Exception("Given parent does not have any children to split.");
+		}
+		if(parent.hasMergedChildren()) {
+			throw new Exception("Fiven parent is already a merged parent.");
+		}
+	}
+
+	public void detachFile(int transactionFileId) throws Exception {
+		TransactionDBTranslator.getInstance().detachFile(transactionFileId);
 	}
 
 	public void attachFile(TransactionFile file) throws Exception {
@@ -555,142 +623,41 @@ public class TransactionService extends ClanilyService {
 
 	}
 
-	private int findCategoryId(String c, String amount) {
-		int cat = 1;
-		if (!isValid(c)) {
-			return 3;
-		}
-		switch (c) {
-		case "Bank Interest": {
-			cat = 75;
-			break;
-		}
-		case "Gift Income":
-		case "Benefits":
-		case "Extra Income": {
-			cat = 78;
-			break;
-		}
-		case "Borrow": {
-			cat = 7;
-			break;
-		}
-		case "Lend Return": {
-			cat = 6;
-			break;
-		}
-
-		case "Parents Payback":
-		case "Return Income": {
-			cat = 6;
-			break;
-		}
-
-		case "Rental Income": {
-			cat = 76;
-			break;
-		}
-
-		case "Salary": {
-			cat = 77;
-			break;
-		}
-
-		case "Donation": {
-			cat = 59;
-			break;
-		}
-		case "Education": {
-			cat = 60;
-			break;
-		}
-		case "Entertainment": {
-			cat = 61;
-			break;
-
-		}
-		case "Family and Personal": {
-			cat = 62;
-			break;
-		}
-		case "Healthcare": {
-			cat = 63;
-			break;
-		}
-		case "Home Daily Needs": {
-			cat = 64;
-			break;
-		}
-		case "Home Maintenance": {
-			cat = 65;
-			break;
-		}
-		case "Lend": {
-			cat = 5;
-			break;
-		}
-		case "Mobile and Broadband": {
-			cat = 66;
-			break;
-		}
-		case "Outside Food": {
-			cat = 67;
-			break;
-		}
-		case "Parent Expense": {
-			cat = 79;
-			break;
-		}
-		case "Personal Grooming": {
-			cat = 68;
-			break;
-		}
-		case "Rental Expense": {
-			cat = 69;
-			break;
-		}
-		case "Shopping": {
-			cat = 70;
-			break;
-		}
-		case "Subscriptions": {
-			cat = 71;
-			break;
-		}
-		case "Tax and Surcharges": {
-			cat = 72;
-			break;
-		}
-		case "Temp transfer": {
-			float value = Float.parseFloat(amount);
-			if (value < 0) {
-				cat = 4;
-			} else {
-				cat = 3;
-			}
-		}
-		case "Travel":
-		case "Trip": {
-			cat = 73;
-			break;
-		}
-		case "Vehicle Maintenance": {
-			cat = 74;
-			break;
-		}
-
-		default: {
-			float value = Float.parseFloat(amount);
-			if (value < 0) {
-				cat = 1;
-			} else {
-				cat = 2;
-			}
-		}
-
-		}
-
-		return cat;
-	}
-
+	/*
+	 * 
+	 * private int findCategoryId(String c, String amount) { int cat = 1; if
+	 * (!isValid(c)) { return 3; } switch (c) { case "Bank Interest": { cat = 75;
+	 * break; } case "Gift Income": case "Benefits": case "Extra Income": { cat =
+	 * 78; break; } case "Borrow": { cat = 7; break; } case "Lend Return": { cat =
+	 * 6; break; }
+	 * 
+	 * case "Parents Payback": case "Return Income": { cat = 6; break; }
+	 * 
+	 * case "Rental Income": { cat = 76; break; }
+	 * 
+	 * case "Salary": { cat = 77; break; }
+	 * 
+	 * case "Donation": { cat = 59; break; } case "Education": { cat = 60; break; }
+	 * case "Entertainment": { cat = 61; break;
+	 * 
+	 * } case "Family and Personal": { cat = 62; break; } case "Healthcare": { cat =
+	 * 63; break; } case "Home Daily Needs": { cat = 64; break; } case
+	 * "Home Maintenance": { cat = 65; break; } case "Lend": { cat = 5; break; }
+	 * case "Mobile and Broadband": { cat = 66; break; } case "Outside Food": { cat
+	 * = 67; break; } case "Parent Expense": { cat = 79; break; } case
+	 * "Personal Grooming": { cat = 68; break; } case "Rental Expense": { cat = 69;
+	 * break; } case "Shopping": { cat = 70; break; } case "Subscriptions": { cat =
+	 * 71; break; } case "Tax and Surcharges": { cat = 72; break; } case
+	 * "Temp transfer": { float value = Float.parseFloat(amount); if (value < 0) {
+	 * cat = 4; } else { cat = 3; } } case "Travel": case "Trip": { cat = 73; break;
+	 * } case "Vehicle Maintenance": { cat = 74; break; }
+	 * 
+	 * default: { float value = Float.parseFloat(amount); if (value < 0) { cat = 1;
+	 * } else { cat = 2; } }
+	 * 
+	 * }
+	 * 
+	 * return cat; }
+	 * 
+	 */
 }

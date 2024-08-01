@@ -8,7 +8,7 @@ import com.vbl.clanily.backend.vo.search.SearchCriteria;
 
 public interface ClanilyDBOperation {
 
-	public SearchResult search(SearchCriteria search) throws Exception;
+	public <T extends ValueObject> SearchResult<T> search(SearchCriteria search) throws Exception;
 
 	public ValueObject getById(int id) throws Exception;
 

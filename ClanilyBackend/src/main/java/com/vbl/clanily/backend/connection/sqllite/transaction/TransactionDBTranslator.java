@@ -3,6 +3,7 @@ package com.vbl.clanily.backend.connection.sqllite.transaction;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -26,6 +27,7 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 		return thisInstance;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public SearchResult<Transaction> search(SearchCriteria searchCriteria) throws Exception {
 		SearchResult<Transaction> result = new SearchResult<Transaction>();
@@ -353,7 +355,7 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 		return result;
 	}
 
-	public void deleteAttachment(int transactionFileId) throws Exception {
+	public void detachFile(int transactionFileId) throws Exception {
 
 		String query = "delete from TRANSACTION_FILES where TRANSACTION_FILE_ID = " + transactionFileId;
 
@@ -381,9 +383,73 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 
 	}
 
+	@SuppressWarnings("resource")
 	@Override
 	public List<Integer> insertAll(List<ValueObject> values) throws Exception {
-		throw new OperationNotSupportedException("Insert all for transactions is not supported.");
+
+		List<Integer> ids = new ArrayList<Integer>();
+		String query = "INSERT INTO TRANSACTIONS (SUMMARY, TRANSACTION_DATE, CATEGORY_ID, TRANSACTION_TYPE, ACCOUNT_ID, TRANSACTION_AMOUNT, PAYEE_ID, NOTES, PROJECT_ID, TRANSACTION_USER_ID, OBJECTIVE_ID, SPLIT_PARENT_ID, IMPORTED_NOTES, INSERT_TYPE, LOAN_ID, CLEARED, MERGE_PARENT_ID, TRANSFER_TRANSACTION_ID, RECURRENCE_ID, CUSTOM_FIELD_1,CUSTOM_FIELD_2,CUSTOM_FIELD_3, BENEFICIARY_ID, EFFECTIVE_DATE) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		PreparedStatement s = connection.prepareStatement(query);
+
+		// set auto commit as false
+		s.getConnection().setAutoCommit(false);
+
+		try {
+			int rowId = -1;
+			for (ValueObject v : values) {
+				Transaction t = (Transaction) v;
+
+				query = "INSERT INTO TRANSACTIONS (SUMMARY, TRANSACTION_DATE, CATEGORY_ID, TRANSACTION_TYPE, ACCOUNT_ID, TRANSACTION_AMOUNT, PAYEE_ID, NOTES, PROJECT_ID, TRANSACTION_USER_ID, OBJECTIVE_ID, SPLIT_PARENT_ID, IMPORTED_NOTES, INSERT_TYPE, LOAN_ID, CLEARED, MERGE_PARENT_ID, TRANSFER_TRANSACTION_ID, RECURRENCE_ID, CUSTOM_FIELD_1,CUSTOM_FIELD_2,CUSTOM_FIELD_3, BENEFICIARY_ID, EFFECTIVE_DATE) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+				s.setString(1, t.summary);
+				s.setLong(2, t.transactionDate.getTime());
+				s.setInt(3, t.categoryId);
+				s.setString(4, t.transactionType);
+				s.setInt(5, t.accountId);
+				s.setFloat(6, t.transactionAmount);
+				s.setInt(7, t.payeeId);
+				s.setString(8, t.notes);
+				s.setInt(9, t.projectId);
+				s.setString(10, t.transactionUserId);
+				s.setInt(11, t.objectiveId);
+				s.setInt(12, t.splitParentId);
+				s.setString(13, t.importedNotes);
+				s.setString(14, t.insertionType);
+				s.setInt(15, t.loanId);
+				s.setBoolean(16, t.cleared);
+				s.setInt(17, t.mergeParentId);
+				s.setInt(18, t.transferTransactionId);
+				s.setInt(19, t.recurrenceId);
+				s.setString(20, t.customField1);
+				s.setString(21, t.customField1);
+				s.setString(22, t.customField3);
+				s.setInt(23, t.beneficiaryId);
+				s.setLong(24, t.effectiveDate.getTime());
+				s.executeUpdate();
+
+				query = "SELECT MAX(TRANSACTION_ID) AS TRANS_ID FROM TRANSACTIONS ";
+				s = connection.prepareStatement(query);
+				ResultSet rs = s.executeQuery();
+				while (rs.next()) {
+					rowId = rs.getInt("TRANS_ID");
+					break;
+				}
+				ids.add(rowId);
+
+			}
+
+			s.getConnection().commit();
+
+		} catch (Exception e) {
+			s.getConnection().rollback();
+			throw new Exception(e);
+		} finally {
+			s.getConnection().setAutoCommit(true);
+			s.close();
+		}
+
+		return ids;
+
 	}
 
 	public void unmergeTransaction(int transactionId) throws Exception {
@@ -404,6 +470,10 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 			s.executeUpdate();
 		}
 		s.close();
+	}
+
+	public void splitTransaction(int transactionId, List<Transaction> children) throws Exception {
+		return;
 	}
 
 	@Override
@@ -450,7 +520,7 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 	@Override
 	public boolean updateAll(List<ValueObject> values) throws Exception {
 		throw new OperationNotSupportedException("Update all for transactions is not supported.");
-		
+
 	}
 
 	@Override
@@ -464,7 +534,7 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 			result = true;
 		s.close();
 		return result;
-		
+
 	}
 
 	@Override
