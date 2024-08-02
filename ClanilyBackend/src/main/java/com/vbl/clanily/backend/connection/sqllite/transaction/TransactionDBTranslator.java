@@ -210,7 +210,7 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 		}
 		rs1.close();
 	}
-	
+
 	private void amendSplitTransactionIds(Transaction transaction) throws Exception {
 		Statement st1 = connection.createStatement();
 		String query = " SELECT TRANSACTION_ID FROM TRANSACTIONS WHERE SPLIT_PARENT_ID = " + transaction.transactionId;
@@ -550,7 +550,34 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 
 	@Override
 	public boolean deleteAll(List<Integer> ids) throws Exception {
-		throw new OperationNotSupportedException("Delete all for transactions is not supported.");
+		boolean result = false;
+		String query = "DELETE FROM TRANSACTIONS WHERE TRANSACTION_ID = ?";
+		PreparedStatement s = connection.prepareStatement(query);
+
+		// set auto commit as false
+		s.getConnection().setAutoCommit(false);
+
+		try {
+			int rowId = -1;
+			for (Integer id : ids) {
+
+				s.setInt(1, id);
+				s.executeUpdate();
+
+			}
+
+			s.getConnection().commit();
+			result = true;
+
+		} catch (Exception e) {
+			s.getConnection().rollback();
+			throw new Exception(e);
+		} finally {
+			s.getConnection().setAutoCommit(true);
+			s.close();
+		}
+
+		return result;
 	}
 
 }

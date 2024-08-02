@@ -123,7 +123,7 @@ public class TransactionService extends ClanilyService {
 
 			// if this is a child of another parent
 			if (child.splitParentId > 0) {
-				throw new Exception("Cannot split a child of another split parent. New child: " + child.summary);
+				throw new Exception("Cannot split a child of another splitted parent. New child: " + child.summary);
 			}
 
 			if (child.mergeParentId > 0) {
@@ -168,9 +168,9 @@ public class TransactionService extends ClanilyService {
 		if(!parent.hasSplitChildren()) {
 			throw new Exception("Given parent does not have any children to split.");
 		}
-		if(parent.hasMergedChildren()) {
-			throw new Exception("Given parent is already a merged parent.");
-		}
+		
+		TransactionDBTranslator.getInstance().deleteAll(parent.splitTransactionIds);
+		
 	}
 
 	public void detachFile(int transactionFileId) throws Exception {
