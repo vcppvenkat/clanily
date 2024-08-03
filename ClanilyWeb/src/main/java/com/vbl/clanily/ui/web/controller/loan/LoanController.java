@@ -123,11 +123,11 @@ public class LoanController implements ControllerAttributes {
 	}
 	
 	@GetMapping("/viewLoanPage")
-	public ModelAndView viewLoanPage(HttpSession session, ModelAndView mav) {
+	public ModelAndView viewLoanPage(int loanId, HttpSession session, ModelAndView mav) {
 		mav.setViewName("/loans/viewLoan");
 		
 		try {
-			Loan loan = new Loan();
+			Loan loan = (Loan) LoanService.getInstance().getById(loanId);
 			mav.addObject("loan", loan);
 		} catch (Exception e) {
 			mav.setViewName("redirect:/loans/");

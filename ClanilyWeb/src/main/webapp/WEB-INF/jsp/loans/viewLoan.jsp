@@ -4,7 +4,7 @@
 
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib uri="jakarta.tags.core" prefix="c"%>
-<%@page session="true"%>
+<%@page session="true" import="java.math.BigDecimal,java.math.RoundingMode"%>
 
 <html>
 <head>
@@ -35,10 +35,8 @@
 			
 			<div class="row">
                 <div class="col-lg-12 m-b-sm">
-                    <h3>Loan summary goes here <span class="badge badge-success">Active</span></h3>
-                    <span>Loan description goes here. It can grow until 5 rows as maximum supported chars are 1000. Beyond
-                        5 lines, the look and feel will not be good. that is the reason, we have restricted to 4 to 5 lines.
-                        but ideally, users wont type more than 4 to 5 lines.</span>
+                    <h3>${loan.loanSummary}<span class="badge badge-success">${loan.loanStatus}</span></h3>
+                    <span>${loan.description}</span>
                 </div>
 
                 <div class="col-lg-12 m-b-md">
@@ -51,8 +49,9 @@
                 <div class="col-lg-12 m-b-md">
                     <h5>Overall progress of the loan</h5>
                         <div class="progress full progress-striped active">
-                            <div style="width: 90%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="90" role="progressbar" class=" progress-bar progress-bar-success">
-                                90%
+                            <div style="width: ${BigDecimal.valueOf((loan.totalPaid /loan.amount) * 100).setScale(2, RoundingMode.HALF_UP)}%" aria-valuemax="100" aria-valuemin="0" 
+                            	aria-valuenow="${BigDecimal.valueOf((loan.totalPaid /loan.amount) * 100).setScale(2, RoundingMode.HALF_UP)}" role="progressbar" class=" progress-bar progress-bar-success">
+                                ${BigDecimal.valueOf((loan.totalPaid /loan.amount) * 100).setScale(2, RoundingMode.HALF_UP)}%
                             </div>
                         </div>
                 </div>
@@ -65,7 +64,7 @@
                                     <h4>Loan amount</h4>
                                 </div>
                                 <div class="m-t-xl">
-                                    <h3 class="text-info font-bold">1,00,00,00,000</h3>
+                                    <h3 class="text-info font-bold">${loan.amount}</h3>
                                 </div>
                             </div>
                         </div>
@@ -78,7 +77,7 @@
                                 </div>
     
                                 <div class="m-t-xl">
-                                    <h3 class="text-success font-bold">1,00,000</h3>
+                                    <h3 class="text-success font-bold">${loan.totalPaid}</h3>
     
                                 </div>
                             </div>
@@ -92,7 +91,7 @@
                                 </div>
     
                                 <div class="m-t-xl">
-                                    <h3 class="text-danger font-bold">1,00,00,000</h3>
+                                    <h3 class="text-danger font-bold">${loan.totalPending}</h3>
     
                                 </div>
                             </div>
@@ -106,7 +105,7 @@
                                 </div>
     
                                 <div class="m-t-xl">
-                                    <h3 class="text-primary2 font-bold">12-Jul-2024</h3>
+                                    <h3 class="text-primary2 font-bold">${loan.endDate}</h3>
     
                                 </div>
                             </div>
@@ -146,31 +145,31 @@
                                 <tbody>
                                     <tr>
                                         <td>Summary</td>
-                                        <td>This is sample summary</td>
+                                        <td>${loan.loanSummary}</td>
                                     </tr>
                                     <tr>
                                         <td>Start By</td>
-                                        <td>12-Jan-2024</td>
+                                        <td>${loan.startDate}</td>
                                     </tr>
                                     <tr>
                                         <td>End On</td>
-                                        <td>12-Jul-2024</td>
+                                        <td>${loan.endDate}</td>
                                     </tr>
                                     <tr>
                                         <td>Loan Amount</td>
-                                        <td>1,00,00,00,000</td>
+                                        <td>${loan.amount}</td>
                                     </tr>
                                     <tr>
                                         <td>Paid</td>
-                                        <td>1,28,29,080.29</td>
+                                        <td>${loan.totalPaid}</td>
                                     </tr>
                                     <tr>
                                         <td>Remaining</td>
-                                        <td>23,23,43,291.80</td>
+                                        <td>${loan.totalPending}</td>
                                     </tr>
                                     <tr>
                                         <td>Status</td>
-                                        <td>Active</td>
+                                        <td>${loan.loanStatus}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -197,42 +196,15 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>Sample summary of transactions</td>
-                                            <td>12-Dec-2023</td>
-                                            <td class="text-danger">Expense</td>
-                                            <td>18,000</td>
-                                            <td>HDFC</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Sample summary of transactions</td>
-                                            <td>12-Dec-2023</td>
-                                            <td class="text-success">Income</td>
-                                            <td>2,000</td>
-                                            <td>HDFC</td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>Sample summary of transactions</td>
-                                            <td>12-Dec-2023</td>
-                                            <td class="text-success">Income</td>
-                                            <td>2,000</td>
-                                            <td>KOTAK</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Sample summary of transactions</td>
-                                            <td>12-Dec-2023</td>
-                                            <td class="text-success">Income</td>
-                                            <td>2,000</td>
-                                            <td>SBI - Venkat</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Sample summary of transactions</td>
-                                            <td>12-Dec-2023</td>
-                                            <td class="text-danger">Expense</td>
-                                            <td>2,000</td>
-                                            <td>Cash</td>
-                                        </tr>
+                                    	<c:forEach  var="transaction" items="${loan.loanTransactions}">
+                                    		<tr>
+	                                            <td>${transaction.summary}</td>
+	                                            <td>${transaction.transactionDateString}</td>
+	                                            <td>${transaction.transactionType}</td>
+	                                            <td>${transaction.transactionAmount}</td>
+	                                            <td>${transaction.accountName}</td>
+                                        	</tr>
+                                    	</c:forEach>
                                     </tbody>
                                 </table>
                             </div>

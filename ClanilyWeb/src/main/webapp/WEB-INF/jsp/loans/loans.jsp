@@ -66,7 +66,7 @@
 						<div class="hpanel stats">
 							<div class="panel-body h-200">
 								<div class="stats-title pull-left">
-									<a href="/loans/viewLoanPage"><h4>${loan.loanSummary}</h4></a>
+									<a href="/loans/viewLoanPage?loanId=${loan.loanId}"><h4>${loan.loanSummary}</h4></a>
 								</div>
 	
 								<div class="m-t-xl">
