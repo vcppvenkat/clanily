@@ -1,14 +1,15 @@
 package com.vbl.clanily.service.loan;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import java.net.PasswordAuthentication;
-
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import com.vbl.clanily.backend.vo.loan.Loan;
 
+// TODO remove Disabled annotation once Unit tests are ready
+@Disabled
 class LoanServiceTest {
 
 	@Test

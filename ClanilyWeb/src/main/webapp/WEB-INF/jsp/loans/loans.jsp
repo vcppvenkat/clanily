@@ -28,9 +28,6 @@
 		<div class="content">
 
 			<div class="row">
-
-
-
 				<div class="col-lg-12">
 					<div class="col-lg-3">
 						<input class="form-control" type="text" placeholder="Search summary or description">
@@ -38,7 +35,7 @@
 					<div class="col-lg-1">
                     </div>
 					<div class="col-lg-3">
-						<a href="AddLoan.html" class="btn btn-primary">Start a new loan</a>
+						<a href="/loans/loadNewLoanPage" class="btn btn-primary">Start a new loan</a>
 						
 					</div>
 					<div class="col-lg-3">
@@ -69,12 +66,12 @@
 						<div class="hpanel stats">
 							<div class="panel-body h-200">
 								<div class="stats-title pull-left">
-									<a href="ViewLoan.html"><h4>${loan.loanSummary}</h4></a>
+									<a href="/loans/viewLoanPage"><h4>${loan.loanSummary}</h4></a>
 								</div>
 	
 								<div class="m-t-xl">
 									<h3 class="m-b-xs">${loan.amount}</h3>
-									<span class="text-muted no-margins"> ${loan.description} </span>
+									<span class="text-muted no-margins"> ${loan.description != null && loan.description!="" ? loan.description : "-"} </span>
 									
 									<div class="progress m-t-xs full progress-small">
 										<div style="width: ${BigDecimal.valueOf((loan.totalPaid /loan.amount) * 100).setScale(2, RoundingMode.HALF_UP)}%" aria-valuemax="100" aria-valuemin="0"
