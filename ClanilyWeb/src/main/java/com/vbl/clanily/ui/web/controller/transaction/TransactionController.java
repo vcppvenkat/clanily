@@ -502,7 +502,7 @@ public class TransactionController implements ControllerAttributes {
 			if(t == null || t.getTransactionId() == 0)
 				throw new Exception("Invalid transaction!");
 
-			TransactionService.getInstance().deleteAttachment(fileId);
+			TransactionService.getInstance().detachFile(fileId);
 			rad.addFlashAttribute("successMessage", "Attachment saved successfully!");
 		} catch (Exception e) {
 			mav.setViewName("redirect:/transactions/");
@@ -1103,6 +1103,16 @@ public class TransactionController implements ControllerAttributes {
 		}
 
 		SearchResult<Transaction> result = TransactionService.getInstance().search(search);
+		for (Transaction t : result.values()) {
+			List<Integer> mergedTranIds = t.getMergeTransactionIds();
+			if(mergedTranIds != null && !mergedTranIds.isEmpty()) {
+				List<Transaction> mergedTransactions = new ArrayList<>();
+				for(int mergedTranId : mergedTranIds) {
+					mergedTransactions.add(TransactionService.getInstance().getById(mergedTranId));
+				}
+				t.setMergeTransactions(mergedTransactions);
+			}
+		}
 		for (Transaction t : result.values()) {
 			if (!"None".equals(search.currentTransactionGroup)) {
 

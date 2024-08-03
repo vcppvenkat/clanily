@@ -4,6 +4,7 @@
 
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib uri="jakarta.tags.core" prefix="c"%>
+<%@ taglib uri="jakarta.tags.functions" prefix="fn"%>
 <%@page session="true"%>
 
 <html>
@@ -113,51 +114,100 @@
 										<tr class="text-muted font-strikethrough bg-light GroupRow${groupRowCount}" id="">
 									</c:if>
 
-									<td></td>
-									<td><input type="checkbox" /></td>
-									<td><a href="/transactions/viewTransaction?transactionId=${t.transactionId}">${t.summary}</a></td>
-									<c:if test="${search.currentTransactionGroup ne 'Date' }">
-										<td>${t.transactionDateString}</td>
-									</c:if>
-
-									<c:choose>
-										<c:when test="${t.transactionType eq 'Expense'}">
-											<td class="text-danger">${t.transactionAmountString}</td>
-										</c:when>
-										<c:when test="${t.transactionType eq 'Income' }">
-											<td class="text-success">${t.transactionAmountString}</td>
-										</c:when>
-										<c:when test="${t.transactionType eq 'Incoming Transfer' or  t.transactionType eq 'Outgoing Transfer'}">
-											<td class="text-info">${t.transactionAmountString}</td>
-										</c:when>
-									</c:choose>
-
-									<c:if test="${search.currentTransactionGroup ne 'Category' }">
-										<td>${t.categoryName}</td>
-									</c:if>
-
-
-									<td>
-										<div class="btn-group">
-											<a data-toggle="dropdown" class="link dropdown-toggle">...</a>
-											<ul class="dropdown-menu">
-												<li><a href="#">Edit Transaction</a></li>
-												<li><a href="#">Copy and Clone</a></li>
-												<li><a href="#">Mark as Cleared</a></li>
-												<li class="divider"></li>
-												<li><a href="#">Group</a></li>
-												<li><a href="#">Split</a></li>
-												<li class="divider"></li>
-												<li><a href="#">Delete</a></li>
-											</ul>
-										</div>
-									</td>
+										
+										<c:choose>
+											<c:when test="${fn:length(t.mergeTransactions) > 0}">
+												<td><a name="GroupRow-MT-${t.transactionId}" class="GroupRow"><i class="fa fa-minus"></i></a></td>
+											</c:when>
+											<c:otherwise>
+												<td></td>
+											</c:otherwise>
+										</c:choose>
+										<td><input type="checkbox" /></td>
+										<td><a href="/transactions/viewTransaction?transactionId=${t.transactionId}">${t.summary}</a></td>
+										<c:if test="${search.currentTransactionGroup ne 'Date' }">
+											<td>${t.transactionDateString}</td>
+										</c:if>
+	
+										<c:choose>
+											<c:when test="${t.transactionType eq 'Expense'}">
+												<td class="text-danger">${t.transactionAmountString}</td>
+											</c:when>
+											<c:when test="${t.transactionType eq 'Income' }">
+												<td class="text-success">${t.transactionAmountString}</td>
+											</c:when>
+											<c:when test="${t.transactionType eq 'Incoming Transfer' or  t.transactionType eq 'Outgoing Transfer'}">
+												<td class="text-info">${t.transactionAmountString}</td>
+											</c:when>
+										</c:choose>
+	
+										<c:if test="${search.currentTransactionGroup ne 'Category' }">
+											<td>${t.categoryName}</td>
+										</c:if>
+	
+	
+										<td>
+											<div class="btn-group">
+												<a data-toggle="dropdown" class="link dropdown-toggle">...</a>
+												<ul class="dropdown-menu">
+													<li><a href="#">Edit Transaction</a></li>
+													<li><a href="#">Copy and Clone</a></li>
+													<li><a href="#">Mark as Cleared</a></li>
+													<li class="divider"></li>
+													<li><a href="#">Group</a></li>
+													<li><a href="#">Split</a></li>
+													<li class="divider"></li>
+													<li><a href="#">Delete</a></li>
+												</ul>
+											</div>
+										</td>
 									</tr>
 
-
-
-
-
+									<c:if test="${fn:length(t.mergeTransactions) > 0}">
+										<c:forEach items="${t.mergeTransactions}" var="mergedTransaction">
+											<tr class="bg-light GroupRow${groupRowCount} GroupRow-MT-${t.transactionId}">
+												<td></td>
+												<td><input type="checkbox" /></td>
+												<td><a href="/transactions/viewTransaction?transactionId=${t.transactionId}">${mergedTransaction.summary}</a></td>
+												<c:if test="${search.currentTransactionGroup ne 'Date' }">
+													<td>${mergedTransaction.transactionDateString}</td>
+												</c:if>
+			
+												<c:choose>
+													<c:when test="${mergedTransaction.transactionType eq 'Expense'}">
+														<td class="text-danger">${mergedTransaction.transactionAmountString}</td>
+													</c:when>
+													<c:when test="${mergedTransaction.transactionType eq 'Income' }">
+														<td class="text-success">${mergedTransaction.transactionAmountString}</td>
+													</c:when>
+													<c:when test="${mergedTransaction.transactionType eq 'Incoming Transfer' or  mergedTransaction.transactionType eq 'Outgoing Transfer'}">
+														<td class="text-info">${mergedTransaction.transactionAmountString}</td>
+													</c:when>
+												</c:choose>
+			
+												<c:if test="${search.currentTransactionGroup ne 'Category' }">
+													<td>${mergedTransaction.categoryName}</td>
+												</c:if>
+			
+			
+												<td>
+													<div class="btn-group">
+														<a data-toggle="dropdown" class="link dropdown-toggle">...</a>
+														<ul class="dropdown-menu">
+															<li><a href="#">Edit Transaction</a></li>
+															<li><a href="#">Copy and Clone</a></li>
+															<li><a href="#">Mark as Cleared</a></li>
+															<li class="divider"></li>
+															<li><a href="#">Group</a></li>
+															<li><a href="#">Split</a></li>
+															<li class="divider"></li>
+															<li><a href="#">Delete</a></li>
+														</ul>
+													</div>
+												</td>
+											</tr>
+										</c:forEach>
+									</c:if>
 
 
 
