@@ -31,7 +31,7 @@
 								<h2 class="m-b-xs">Categories</h2>
 								<p class="font-bold text-info">Add, edit and view categories</p>
 								<div class="m">
-									<i class="pe-7s-star fa-5x"></i>
+									<i class="fa fa-sitemap fa-5x"></i>
 								</div>
 								<p class="small">Manage your Categories by adding, modifying, view the complete report of a Category, or remove it if you dont need it anymore.</p>
 								<a class="btn btn-primary btn-sm" href="/category/">Manage Categories</a>
@@ -46,7 +46,7 @@
 								<h2 class="m-b-xs">Payees</h2>
 								<p class="font-bold text-info">Manage Payees</p>
 								<div class="m">
-									<i class="pe-7s-science fa-5x"></i>
+									<i class="fa fa-user-secret fa-5x"></i>
 								</div>
 								<p class="small">Manage your payees list by adding, modifying, view the complete report of a payees, or remove it if you dont need it anymore.</p>
 								<a class="btn btn-primary btn-sm" href="/payee/">Manage Payees</a>
@@ -62,7 +62,7 @@
 								<h2 class="m-b-xs">Objectives</h2>
 								<p class="font-bold text-info">Manage objectives</p>
 								<div class="m">
-									<i class="pe-7s-science fa-5x"></i>
+									<i class="pe-7s-target fa-5x"></i>
 								</div>
 								<p class="small">Manage your objectives list by adding, modifying, view the complete report of an objective, or remove it if you dont need it anymore.</p>
 								<a class="btn btn-primary btn-sm" href="/objective/">Manage Objectives</a>
@@ -77,7 +77,7 @@
 								<h2 class="m-b-xs">Beneficiaries</h2>
 								<p class="font-bold text-info">Manage beneficiaries</p>
 								<div class="m">
-									<i class="pe-7s-science fa-5x"></i>
+									<i class="pe-7s-users fa-5x"></i>
 								</div>
 								<p class="small">
 									Beneficiaries are those who actually get benefitted from a transaction. it may be our family members or someone else.	
@@ -87,6 +87,25 @@
 						</div>
 					</div>
 				</div>
+				
+				<div class="col-md-4">
+					<div class="hpanel">
+						<div class="panel-body">
+							<div class="text-center">
+								<h2 class="m-b-xs">User Settings</h2>
+								<p class="font-bold text-info">Manage Users</p>
+								<div class="m">
+									<i class="fa fa-user-o fa-5x"></i>
+								</div>
+								<p class="small">
+									Beneficiaries are those who actually get benefitted from a transaction. it may be our family members or someone else.	
+								</p>
+								<a class="btn btn-primary btn-sm" href="#">Manage Users</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				
 			</div>
 
 
