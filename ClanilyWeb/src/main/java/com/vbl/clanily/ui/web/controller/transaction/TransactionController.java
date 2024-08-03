@@ -1104,6 +1104,16 @@ public class TransactionController implements ControllerAttributes {
 
 		SearchResult<Transaction> result = TransactionService.getInstance().search(search);
 		for (Transaction t : result.values()) {
+			List<Integer> mergedTranIds = t.getMergeTransactionIds();
+			if(mergedTranIds != null && !mergedTranIds.isEmpty()) {
+				List<Transaction> mergedTransactions = new ArrayList<>();
+				for(int mergedTranId : mergedTranIds) {
+					mergedTransactions.add(TransactionService.getInstance().getById(mergedTranId));
+				}
+				t.setMergeTransactions(mergedTransactions);
+			}
+		}
+		for (Transaction t : result.values()) {
 			if (!"None".equals(search.currentTransactionGroup)) {
 
 				switch (search.currentTransactionGroup) {
