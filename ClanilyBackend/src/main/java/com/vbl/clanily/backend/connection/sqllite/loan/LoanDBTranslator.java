@@ -4,12 +4,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import com.vbl.clanily.backend.connection.ClanilyDBOperation;
 import com.vbl.clanily.backend.connection.sqllite.AbstractSqlLiteOperationManager;
-import com.vbl.clanily.backend.connection.sqllite.account.AccountDBTranslator;
 import com.vbl.clanily.backend.connection.sqllite.transaction.TransactionDBTranslator;
 import com.vbl.clanily.backend.vo.ValueObject;
 import com.vbl.clanily.backend.vo.loan.Loan;
@@ -31,12 +29,18 @@ public class LoanDBTranslator extends AbstractSqlLiteOperationManager implements
 
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public SearchResult<Loan> search(SearchCriteria searchCriteria) throws Exception {
 		SearchResult<Loan> result = new SearchResult<Loan>();
 		Loan l = null;
 		LoanSearchCriteria search = (LoanSearchCriteria) searchCriteria;
-		String query = "SELECT * FROM LOANS WHERE 1 = 1 ";
+		if (!isValid(search.loanType))
+			search.loanType = "Borrow";
+
+		String query = "SELECT LOANS.*, ";
+		query += getSumOfTransactionsSubQueryString(search.loanType);
+		query += " FROM LOANS WHERE 1 = 1 ";
 		if (!search.includeInternal) {
 			query += " AND INTERNAL = '0' ";
 		} else {
@@ -57,11 +61,14 @@ public class LoanDBTranslator extends AbstractSqlLiteOperationManager implements
 			query += " AND LOAN_STATUS = '" + search.loanStatus + "' ";
 		}
 
+		System.out.println(query);
+
 		Statement st = connection.createStatement();
 		ResultSet rs = st.executeQuery(query);
 
 		while (rs.next()) {
 			l = copyLoan(null, rs);
+
 			result.add(l);
 		}
 		rs.close();
@@ -69,10 +76,23 @@ public class LoanDBTranslator extends AbstractSqlLiteOperationManager implements
 		return result;
 	}
 
+	private String getSumOfTransactionsSubQueryString(String loanType) {
+		String transactionType = "";
+		if ("Borrow".equals(loanType))
+			transactionType = "Income";
+		else if ("Lend".equals(loanType))
+			transactionType = "Expense";
+		return " (SELECT SUM(TRANSACTION_AMOUNT) FROM TRANSACTIONS WHERE TRANSACTIONS.LOAN_ID = LOANS.LOAN_ID AND TRANSACTION_TYPE = '"
+				+ transactionType + "') AS LOAN_AMOUNT, "
+				+ " (SELECT SUM(ABS(TRANSACTION_AMOUNT)) FROM TRANSACTIONS WHERE  TRANSACTIONS.LOAN_ID = LOANS.LOAN_ID AND TRANSACTIONS.TRANSACTION_TYPE = '"
+				+ transactionType + "' ) AS TOTAL_PAID ";
+	}
+
 	public SearchResult<Loan> getAllBorrowedLoans() throws Exception {
 		SearchResult<Loan> result = new SearchResult<Loan>();
 		Loan l = null;
-		String query = "SELECT * FROM LOANS WHERE LOAN_TYPE = 'Borrow'";
+		String query = "SELECT LOANS.*, " + getSumOfTransactionsSubQueryString("Borrow")
+				+ " FROM LOANS WHERE LOAN_TYPE = 'Borrow' ";
 
 		Statement st = connection.createStatement();
 		ResultSet rs = st.executeQuery(query);
@@ -89,7 +109,8 @@ public class LoanDBTranslator extends AbstractSqlLiteOperationManager implements
 	public SearchResult<Loan> getAllLentLoans() throws Exception {
 		SearchResult<Loan> result = new SearchResult<Loan>();
 		Loan l = null;
-		String query = "SELECT * FROM LOANS WHERE LOAN_TYPE = 'Lend'";
+		String query = "SELECT LOANS.*, " + getSumOfTransactionsSubQueryString("Lend")
+				+ " FROM LOANS WHERE LOAN_TYPE = 'Lend' ";
 
 		Statement st = connection.createStatement();
 		ResultSet rs = st.executeQuery(query);
@@ -107,7 +128,7 @@ public class LoanDBTranslator extends AbstractSqlLiteOperationManager implements
 	public Loan getById(int id) throws Exception {
 		Loan l = null;
 		Statement st = connection.createStatement();
-		String query = "SELECT * FROM LOANS WHERE LOAN_ID = " + id;
+		String query = "SELECT * FROM LOANS WHERE LOAN_ID =  " + id;
 
 		ResultSet rs = st.executeQuery(query);
 
@@ -160,7 +181,7 @@ public class LoanDBTranslator extends AbstractSqlLiteOperationManager implements
 	public int insert(ValueObject value) throws Exception {
 		int pk = -1;
 		Loan loan = (Loan) value;
-		String query = "INSERT INTO LOANS (SUMMARY, START_DATE, END_DATE, NO_END_DATE, LOAN_TYPE, AMOUNT, LOAN_STATUS, DESCRIPTION, PAYEE_ID, INTEREST_PER_ANUM, CREATED_TS, INTERNAL) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+		String query = "INSERT INTO LOANS (SUMMARY, START_DATE, END_DATE, NO_END_DATE, LOAN_TYPE, LOAN_STATUS, DESCRIPTION, PAYEE_ID, INTEREST_PER_ANUM, CREATED_TS, INTERNAL) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
 
 		PreparedStatement s = connection.prepareStatement(query);
 		s.setString(1, loan.loanSummary);
@@ -168,7 +189,6 @@ public class LoanDBTranslator extends AbstractSqlLiteOperationManager implements
 		s.setLong(3, loan.endDate);
 		s.setBoolean(4, loan.noEndDate);
 		s.setString(5, loan.loanType);
-		s.setFloat(6, loan.amount);
 		s.setString(7, loan.loanStatus);
 		s.setString(8, loan.description);
 		s.setInt(9, loan.payeeId);
@@ -199,7 +219,7 @@ public class LoanDBTranslator extends AbstractSqlLiteOperationManager implements
 	@Override
 	public boolean update(ValueObject value) throws Exception {
 		Loan loan = (Loan) value;
-		String query = "UPDATE LOANS SET SUMMARY = ?, START_DATE = ?, END_DATE=?, NO_END_DATE=? , AMOUNT = ?, DESCRIPTION=?, PAYEE_ID=?, INTEREST_PER_ANUM=? WHERE LOAN_ID=?";
+		String query = "UPDATE LOANS SET SUMMARY = ?, START_DATE = ?, END_DATE=?, NO_END_DATE=? ,  DESCRIPTION=?, PAYEE_ID=?, INTEREST_PER_ANUM=? WHERE LOAN_ID=?";
 		boolean result = false;
 
 		PreparedStatement stmt = connection.prepareStatement(query);
@@ -207,7 +227,6 @@ public class LoanDBTranslator extends AbstractSqlLiteOperationManager implements
 		stmt.setLong(2, loan.startDate);
 		stmt.setLong(3, loan.endDate);
 		stmt.setBoolean(4, loan.noEndDate);
-		stmt.setFloat(5, loan.amount);
 		stmt.setString(6, loan.description);
 		stmt.setInt(7, loan.payeeId);
 		stmt.setFloat(8, loan.interestPerAnum);
@@ -300,28 +319,18 @@ public class LoanDBTranslator extends AbstractSqlLiteOperationManager implements
 		return result;
 	}
 
-	public float getTotalPaidByBorrowedLoan(int loanId) throws Exception {
+	public float getTotalPaid(int loanId) throws Exception {
 		float sum = 0.0f;
+		Loan loan = getById(loanId);
+		String transactionType = "";
+		if ("Borrow".equals(loan.loanType))
+			transactionType = "Income";
+		else if ("Lend".equals(loan.loanType))
+			transactionType = "Expense";
 		Statement st = connection.createStatement();
-		String query = " SELECT SUM(ABS(TRANSACTION_AMOUNT)) AS SUM_OF_TRX FROM TRANSACTIONS WHERE TRANSACTION_TYPE = 'Expense' AND LOAN_ID = "
-				+ loanId;
-		ResultSet rs = st.executeQuery(query);
 
-		while (rs.next()) {
-			sum = rs.getFloat("SUM_OF_TRX");
-			break;
-		}
-
-		rs.close();
-
-		return sum;
-	}
-
-	public float getTotalPaidByLentLoan(int loanId) throws Exception {
-		float sum = 0.0f;
-		Statement st = connection.createStatement();
-		String query = " SELECT SUM(ABS(TRANSACTION_AMOUNT) )AS SUM_OF_TRX FROM TRANSACTIONS WHERE TRANSACTION_TYPE = 'Income' AND LOAN_ID = "
-				+ loanId;
+		String query = " SELECT SUM(ABS(TRANSACTION_AMOUNT)) AS SUM_OF_TRX FROM TRANSACTIONS WHERE TRANSACTION_TYPE = "
+				+ transactionType + " AND LOAN_ID = " + loanId;
 		ResultSet rs = st.executeQuery(query);
 
 		while (rs.next()) {

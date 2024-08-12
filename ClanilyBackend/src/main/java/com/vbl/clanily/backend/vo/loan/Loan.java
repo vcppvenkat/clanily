@@ -22,6 +22,42 @@ public class Loan implements ValueObject {
 	public boolean internal;
 	public long createdTs;
 	public float totalPaid;
+	public List<Integer> sourceTransactionIds;
+	public List<Integer> repaymentTransactionIds;
+
+	public void addRepaymentTransactionId(int id) {
+		if (this.repaymentTransactionIds == null)
+			this.repaymentTransactionIds = new ArrayList<Integer>();
+
+		this.repaymentTransactionIds.add(id);
+	}
+
+	public List<Integer> getRepaymentTransactionIds() {
+		return repaymentTransactionIds;
+	}
+
+	public void setRepaymentTransactionIds(List<Integer> repaymentTransactionIds) {
+		this.repaymentTransactionIds = repaymentTransactionIds;
+	}
+
+	public float getTotalRemaining() {
+		return amount - totalPaid;
+	}
+
+	public void addSourceTransctionId(int transactionId) {
+		if (this.sourceTransactionIds == null)
+			this.sourceTransactionIds = new ArrayList<Integer>();
+
+		this.sourceTransactionIds.add(transactionId);
+	}
+
+	public List<Integer> getSourceTransactionIds() {
+		return sourceTransactionIds;
+	}
+
+	public void setSourceTransactionIds(List<Integer> sourceTransactionIds) {
+		this.sourceTransactionIds = sourceTransactionIds;
+	}
 
 	public List<Transaction> loanTransactions = new ArrayList<Transaction>();
 

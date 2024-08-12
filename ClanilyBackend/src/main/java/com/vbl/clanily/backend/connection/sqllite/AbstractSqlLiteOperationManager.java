@@ -71,7 +71,13 @@ public abstract class AbstractSqlLiteOperationManager extends AbstractSqlLiteMan
 		l.endDate = rs.getLong("END_DATE");
 		l.noEndDate = rs.getBoolean("NO_END_DATE");
 		l.loanType = rs.getString("LOAN_TYPE");
-		l.amount = rs.getFloat("AMOUNT");
+		try {
+			l.amount = rs.getFloat("LOAN_AMOUNT");
+			l.totalPaid = rs.getFloat("TOTAL_PAID");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		l.loanStatus = rs.getString("LOAN_STATUS");
 		l.description = rs.getString("DESCRIPTION");
 		l.payeeId = rs.getInt("PAYEE_ID");
