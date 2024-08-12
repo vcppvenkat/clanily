@@ -18,8 +18,9 @@ public class BeneficiaryService extends ClanilyService {
 		return thisInstance;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public SearchResult<Beneficiary> search(SearchCriteria search) throws Exception {
+	public SearchResult search(SearchCriteria search) throws Exception {
 		return BeneficiaryDBTranslator.getInstance().search(search);
 	}
 

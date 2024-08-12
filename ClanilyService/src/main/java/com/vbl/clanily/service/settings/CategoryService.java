@@ -17,8 +17,9 @@ public class CategoryService extends ClanilyService {
 		return thisInstance;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public SearchResult<Category> search(SearchCriteria search) throws Exception {
+	public SearchResult search(SearchCriteria search) throws Exception {
 
 		if (search == null) {
 			throw new Exception("Search criteria is null");

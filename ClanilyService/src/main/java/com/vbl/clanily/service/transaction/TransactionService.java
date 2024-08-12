@@ -202,8 +202,9 @@ public class TransactionService extends ClanilyService {
 		TransactionDBTranslator.getInstance().attachFile(file);
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public SearchResult<Transaction> search(SearchCriteria search) throws Exception {
+	public SearchResult search(SearchCriteria search) throws Exception {
 		if (search != null) {
 			TransactionSearchCriteria t = (TransactionSearchCriteria) search;
 			if (isValid(t.currentTransactionGroup)) {

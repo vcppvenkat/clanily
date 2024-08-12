@@ -41,8 +41,9 @@ public class AccountService extends ClanilyService {
 		return AccountDBTranslator.getInstance().update(account);
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public SearchResult<Account> search(SearchCriteria search) throws Exception {
+	public SearchResult search(SearchCriteria search) throws Exception {
 		return AccountDBTranslator.getInstance().search(search);
 	}
 

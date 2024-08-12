@@ -25,11 +25,12 @@ public class LoanService extends ClanilyService {
 
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public SearchResult<Loan> search(SearchCriteria search) throws Exception {
-		SearchResult<Loan> loans = LoanDBTranslator.getInstance().search(search);
+	public SearchResult search(SearchCriteria search) throws Exception {
+		return LoanDBTranslator.getInstance().search(search);
 
-		return loans;
+		// return (SearchResult<ValueObject>) loans;
 	}
 
 	@Override
