@@ -169,7 +169,7 @@
                 <li>
                     <a href="events.html">
                         <span class="nav-label">Events</span>
-                      </a>
+                    </a>
                 </li>
                 <li class="active">
                     <a href="loans.html">
@@ -211,10 +211,12 @@
             <div class="row">
                 <div class="col-lg-12 m-b-sm">
                     <h3>Loan summary goes here <span class="badge badge-success">Active</span></h3>
-                    <span>Loan description goes here. It can grow until 5 rows as maximum supported chars are 1000. Beyond
-                        5 lines, the look and feel will not be good. that is the reason, we have restricted to 4 to 5 lines.
+                    <span>Loan description goes here. It can grow until 5 rows as maximum supported chars are 1000.
+                        Beyond
+                        5 lines, the look and feel will not be good. that is the reason, we have restricted to 4 to 5
+                        lines.
                         but ideally, users wont type more than 4 to 5 lines.</span>
-    
+
                 </div>
 
 
@@ -228,13 +230,14 @@
 
                 <div class="col-lg-12 m-b-md">
                     <h5>Overall progress of the loan</h5>
-                        <div class="progress full progress-striped active">
-                            <div style="width: 90%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="90" role="progressbar" class=" progress-bar progress-bar-success">
-                                90%
-                            </div>
+                    <div class="progress full progress-striped active">
+                        <div style="width: 90%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="90"
+                            role="progressbar" class=" progress-bar progress-bar-success">
+                            90%
                         </div>
+                    </div>
 
-                    
+
                 </div>
 
 
@@ -245,10 +248,10 @@
                                 <div class="stats-title pull-left">
                                     <h4>Loan amount</h4>
                                 </div>
-    
+
                                 <div class="m-t-xl">
                                     <h3 class="text-info font-bold">1,00,00,00,000</h3>
-    
+
                                 </div>
                             </div>
                         </div>
@@ -259,10 +262,10 @@
                                 <div class="stats-title pull-left">
                                     <h4>Paid</h4>
                                 </div>
-    
+
                                 <div class="m-t-xl">
                                     <h3 class="text-success font-bold">1,00,000</h3>
-    
+
                                 </div>
                             </div>
                         </div>
@@ -273,10 +276,10 @@
                                 <div class="stats-title pull-left">
                                     <h4>Pending</h4>
                                 </div>
-    
+
                                 <div class="m-t-xl">
                                     <h3 class="text-danger font-bold">1,00,00,000</h3>
-    
+
                                 </div>
                             </div>
                         </div>
@@ -287,23 +290,23 @@
                                 <div class="stats-title pull-left">
                                     <h4>Repayment By</h4>
                                 </div>
-    
+
                                 <div class="m-t-xl">
                                     <h3 class="text-primary2 font-bold">12-Jul-2024</h3>
-    
+
                                 </div>
                             </div>
                         </div>
                     </div>
-    
-    
+
+
                 </div>
-                
+
 
                 <div class="col-lg-12">
                     <div class="hpanel">
                         <div class="panel-heading">
-                            Repayment 
+                            Repayment
                         </div>
                         <div class="panel-body">
                             <div>
@@ -312,18 +315,18 @@
                         </div>
                     </div>
                 </div>
-                
+
 
             </div>
-           
-
-            
 
 
 
 
 
-            
+
+
+
+
             <div class="row">
 
                 <div class="col-lg-4">
@@ -382,6 +385,11 @@
                     <div class="hpanel">
                         <div class="panel-heading">
                             Transaction list
+                            <div class="pull-right">
+                                <a class="btn btn-primary2 btn-xs" href="#">Group</a>
+                                <a class="btn btn-primary2 btn-outline btn-xs" href="#">List</a>
+                            </div>
+
                         </div>
                         <div class="panel-body">
                             <div class="table-responsive">
@@ -458,13 +466,13 @@
 
     <!-- Vendor scripts -->
     <script src="vendor/jquery/dist/jquery.min.js"></script>
-<script src="vendor/jquery-ui/jquery-ui.min.js"></script>
-<script src="vendor/slimScroll/jquery.slimscroll.min.js"></script>
-<script src="vendor/bootstrap/dist/js/bootstrap.min.js"></script>
-<script src="vendor/metisMenu/dist/metisMenu.min.js"></script>
-<script src="vendor/iCheck/icheck.min.js"></script>
-<script src="vendor/chartjs/Chart.min.js"></script>
-<script src="vendor/sparkline/index.js"></script>
+    <script src="vendor/jquery-ui/jquery-ui.min.js"></script>
+    <script src="vendor/slimScroll/jquery.slimscroll.min.js"></script>
+    <script src="vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="vendor/metisMenu/dist/metisMenu.min.js"></script>
+    <script src="vendor/iCheck/icheck.min.js"></script>
+    <script src="vendor/chartjs/Chart.min.js"></script>
+    <script src="vendor/sparkline/index.js"></script>
 
     <!-- App scripts -->
     <script src="scripts/homer.js"></script>
@@ -472,16 +480,16 @@
     <script>
 
         $(function () {
-    
-    
+
+
             /**
              * Options for Line chart
              */
-    
+
             var lineData = {
                 labels: ["January", "February", "March", "April", "May", "June", "July"],
                 datasets: [
-    
+
                     {
                         label: "Dt 1",
                         backgroundColor: 'rgba(98,203,49, 0.5)',
@@ -505,14 +513,14 @@
                     }
                 ]
             };
-    
+
             var lineOptions = {
                 responsive: true
             };
-    
+
             var ctx = document.getElementById("lineOptions").getContext("2d");
-            new Chart(ctx, {type: 'line', data: lineData, options:lineOptions});
-    
+            new Chart(ctx, { type: 'line', data: lineData, options: lineOptions });
+
             /**
              * Options for Sharp Line chart
              */
@@ -532,25 +540,25 @@
                     }
                 ]
             };
-    
+
             var sharpLineOptions = {
                 responsive: true,
                 legend: {
                     display: false
                 }
             };
-    
+
             var ctx = document.getElementById("sharpLineOptions").getContext("2d");
-            new Chart(ctx, {type: 'line', data: sharpLineData, options:sharpLineOptions});
-    
-    
+            new Chart(ctx, { type: 'line', data: sharpLineData, options: sharpLineOptions });
+
+
             /**
              * Options for Bar chart
              */
             var barOptions = {
-                responsive:true
+                responsive: true
             };
-    
+
             /**
              * Data for Bar chart
              */
@@ -577,20 +585,20 @@
                     }
                 ]
             };
-    
+
             var ctx = document.getElementById("barOptions").getContext("2d");
-            new Chart(ctx, {type: 'bar', data: barData, options:barOptions});
-    
+            new Chart(ctx, { type: 'bar', data: barData, options: barOptions });
+
             /**
              * Options for Bar chart
              */
             var singleBarOptions = {
-                responsive:true,
+                responsive: true,
                 legend: {
                     display: true
                 }
             };
-    
+
             /**
              * Data for Bar chart
              */
@@ -608,11 +616,11 @@
                     }
                 ]
             };
-    
+
             var ctx = document.getElementById("singleBarOptions").getContext("2d");
-            new Chart(ctx, {type: 'bar', data: singleBarData, options:singleBarOptions});
-    
-    
+            new Chart(ctx, { type: 'bar', data: singleBarData, options: singleBarOptions });
+
+
             var polarData = {
                 datasets: [{
                     data: [
@@ -633,16 +641,16 @@
                     "Luna"
                 ]
             }
-    
+
             var polarOptions = {
                 responsive: true
-    
+
             };
-    
+
             var ctx = document.getElementById("polarOptions").getContext("2d");
-            new Chart(ctx, {type: 'polarArea', data: polarData, options:polarOptions});
-    
-    
+            new Chart(ctx, { type: 'polarArea', data: polarData, options: polarOptions });
+
+
             var doughnutData = {
                 labels: [
                     "App",
@@ -664,15 +672,15 @@
                         ]
                     }]
             }
-    
-    
+
+
             var doughnutOptions = {
                 responsive: true
             };
-    
+
             var ctx = document.getElementById("doughnutChart").getContext("2d");
-            new Chart(ctx, {type: 'doughnut', data: doughnutData, options:doughnutOptions});
-    
+            new Chart(ctx, { type: 'doughnut', data: doughnutData, options: doughnutOptions });
+
             var radarData = {
                 labels: ["Eating", "Drinking", "Sleeping", "Designing", "Coding", "Cycling", "Running"],
                 datasets: [
@@ -700,16 +708,16 @@
                     }
                 ]
             };
-    
+
             var radarOptions = {
                 responsive: true
             };
-    
-    
+
+
             var ctx = document.getElementById("radarChart").getContext("2d");
-            new Chart(ctx, {type: 'radar', data: radarData, options:radarOptions});
+            new Chart(ctx, { type: 'radar', data: radarData, options: radarOptions });
         });
-    
+
     </script>
 
 </body>

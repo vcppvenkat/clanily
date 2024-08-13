@@ -29,14 +29,11 @@ public class LoanService extends ClanilyService {
 	@Override
 	public SearchResult search(SearchCriteria search) throws Exception {
 		return LoanDBTranslator.getInstance().search(search);
-
-		// return (SearchResult<ValueObject>) loans;
 	}
 
 	@Override
 	public ValueObject getById(int id) throws Exception {
 		Loan loan = LoanDBTranslator.getInstance().getById(id);
-
 		return loan;
 	}
 
