@@ -75,6 +75,8 @@ public abstract class AbstractSqlLiteOperationManager extends AbstractSqlLiteMan
 			l.amount = rs.getFloat("LOAN_AMOUNT");
 			l.totalPaid = rs.getFloat("TOTAL_PAID");
 		} catch (Exception e) {
+			l.totalPaid = 0;
+			l.amount = 0;
 			e.printStackTrace();
 		}
 

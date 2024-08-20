@@ -69,6 +69,7 @@ public class LoanDBTranslator extends AbstractSqlLiteOperationManager implements
 		while (rs.next()) {
 			l = copyLoan(null, rs);
 
+			
 			result.add(l);
 		}
 		rs.close();

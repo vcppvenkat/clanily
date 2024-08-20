@@ -44,19 +44,7 @@ public class LoanController implements ControllerAttributes {
 		
 		mav.addObject("values", result.values());
 				
-		
-		//TODO remove this hardcoded values once we get data from service 
-//		Loan loan1 = new Loan();
-//		loan1.loanSummary = "MURUGAN HOUSE CONTRUCTION - 2019";
-//		loan1.amount = 75000;
-//		loan1.totalPaid = 69000;
-//		
-//		Loan loan2 = new Loan();
-//		loan2.loanSummary = "LOAN FROM PARENTS - JAN 2024";
-//		loan2.amount = 114000;
-//		loan2.totalPaid = 34000;
-//		mav.addObject("values", Arrays.asList(loan1, loan2, loan1, loan2 , loan1));
-		
+
 		
 		session.setAttribute(SEARCH_CRITERIA, search);
 		session.setAttribute(THIS_PAGE, "loan");
