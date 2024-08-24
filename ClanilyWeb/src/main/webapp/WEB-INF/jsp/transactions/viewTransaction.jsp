@@ -158,10 +158,12 @@
 								</tbody>
 							</table>
 						</div>
+						<c:if test="${transaction.importedNotes ne null }">
 						<div class="panel-heading">
 							<h6 class="font-bold">Original Notes</h6>
 							<small class="text-muted">${transaction.importedNotes } </small>
 						</div>
+						</c:if>
 					</div>
 				</div>
 
@@ -169,6 +171,7 @@
 					<div class="col-lg-12">
 						<div class="hpanel">
 
+							<c:if test="${not transaction.hasSplitChildren }">
 							<div class="panel-heading">
 								<h5 class="font-bold">Group transactions</h5>
 								<div class="hr-line-solid"></div>
@@ -208,6 +211,10 @@
 									</tfoot>
 								</table>
 							</div>
+							</c:if>
+							<c:if test="${not transaction.hasMergedChildren }">
+							
+							
 							<div class="panel-heading">
 								<h5 class="font-bold">Split transactions</h5>
 								<div class="hr-line-solid"></div>
@@ -216,6 +223,8 @@
 								<a class="btn btn-primary2 btn-outline btn-sm" href="#">Split
 									transaction</a>
 							</div>
+							
+							</c:if>
 
 							<div class="panel-heading">
 								<h4 class="font-bold">

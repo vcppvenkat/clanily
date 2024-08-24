@@ -92,14 +92,16 @@ public class Transaction implements ValueObject {
 	public String beneficiaryName;
 
 	public int beneficiaryId;
+	
+	
 
 	public List<TransactionFile> transactionFilesMetaData;
 
-	public boolean hasMergedChildren() {
+	public boolean isHasMergedChildren() {
 		return (mergeTransactionIds != null && !mergeTransactionIds.isEmpty());
 	}
 
-	public boolean hasSplitChildren() {
+	public boolean isHasSplitChildren() {
 		return (splitTransactionIds != null && !splitTransactionIds.isEmpty());
 	}
 

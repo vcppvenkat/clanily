@@ -49,9 +49,7 @@ public class ImportTransactionController implements ControllerAttributes {
 		try {
 			String extension = FilenameUtils.getExtension(transactionFile.getOriginalFilename());
 
-			if (!"csv".equalsIgnoreCase(extension)) {
-				throw new Exception("Please upload only CSV file");
-			}
+			
 
 			//File convertedFile = new File(transactionFile.getOriginalFilename());
 			File convertedFile = new File("/Users/venkat/Downloads/transaction export/transactions_export_hdfc.csv");

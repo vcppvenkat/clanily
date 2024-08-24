@@ -44,7 +44,7 @@ public class TransactionService extends ClanilyService {
 		if (parent == null)
 			throw new Exception("Invalid parent transaction id: " + parentTransactionId);
 
-		if (!parent.hasMergedChildren()) {
+		if (!parent.isHasMergedChildren()) {
 			for (int childId : parent.mergeTransactionIds) {
 				Transaction child = TransactionDBTranslator.getInstance().getById(childId);
 				if (child != null) {
@@ -130,11 +130,11 @@ public class TransactionService extends ClanilyService {
 				throw new Exception("Cannot split a child of another merged parent. New child: " + child.summary);
 			}
 
-			if (child.hasMergedChildren()) {
+			if (child.isHasMergedChildren()) {
 				throw new Exception("An already merged parent cannot become child. Existing parent: " + child.summary);
 			}
 
-			if (child.hasSplitChildren()) {
+			if (child.isHasSplitChildren()) {
 				throw new Exception("An already split parent cannot become child. Existing parent: " + child.summary);
 			}
 
@@ -165,7 +165,7 @@ public class TransactionService extends ClanilyService {
 			throw new Exception("Invalid input. Given parent id does not exist: Parent Id: " + parentId);
 		}
 		
-		if(!parent.hasSplitChildren()) {
+		if(!parent.isHasSplitChildren()) {
 			throw new Exception("Given parent does not have any children to split.");
 		}
 		

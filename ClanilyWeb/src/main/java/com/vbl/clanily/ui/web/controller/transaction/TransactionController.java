@@ -466,9 +466,7 @@ public class TransactionController implements ControllerAttributes {
 			t = TransactionService.getInstance().getById(transactionId);
 			String extension = FilenameUtils.getExtension(inputFile.getOriginalFilename());
 
-			if (!"txt".equalsIgnoreCase(extension)) {
-				throw new Exception("Please upload only CSV file");
-			}
+			
 
 			byte[] fileData = inputFile.getBytes();
 			String fileDataStr = new String(fileData);
