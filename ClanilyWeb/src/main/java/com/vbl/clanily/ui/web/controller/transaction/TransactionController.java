@@ -9,6 +9,10 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.io.FilenameUtils;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,9 +32,6 @@ import com.vbl.clanily.backend.vo.search.ObjectiveSearchCriteria;
 import com.vbl.clanily.backend.vo.search.PayeeSearchCriteria;
 import com.vbl.clanily.backend.vo.search.TransactionSearchCriteria;
 import com.vbl.clanily.backend.vo.settings.Category;
-import com.vbl.clanily.backend.vo.settings.Objective;
-import com.vbl.clanily.backend.vo.settings.Payee;
-import com.vbl.clanily.backend.vo.settings.User;
 import com.vbl.clanily.backend.vo.transaction.Transaction;
 import com.vbl.clanily.backend.vo.transaction.TransactionFile;
 import com.vbl.clanily.service.account.AccountService;
@@ -69,9 +70,14 @@ public class TransactionController implements ControllerAttributes {
 		TransactionSearchCriteria search = (TransactionSearchCriteria) getSearchCriteria(session);
 
 		try {
+			// add accounts and group
 			List<AccountDisplayUnit> accountDisplayUnits = extractAccountsAndGroups(search);
 			mav.addObject("units", accountDisplayUnits);
+			
+			// add transactions
 			SearchResult<Transaction> result = getTransactions(search);
+			
+			
 			mav.addObject("transactions", result.values());
 
 		} catch (Exception e) {
@@ -121,24 +127,24 @@ public class TransactionController implements ControllerAttributes {
 			mav.addObject("transferCategories", categorySearchResult.values());
 
 			// load accounts
-			SearchResult<Account> accounts = AccountService.getInstance().search(new AccountSearchCriteria());
+			SearchResult<?> accounts = AccountService.getInstance().search(new AccountSearchCriteria());
 			mav.addObject("accounts", accounts.values());
 
 			// load users
-			SearchResult<User> users = UserService.getInstance().search(null);
+			SearchResult<?> users = UserService.getInstance().search(null);
 			mav.addObject("users", users.values());
 
 			// load objective
 			ObjectiveSearchCriteria objectiveSearchCriteria = new ObjectiveSearchCriteria();
 			objectiveSearchCriteria.includeInternal = true;
-			SearchResult<Objective> objectiveSearchResult = ObjectiveService.getInstance()
+			SearchResult<?> objectiveSearchResult = ObjectiveService.getInstance()
 					.search(objectiveSearchCriteria);
 			mav.addObject("objectives", objectiveSearchResult.values());
 
 			// load payee
 			PayeeSearchCriteria payeeSearchCriteria = new PayeeSearchCriteria();
 			payeeSearchCriteria.includeInternal = true;
-			SearchResult<Payee> payeeSearchResult = PayeeService.getInstance().search(payeeSearchCriteria);
+			SearchResult<?> payeeSearchResult = PayeeService.getInstance().search(payeeSearchCriteria);
 			mav.addObject("payees", payeeSearchResult.values());
 
 		} catch (Exception e) {
@@ -177,14 +183,14 @@ public class TransactionController implements ControllerAttributes {
 		Transaction t = null;
 		try {
 			t = TransactionService.getInstance().getById(transactionId);
-			List<Integer> associatedGroupTrantractionIds = t.getMergeTransactionIds();
-			List<Transaction> associatedGroupTransactions = null;
-			if (associatedGroupTrantractionIds != null && !associatedGroupTrantractionIds.isEmpty()) {
-				associatedGroupTransactions = new ArrayList<>();
-				for (int groupTransactionId : associatedGroupTrantractionIds) {
-					associatedGroupTransactions.add(TransactionService.getInstance().getById(groupTransactionId));
+			List<Integer> associatedMergeTrantractionIds = t.getMergeTransactionIds();
+			List<Transaction> associatedMergeTransactions = null;
+			if (associatedMergeTrantractionIds != null && !associatedMergeTrantractionIds.isEmpty()) {
+				associatedMergeTransactions = new ArrayList<>();
+				for (int groupTransactionId : associatedMergeTrantractionIds) {
+					associatedMergeTransactions.add(TransactionService.getInstance().getById(groupTransactionId));
 				}
-				t.setMergeTransactions(associatedGroupTransactions);
+				t.setMergeTransactions(associatedMergeTransactions);
 			}
 			mav.addObject("attachment", new TransactionFile());
 
@@ -232,52 +238,54 @@ public class TransactionController implements ControllerAttributes {
 			float groupedTransactionsRemainingAmount = t.getTransactionAmount() + sumOfGroupedTransactionAmount;
 			mav.addObject("sumOfGroupedTransactionAmount", sumOfGroupedTransactionAmount);
 			mav.addObject("groupedTransactionsRemainingAmount", groupedTransactionsRemainingAmount);
-			mav.addObject("groupedTransactionsRemainingSummary", "Unknown " + (groupedTransactionsRemainingAmount>=0 ? "Income" : "Expense"));
+			mav.addObject("groupedTransactionsRemainingSummary",
+					"Unknown " + (groupedTransactionsRemainingAmount >= 0 ? "Income" : "Expense"));
 			mav.addObject("groupedTransactionsRemainingDate", "28-07-2024");
 
 			List<Transaction> filteredSearchResultTransactions = new ArrayList<>();
-			if(SEARCH_GROUP_TRANS_RESULT_FLAG.equals(session.getAttribute(SEARCH_GROUP_TRANS_RESULT))) {
+			if (SEARCH_GROUP_TRANS_RESULT_FLAG.equals(session.getAttribute(SEARCH_GROUP_TRANS_RESULT))) {
 				TransactionSearchCriteria searchCriteria = getGroupTransactionSearchCriteria(session);
 				searchCriteria.setCurrentTransactionView("Income, Expense");
 				System.out.println("from date ? " + searchCriteria.getSearchFromDateString());
 				System.out.println("to date ? " + searchCriteria.getSearchToDateString());
-				if(searchCriteria.getSearchFromDateString() != null && searchCriteria.getSearchFromDateString().length() > 1) {
+				if (searchCriteria.getSearchFromDateString() != null
+						&& searchCriteria.getSearchFromDateString().length() > 1) {
 					Date fromDate = CALENDAR_DATE_FORMAT.parse(searchCriteria.getSearchFromDateString());
 					searchCriteria.setFromDate(fromDate);
 				}
-				if(searchCriteria.getSearchToDateString() != null && searchCriteria.getSearchToDateString().length() > 1) {
+				if (searchCriteria.getSearchToDateString() != null
+						&& searchCriteria.getSearchToDateString().length() > 1) {
 					Date toDate = CALENDAR_DATE_FORMAT.parse(searchCriteria.getSearchToDateString());
 					Calendar calendar = Calendar.getInstance();
 					calendar.setTime(toDate);
 					calendar.set(Calendar.HOUR_OF_DAY, 23);
 					calendar.set(Calendar.MINUTE, 59);
 					calendar.set(Calendar.SECOND, 59);
-					calendar.set(Calendar.MILLISECOND, 999);				
+					calendar.set(Calendar.MILLISECOND, 999);
 					searchCriteria.setToDate(calendar.getTime());
 				}
-			
+
 				SearchResult<Transaction> result = getTransactions(searchCriteria);
 				List<Transaction> searchResultTransactions = result.values();
-				
-				
+
 				int transactionIndex = 0;
-	
+
 				for (Transaction transaction : searchResultTransactions) {
 					if (transactionIndex == 20)
 						break;
-	
+
 					if (associatedGroupTransactionIds.contains(transaction.getTransactionId()))
 						continue;
-	
+
 					if (transactionId == transaction.getTransactionId())
 						continue;
 
 					if (transaction.getMergeTransactionIds() != null && !transaction.getMergeTransactionIds().isEmpty())
 						continue;
-	
+
 					if (transaction.getMergeParentId() > 0 && transaction.getMergeParentId() != t.getTransactionId())
 						continue;
-	
+
 					filteredSearchResultTransactions.add(transaction);
 					transactionIndex++;
 				}
@@ -285,17 +293,17 @@ public class TransactionController implements ControllerAttributes {
 			}
 			mav.addObject("searchResult", filteredSearchResultTransactions);
 
-			List<Category> categories = new ArrayList<>();			
+			List<Category> categories = new ArrayList<>();
 			categories.addAll(CategoryService.getInstance().getAllExpenseCategories().values());
 			categories.addAll(CategoryService.getInstance().getAllIncomeCategories().values());
 			Collections.sort(categories, Category.getCategoryNameSorter());
 			mav.addObject("categories", categories);
 
 			// search for list of accounts
-			SearchResult<Account> accountResult = AccountService.getInstance().search(new AccountSearchCriteria());
+			SearchResult<?> accountResult = AccountService.getInstance().search(new AccountSearchCriteria());
 			if (accountResult.values() == null || accountResult.values().isEmpty()) {
 				throw new Exception("No accounts found");
-			} 
+			}
 
 			mav.addObject("accounts", accountResult.values());
 		} catch (Exception e) {
@@ -393,14 +401,9 @@ public class TransactionController implements ControllerAttributes {
 	}
 
 	@PostMapping("/saveGroupTransaction")
-	public ModelAndView pushGroupTransaction(int transactionId, 
-			String gtMasterSummary,
-			String gtMasterDate,
-			String gtMasterCategory,
-			String gtMasterAccount,
-			float gtMasterAmount,
-			HttpSession session, RedirectAttributes rad,
-			ModelAndView mav) {
+	public ModelAndView pushGroupTransaction(int transactionId, String gtMasterSummary, String gtMasterDate,
+			String gtMasterCategory, String gtMasterAccount, float gtMasterAmount, HttpSession session,
+			RedirectAttributes rad, ModelAndView mav) {
 		mav.setViewName("redirect:/transactions/");
 
 		System.out.println(transactionId);
@@ -410,7 +413,7 @@ public class TransactionController implements ControllerAttributes {
 		System.out.println(gtMasterCategory);
 		System.out.println(gtMasterAccount);
 		try {
-			List<Integer> associatedGroupTransactionIds = getSessionGroupTransactionIds(session);			
+			List<Integer> associatedGroupTransactionIds = getSessionGroupTransactionIds(session);
 			Transaction masterTransaction = new Transaction();
 			masterTransaction.setSummary(gtMasterSummary);
 			masterTransaction.setNotes(gtMasterSummary);
@@ -418,11 +421,11 @@ public class TransactionController implements ControllerAttributes {
 			masterTransaction.setCategoryId(1);
 			masterTransaction.setAccountId(1);
 			masterTransaction.setTransactionAmount(gtMasterAmount);
-			masterTransaction.setTransactionType(gtMasterAmount >=0 ? "Income" : "Expense");
+			masterTransaction.setTransactionType(gtMasterAmount >= 0 ? "Income" : "Expense");
 			masterTransaction.setTransactionUserId("venkatramanp");
 
 			List<Integer> mergeTransactionIds = new ArrayList<>();
-			for(Integer id : associatedGroupTransactionIds) {
+			for (Integer id : associatedGroupTransactionIds) {
 				mergeTransactionIds.add(id);
 			}
 			mergeTransactionIds.add(transactionId);
@@ -431,21 +434,39 @@ public class TransactionController implements ControllerAttributes {
 		} catch (Exception e) {
 			rad.addFlashAttribute("errorMessage", e.getMessage());
 			ClanilyLogger.LogMessage(getClass(), e);
-			mav.setViewName("redirect:/transactions/groupTransaction?transactionId="+transactionId);
+			mav.setViewName("redirect:/transactions/groupTransaction?transactionId=" + transactionId);
 		} finally {
 
 		}
 		return mav;
 	}
 
+	@GetMapping("/viewAttachment")
+	public ResponseEntity<byte[]> viewAttachment(int transactionFileId, int transactionId, HttpSession session,
+			RedirectAttributes rad, ModelAndView mav) throws Exception {
+
+		TransactionFile file = TransactionService.getInstance().getTransactionAttachment(transactionFileId);
+		if (file == null || file.file == null)
+			throw new Exception("Unable to find the given transaction file");
+
+		HttpHeaders responseHeaders = new HttpHeaders();
+		responseHeaders.set("charset", "utf-8");
+		responseHeaders.setContentType(MediaType.valueOf("text/html"));
+		responseHeaders.setContentLength(file.file.length);
+		responseHeaders.set("Content-disposition", "attachment; filename=" + file.fileName);
+
+		return new ResponseEntity<byte[]>(file.file, responseHeaders, HttpStatus.OK);
+
+	}
+
 	@GetMapping("/addAttachmentForm")
-	public ModelAndView addAttachmentForm(int transactionId, 
-			HttpSession session, RedirectAttributes rad, ModelAndView mav) {
+	public ModelAndView addAttachmentForm(int transactionId, HttpSession session, RedirectAttributes rad,
+			ModelAndView mav) {
 		Transaction t = null;
 		mav.setViewName("/transactions/addAttachmentForm");
 		try {
 			t = TransactionService.getInstance().getById(transactionId);
-			if(t == null || t.getTransactionId() == 0)
+			if (t == null || t.getTransactionId() == 0)
 				throw new Exception("Invalid transaction!");
 			mav.addObject("transaction", t);
 		} catch (Exception e) {
@@ -456,20 +477,32 @@ public class TransactionController implements ControllerAttributes {
 		return mav;
 	}
 
+	@GetMapping("/unmergeTransaction")
+	public ModelAndView unmergeTransaction(int transactionId, HttpSession session, RedirectAttributes rad,
+			ModelAndView mav) {
+		mav.setViewName("redirect:/transactions/");
+		try {
+			TransactionService.getInstance().unmergeTransaction(transactionId);
+			rad.addFlashAttribute("successMessage", "Transaction un-merged successfully!");
+		} catch (Exception e) {
+			mav.setViewName("redirect:/transactions/");
+			rad.addFlashAttribute("errorMessage", e.getMessage());
+			ClanilyLogger.LogMessage(getClass(), e);
+		}
+		return mav;
+	}
+
 	@PostMapping("/addAttachment")
 	public ModelAndView addAttachment(int transactionId, @RequestParam("transactionFile") MultipartFile inputFile,
-			String summary, String description,
-			HttpSession session, RedirectAttributes rad, ModelAndView mav) {
-		Transaction t = null;
+			String summary, String description, HttpSession session, RedirectAttributes rad, ModelAndView mav) {
+		//Transaction t = null;
 		mav.setViewName("redirect:/transactions/viewTransaction?transactionId=" + transactionId);
 		try {
-			t = TransactionService.getInstance().getById(transactionId);
+			//t = TransactionService.getInstance().getById(transactionId);
 			String extension = FilenameUtils.getExtension(inputFile.getOriginalFilename());
 
-			
-
 			byte[] fileData = inputFile.getBytes();
-			String fileDataStr = new String(fileData);
+			//String fileDataStr = new String(fileData);
 
 			TransactionFile transactionFile = new TransactionFile();
 			transactionFile.setTransactionId(transactionId);
@@ -479,7 +512,7 @@ public class TransactionController implements ControllerAttributes {
 			transactionFile.setFileName(inputFile.getOriginalFilename());
 			transactionFile.setFileType(extension);
 			TransactionService.getInstance().attachFile(transactionFile);
-			System.out.println(fileDataStr);
+			
 			rad.addFlashAttribute("successMessage", "Attachment saved successfully!");
 		} catch (Exception e) {
 			mav.setViewName("redirect:/transactions/addAttachmentForm?transactionId=" + transactionId);
@@ -491,17 +524,17 @@ public class TransactionController implements ControllerAttributes {
 	}
 
 	@GetMapping("/deleteAttachment")
-	public ModelAndView deleteAttachment(int transactionId, int fileId,
-			HttpSession session, RedirectAttributes rad, ModelAndView mav) {
+	public ModelAndView deleteAttachment(int transactionId, int fileId, HttpSession session, RedirectAttributes rad,
+			ModelAndView mav) {
 		Transaction t = null;
 		mav.setViewName("redirect:/transactions/viewTransaction?transactionId=" + transactionId);
 		try {
 			t = TransactionService.getInstance().getById(transactionId);
-			if(t == null || t.getTransactionId() == 0)
+			if (t == null || t.getTransactionId() == 0)
 				throw new Exception("Invalid transaction!");
 
 			TransactionService.getInstance().detachFile(fileId);
-			rad.addFlashAttribute("successMessage", "Attachment saved successfully!");
+			rad.addFlashAttribute("successMessage", "Attachment deleted");
 		} catch (Exception e) {
 			mav.setViewName("redirect:/transactions/");
 			rad.addFlashAttribute("errorMessage", e.getMessage());
@@ -1039,7 +1072,7 @@ public class TransactionController implements ControllerAttributes {
 		AccountDisplayUnit unit = null;
 		List<AccountDisplayUnit> accountDisplayUnits = new ArrayList<AccountDisplayUnit>();
 		List<String> accountGroups = AccountService.getInstance().getUniqueAccountGroups();
-		SearchResult<Account> result = AccountService.getInstance().search(new AccountSearchCriteria());
+		SearchResult<?> result = AccountService.getInstance().search(new AccountSearchCriteria());
 		if (result != null && result.values() != null && result.values().size() != 0) {
 			unit = new AccountDisplayUnit(0, "All Accounts", 0, false);
 			if (search.isNothingSelected() || search.allSelected) {
@@ -1103,9 +1136,9 @@ public class TransactionController implements ControllerAttributes {
 		SearchResult<Transaction> result = TransactionService.getInstance().search(search);
 		for (Transaction t : result.values()) {
 			List<Integer> mergedTranIds = t.getMergeTransactionIds();
-			if(mergedTranIds != null && !mergedTranIds.isEmpty()) {
+			if (mergedTranIds != null && !mergedTranIds.isEmpty()) {
 				List<Transaction> mergedTransactions = new ArrayList<>();
-				for(int mergedTranId : mergedTranIds) {
+				for (int mergedTranId : mergedTranIds) {
 					mergedTransactions.add(TransactionService.getInstance().getById(mergedTranId));
 				}
 				t.setMergeTransactions(mergedTransactions);
@@ -1203,20 +1236,22 @@ public class TransactionController implements ControllerAttributes {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	private List<Integer> getSessionGroupTransactionIds(HttpSession session) {
 		if (session.getAttribute(CHOSEN_GROUP_TRANSACTION) == null) {
 			List<Integer> emptyList = new ArrayList<>();
 			return emptyList;
 		} else {
-			return (ArrayList<Integer>) session.getAttribute(CHOSEN_GROUP_TRANSACTION);
+			return  (List<Integer>) session.getAttribute(CHOSEN_GROUP_TRANSACTION);
 		}
 	}
 
+	@SuppressWarnings("unused")
 	private class CategorySorter implements Comparator<Category> {
 		@Override
 		public int compare(Category o1, Category o2) {
 			return o1.getCategoryName().compareTo(o2.getCategoryName());
 		}
-		
+
 	}
 }

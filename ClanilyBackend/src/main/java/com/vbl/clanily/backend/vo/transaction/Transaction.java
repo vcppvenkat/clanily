@@ -96,12 +96,16 @@ public class Transaction implements ValueObject {
 	
 
 	public List<TransactionFile> transactionFilesMetaData;
+	
+	public boolean isHavingAttachments() {
+		return transactionFilesMetaData != null && !transactionFilesMetaData.isEmpty();
+	}
 
-	public boolean isHasMergedChildren() {
+	public boolean isHavingMergedChildren() {
 		return (mergeTransactionIds != null && !mergeTransactionIds.isEmpty());
 	}
 
-	public boolean isHasSplitChildren() {
+	public boolean isHavingSplitChildren() {
 		return (splitTransactionIds != null && !splitTransactionIds.isEmpty());
 	}
 

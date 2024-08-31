@@ -159,10 +159,11 @@
 							</table>
 						</div>
 						<c:if test="${transaction.importedNotes ne null }">
-						<div class="panel-heading">
-							<h6 class="font-bold">Original Notes</h6>
-							<small class="text-muted">${transaction.importedNotes } </small>
-						</div>
+							<div class="panel-heading">
+								<h6 class="font-bold">Original Notes</h6>
+								<small class="text-muted">${transaction.importedNotes }
+								</small>
+							</div>
 						</c:if>
 					</div>
 				</div>
@@ -170,94 +171,116 @@
 				<div class="col-lg-8">
 					<div class="col-lg-12">
 						<div class="hpanel">
-
-							<c:if test="${not transaction.hasSplitChildren }">
+						
 							<div class="panel-heading">
-								<h5 class="font-bold">Group transactions</h5>
-								<div class="hr-line-solid"></div>
-								<table class="table table-responsive">
-									<thead>
-										<th>Summary</th>
-										<th>Amount</th>
-										<th>Account</th>
-										<th>Category</th>
-									</thead>
-									<tbody>
-										<c:forEach items="${transaction.mergeTransactions}"
-											var="groupTransaction">
+								<h4 class="font-bold">Attachments</h4>
+								<c:if test="${transaction.havingAttachments }">
+									<table class="table table-responsive">
+										<thead>
 											<tr>
-												<td>${ groupTransaction.summary }</td>
-												<c:if
-													test="${groupTransaction.transactionType eq 'Income' }">
-													<td class="text-success">${ groupTransaction.transactionAmountString }</td>
-												</c:if>
-												<c:if
-													test="${groupTransaction.transactionType eq 'Expense' }">
-													<td class="text-danger">${ groupTransaction.transactionAmountString }</td>
-												</c:if>
-
-												<td>${ groupTransaction.accountName }</td>
-												<td>${ groupTransaction.categoryName }</td>
+												<th>Summary</th>
+												<th>Date added</th>
+												<th>Type</th>
+												<th></th>
 											</tr>
-										</c:forEach>
-									</tbody>
-									<tfoot>
-										<tr>
-											<td colspan="4"><a
-												class="btn btn-primary2 btn-outline btn-sm"
-												href="/transactions/groupTransaction?f=true&transactionId=${transaction.transactionId}">Group
-													transaction</a></td>
-										</tr>
-									</tfoot>
-								</table>
+
+										</thead>
+										<tbody>
+											<c:forEach items="${transaction.transactionFilesMetaData}"
+												var="file">
+												<tr>
+													<td><a href="/transactions/viewAttachment?transactionFileId=${file.transactionFileId}&transactionId=${file.transactionId}">${file.summary }</a></td>
+													<td>${file.dateAddedString }</td>
+													<td>${file.fileType }</td>
+													<td><a
+														href="/transactions/deleteAttachment?transactionId=${transaction.transactionId}&fileId=${file.transactionFileId}"><i
+															class="text-danger pe-7s-trash"></i></a></td>
+												</tr>
+											</c:forEach>
+
+
+										</tbody>
+									</table>
+								</c:if>
+								<c:if test="${not transaction.havingAttachments }">
+									<div class="well">No attachments found. Please click
+										below button to add attachments</div>
+								</c:if>
+								<a class=" btn btn-primary2 btn-outline btn-sm"
+									href="/transactions/addAttachmentForm?transactionId=${transaction.transactionId}">Add
+									attachments</a>
 							</div>
+							<div class="hr-line-solid"></div>
+
+							<c:if test="${not transaction.havingSplitChildren }">
+								<div class="panel-heading">
+									<h4 class="font-bold">Merge transactions</h4>
+
+									<c:if test="${not transaction.havingMergedChildren }">
+										<div class="well">No split transactions found. Please
+											click below button to split the transaction</div>
+									</c:if>
+
+									<c:if test="${ transaction.havingMergedChildren }">
+										<table class="table table-responsive">
+											<thead>
+												<th>Summary</th>
+												<th>Amount</th>
+												<th>Account</th>
+												<th>Category</th>
+											</thead>
+											<tbody>
+												<c:forEach items="${transaction.mergeTransactions}"
+													var="groupTransaction">
+													<tr>
+														<td>${ groupTransaction.summary }</td>
+														<c:if
+															test="${groupTransaction.transactionType eq 'Income' }">
+															<td class="text-success">${ groupTransaction.transactionAmountString }</td>
+														</c:if>
+														<c:if
+															test="${groupTransaction.transactionType eq 'Expense' }">
+															<td class="text-danger">${ groupTransaction.transactionAmountString }</td>
+														</c:if>
+
+														<td>${ groupTransaction.accountName }</td>
+														<td>${ groupTransaction.categoryName }</td>
+													</tr>
+												</c:forEach>
+											</tbody>
+
+
+
+										</table>
+									</c:if>
+									<c:if test="${not transaction.havingMergedChildren }">
+										<a class="btn btn-primary2 btn-outline btn-sm"
+											href="/transactions/groupTransaction?f=true&transactionId=${transaction.transactionId}" disabled>Merge
+											transaction</a>
+
+									</c:if>
+									<c:if test="${ transaction.havingMergedChildren }">
+										<a class="btn btn-primary2 btn-outline btn-sm" href="/transactions/unmergeTransaction?transactionId=${transaction.transactionId }" disabled>Un-Merge</a>
+									</c:if>
+
+
+								</div>
 							</c:if>
-							<c:if test="${not transaction.hasMergedChildren }">
-							
-							
-							<div class="panel-heading">
-								<h5 class="font-bold">Split transactions</h5>
+							<c:if test="${not transaction.havingMergedChildren }">
+
 								<div class="hr-line-solid"></div>
-								<div class="well">No split transactions found. Please
-									click below button to split the transaction</div>
-								<a class="btn btn-primary2 btn-outline btn-sm" href="#">Split
-									transaction</a>
-							</div>
-							
+								<div class="panel-heading">
+									<h4 class="font-bold">Split transactions</h4>
+
+									<div class="well">No split transactions found. Please
+										click below button to split the transaction</div>
+									<a class="btn btn-primary2 btn-outline btn-sm" href="#" disabled>Split
+										transaction</a>
+								</div>
+
 							</c:if>
-
-							<div class="panel-heading">
-								<h4 class="font-bold">
-									Attachments <a
-										class="pull-right btn btn-primary2 btn-outline btn-sm"
-										href="/transactions/addAttachmentForm?transactionId=${transaction.transactionId}">Add attachments</a>
-								</h4>
-								<div class="hr-line-solid"></div>
-								<table class="table table-responsive">
-									<thead>
-										<tr>
-											<th>Summary</th>
-											<th>Date added</th>
-											<th>Type</th>
-											<th></th>
-										</tr>
-
-									</thead>
-									<tbody>
-										<c:forEach items="${transaction.transactionFilesMetaData}"
-											var="file">
-											<tr>
-												<td><a href="">${file.summary }</a></td>
-												<td>${file.dateAddedString }</td>
-												<td>${file.fileType }</td>
-												<td><a href="/transactions/deleteAttachment?transactionId=${transaction.transactionId}&fileId=${file.transactionFileId}"><i class="text-danger pe-7s-trash"></i></a></td>
-											</tr>
-										</c:forEach>
-
-
-									</tbody>
-								</table>
-							</div>
+							
+							
 						</div>
 					</div>
 

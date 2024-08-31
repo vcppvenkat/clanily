@@ -9,11 +9,11 @@ import com.vbl.clanily.backend.vo.response.SearchResult;
 import com.vbl.clanily.backend.vo.search.SearchCriteria;
 import com.vbl.clanily.service.ClanilyService;
 
-public class AccountService extends ClanilyService {
+public class AccountService<T> extends ClanilyService {
 
-	private static final AccountService thisInstance = new AccountService();
+	private static final AccountService<?> thisInstance = new AccountService<Object>();
 
-	public static AccountService getInstance() {
+	public static AccountService<?> getInstance() {
 		return thisInstance;
 	}
 
@@ -41,9 +41,8 @@ public class AccountService extends ClanilyService {
 		return AccountDBTranslator.getInstance().update(account);
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public SearchResult search(SearchCriteria search) throws Exception {
+	public SearchResult<?> search(SearchCriteria search) throws Exception {
 		return AccountDBTranslator.getInstance().search(search);
 	}
 
@@ -207,7 +206,7 @@ public class AccountService extends ClanilyService {
 	public SearchResult<Account> getByAccountGroup(String accountGroup) throws Exception {
 		return AccountDBTranslator.getInstance().getByAccountGroup(accountGroup);
 	}
-	
+
 	public List<String> getUniqueAccountGroups() throws Exception {
 		return AccountDBTranslator.getInstance().getUniqueAccountGroups();
 	}

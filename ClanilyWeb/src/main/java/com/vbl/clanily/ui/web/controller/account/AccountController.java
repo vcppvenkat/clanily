@@ -41,7 +41,7 @@ public class AccountController implements ControllerAttributes {
 		
 		try {
 			
-			SearchResult<Account> result = AccountService.getInstance().search(new AccountSearchCriteria());
+			SearchResult<?> result = AccountService.getInstance().search(new AccountSearchCriteria());
 			if (result.values() == null || result.values().isEmpty()) {
 				throw new Exception("No accounts found");
 			} 

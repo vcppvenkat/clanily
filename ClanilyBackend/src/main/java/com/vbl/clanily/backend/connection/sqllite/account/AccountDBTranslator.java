@@ -24,7 +24,7 @@ public class AccountDBTranslator extends AbstractSqlLiteOperationManager impleme
 	}
 
 	@Override
-	public SearchResult<Account> search(SearchCriteria search) throws Exception {
+	public SearchResult search(SearchCriteria search) throws Exception {
 		SearchResult<Account> result = new SearchResult<Account>();
 		Account account = null;
 		String query = "SELECT * FROM ACCOUNTS WHERE 1 = 1 ";

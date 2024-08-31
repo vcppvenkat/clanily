@@ -21,7 +21,7 @@ public class UserService extends ClanilyService {
 		return thisInstance;
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	
 	@Override
 	public SearchResult search(SearchCriteria search) throws Exception {
 		return UserDBTranslator.getInstance().search(search);

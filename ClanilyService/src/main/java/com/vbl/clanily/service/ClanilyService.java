@@ -52,7 +52,7 @@ public abstract class ClanilyService {
 		return Arrays.asList(values.split(","));
 	}
 
-	public abstract SearchResult<ValueObject> search(SearchCriteria search) throws Exception;
+	public abstract SearchResult<?> search(SearchCriteria search) throws Exception;
 
 	public abstract ValueObject getById(int id) throws Exception;
 

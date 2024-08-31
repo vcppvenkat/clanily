@@ -284,7 +284,7 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 
 		// associate transaction file metadata
 		t.transactionFilesMetaData = getTransactionFilesMetadata(t.transactionId).values();
-		System.out.println("Printing - " + t.transactionFilesMetaData.size());
+		// System.out.println("Printing - " + t.transactionFilesMetaData.size());
 
 		amendMergeTransactionIds(t);
 
@@ -341,8 +341,31 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 		return rowId;
 	}
 
-	public TransactionFile getTransactionFile(int transactionFileId) throws Exception {
-		throw new UnsupportedOperationException("This method is currently not supported");
+	public TransactionFile getTransactionAttachment(int transactionFileId) throws Exception {
+		TransactionFile t = new TransactionFile();
+		Statement st = connection.createStatement();
+		String query = "SELECT * FROM TRANSACTION_FILES WHERE TRANSACTION_FILE_ID = " + transactionFileId;
+
+		ResultSet rs = st.executeQuery(query);
+
+		while (rs.next()) {
+
+			t.transactionId = rs.getInt("TRANSACTION_ID");
+			t.transactionFileId = rs.getInt("TRANSACTION_FILE_ID");
+			t.fileName = rs.getString("FILE_NAME");
+			t.file = rs.getBytes("FILE_OBJECT");
+			t.dateAdded = new Date(rs.getLong("DATE_ADDED"));
+			t.description = rs.getString("DESCRIPTION");
+			t.fileType = rs.getString("FILE_TYPE");
+			t.summary = rs.getString("SUMMARY");
+
+			break;
+		}
+
+		rs.close();
+
+		return t;
+
 	}
 
 	public SearchResult<TransactionFile> getTransactionFilesMetadata(int transactionId) throws Exception {
@@ -558,7 +581,7 @@ public class TransactionDBTranslator extends AbstractSqlLiteOperationManager imp
 		s.getConnection().setAutoCommit(false);
 
 		try {
-			int rowId = -1;
+
 			for (Integer id : ids) {
 
 				s.setInt(1, id);

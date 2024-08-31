@@ -44,7 +44,7 @@ public class TransactionService extends ClanilyService {
 		if (parent == null)
 			throw new Exception("Invalid parent transaction id: " + parentTransactionId);
 
-		if (!parent.isHasMergedChildren()) {
+		if (parent.isHavingMergedChildren()) {
 			for (int childId : parent.mergeTransactionIds) {
 				Transaction child = TransactionDBTranslator.getInstance().getById(childId);
 				if (child != null) {
@@ -130,11 +130,11 @@ public class TransactionService extends ClanilyService {
 				throw new Exception("Cannot split a child of another merged parent. New child: " + child.summary);
 			}
 
-			if (child.isHasMergedChildren()) {
+			if (child.isHavingMergedChildren()) {
 				throw new Exception("An already merged parent cannot become child. Existing parent: " + child.summary);
 			}
 
-			if (child.isHasSplitChildren()) {
+			if (child.isHavingSplitChildren()) {
 				throw new Exception("An already split parent cannot become child. Existing parent: " + child.summary);
 			}
 
@@ -165,7 +165,7 @@ public class TransactionService extends ClanilyService {
 			throw new Exception("Invalid input. Given parent id does not exist: Parent Id: " + parentId);
 		}
 		
-		if(!parent.isHasSplitChildren()) {
+		if(!parent.isHavingSplitChildren()) {
 			throw new Exception("Given parent does not have any children to split.");
 		}
 		
@@ -175,6 +175,10 @@ public class TransactionService extends ClanilyService {
 
 	public void detachFile(int transactionFileId) throws Exception {
 		TransactionDBTranslator.getInstance().detachFile(transactionFileId);
+	}
+	
+	public TransactionFile getTransactionAttachment(int transactionFileId) throws Exception {
+		return TransactionDBTranslator.getInstance().getTransactionAttachment(transactionFileId);
 	}
 
 	public void attachFile(TransactionFile file) throws Exception {
@@ -204,7 +208,7 @@ public class TransactionService extends ClanilyService {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public SearchResult search(SearchCriteria search) throws Exception {
+	public SearchResult<Transaction> search(SearchCriteria search) throws Exception {
 		if (search != null) {
 			TransactionSearchCriteria t = (TransactionSearchCriteria) search;
 			if (isValid(t.currentTransactionGroup)) {
@@ -249,26 +253,7 @@ public class TransactionService extends ClanilyService {
 				}
 			}
 
-			// insert an attachment
-			/*
-			 * String file =
-			 * "/Users/venkat/Downloads/4C89E125-7C20-4358-8C97-FA542164E737_1_102_o.jpeg";
-			 * File image = new File(file); FileInputStream fis = new
-			 * FileInputStream(image); ByteArrayOutputStream bos = new
-			 * ByteArrayOutputStream(); byte[] buf = new byte[1024]; byte[] person_image =
-			 * null; try { for (int readNum; (readNum = fis.read(buf)) != -1;) {
-			 * bos.write(buf, 0, readNum); person_image = bos.toByteArray(); }
-			 * 
-			 * 
-			 * for(Transaction temp : result.values()) { TransactionFile tFile = new
-			 * TransactionFile(); tFile.dateAdded = new Date(); tFile.description =
-			 * "This is added via auto code from service for testing"; tFile.file =
-			 * person_image; tFile.fileName = temp.summary; tFile.fileType = "JPEG";
-			 * tFile.summary = temp.summary; tFile.transactionId = temp.transactionId;
-			 * TransactionDBTranslator.getInstance().attachFile(tFile); }
-			 * 
-			 * } catch (IOException ex) { System.err.println(ex.getMessage()); }
-			 */
+			
 
 			return result;
 		}
